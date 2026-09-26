@@ -67,3 +67,17 @@ class TestHalalCryptoRegistry(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestUsdAverage(unittest.TestCase):
+    def test_falling_currency_does_not_shrink_old_prices(self):
+        from agents.base_agent import usd_average
+        # Price in lira doubles while the lira halves: the USD value never changed.
+        closes = {(2024, m): 100.0 + 100.0 * m / 12 for m in range(1, 13)}
+        fx = {(2024, m): 10.0 + 10.0 * m / 12 for m in range(1, 13)}
+        self.assertAlmostEqual(usd_average(closes, fx), 10.0)
+
+    def test_needs_twelve_matched_months(self):
+        from agents.base_agent import usd_average
+        closes = {(2024, m): 1.0 for m in range(1, 13)}
+        self.assertIsNone(usd_average(closes, {(2024, m): 1.0 for m in range(1, 12)}))

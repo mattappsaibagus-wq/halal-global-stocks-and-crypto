@@ -34,7 +34,7 @@ The default is **AAOIFI Shariah Standard 21**, the standard used by Musaffa (and
 | Receivables | not tested | < 49% | (receivables + cash) < 50% | < 33.33% |
 | Impermissible income / revenue | < 5% | < 5% | < 5% | < 5% |
 
-- **36-month average market cap**: monthly closes over 3 years × shares outstanding, converted into the company's reporting currency. This smooths out a single-day price swing flipping a verdict.
+- **36-month average market cap**: monthly closes over 3 years × shares outstanding. Each month is converted to US dollars at that month's exchange rate, then into the company's reporting currency, so a falling currency (e.g. the Turkish lira) can't shrink old prices and fake a high debt ratio. This smooths out a single-day price swing flipping a verdict.
 - The verdict follows your chosen standard (`shariah_compliance.standard`). Every stock card also shows **"Standards: x/4 pass"** with the reason each standard fails, so you can see how robust a verdict is.
 - Switch standards in `data/advisor_config.json` (`AAOIFI_STANDARD_21`, `DJIM` or `CUSTOM`). Changing the method re-baselines the compliance watch, so a methodology change never raises false HARAM alerts.
 
