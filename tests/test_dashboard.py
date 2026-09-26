@@ -65,6 +65,17 @@ class TestDashboardHTML(unittest.TestCase):
         with open(os.path.join(os.path.dirname(__file__), "..", ".github", "workflows", "scan.yml")) as f:
             self.assertIn("'0 */3 * * *'", f.read())
 
+    def test_where_to_buy(self):
+        import json
+        for needle in ("whereToBuyHtml", "markets.json", "Where to buy", "not endorsements"):
+            self.assertIn(needle, self.html)
+        with open(os.path.join(os.path.dirname(DASH), "markets.json")) as f:
+            m = json.load(f)
+        for key in ("US", ".SR", ".JK", ".KL", ".AE", ".QA", ".IS", "CRYPTO"):
+            self.assertTrue(m[key]["brokers"] and m[key]["steps"], key)
+            for b in m[key]["brokers"]:
+                self.assertTrue(b["url"].startswith("https://"), b)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

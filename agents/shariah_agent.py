@@ -254,6 +254,7 @@ class ShariahScreenerAgent(BaseAgent):
             "price": to_float(financials.get("price")),
             "currency": financials.get("currency") or "",
             "dividend_rate": to_float(financials.get("dividend_rate")),
+            "exchange": financials.get("exchange") or "",
         }
 
     def _allowlisted_institution(self, symbol, financials):

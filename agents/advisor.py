@@ -198,6 +198,7 @@ class AdvisorAgent:
             "denominator_basis": shariah.get("denominator_basis"),
             "news": shariah.get("news", []),
             "region": shariah.get("region"),
+            "exchange": shariah.get("exchange", ""),
         }
 
     def _rejected(self, symbol, data, shariah):

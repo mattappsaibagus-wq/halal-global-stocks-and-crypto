@@ -1,0 +1,231 @@
+{
+  "_about": "Where-to-buy info shown on each dashboard card. Keyed by Yahoo symbol suffix ('US' = no suffix, 'CRYPTO' = -USD pairs). Edit freely. Listings are examples, not endorsements; availability depends on your country of residence.",
+  "_checked": "2026-09-26",
+  "_general": [
+    "Use a cash account: no margin, no short selling, no options (these are generally not Shariah-compliant).",
+    "Where a broker offers an Islamic or Shariah account, prefer it.",
+    "Check the broker is licensed by the market's regulator and accepts residents of your country."
+  ],
+  "US": {
+    "market": "United States",
+    "exchange": "NYSE / Nasdaq",
+    "currency": "USD",
+    "hours": "09:30–16:00 New York",
+    "code_hint": "Use the ticker as shown.",
+    "brokers": [
+      {
+        "name": "Interactive Brokers",
+        "url": "https://www.interactivebrokers.com",
+        "note": "Global broker, most countries"
+      },
+      {
+        "name": "Sahm",
+        "url": "https://www.sahmcapital.com",
+        "note": "US and Saudi stocks in one app, includes a Shariah filter"
+      },
+      {
+        "name": "Baraka",
+        "url": "https://getbaraka.com",
+        "note": "GCC-focused app with a Musaffa-sourced Sharia screener"
+      },
+      {
+        "name": "moomoo",
+        "url": "https://www.moomoo.com",
+        "note": "Available in several Asian markets"
+      }
+    ],
+    "steps": [
+      "Open an account with a broker that serves your country",
+      "Fund it (USD conversion applies)",
+      "Search the ticker and buy with a limit order"
+    ]
+  },
+  ".SR": {
+    "market": "Saudi Arabia",
+    "exchange": "Saudi Exchange (Tadawul)",
+    "currency": "SAR",
+    "hours": "10:00–15:00 Riyadh, Sun–Thu",
+    "code_hint": "Search the 4-digit code (e.g. 2222).",
+    "brokers": [
+      {
+        "name": "Al Rajhi Capital",
+        "url": "https://www.alrajhi-capital.sa",
+        "note": "Shariah-compliant brokerage"
+      },
+      {
+        "name": "Sahm",
+        "url": "https://www.sahmcapital.com",
+        "note": "CMA-licensed app"
+      },
+      {
+        "name": "SNB Capital",
+        "url": "https://www.snbcapital.com",
+        "note": "Also the local partner behind IBKR's Saudi access"
+      },
+      {
+        "name": "Interactive Brokers",
+        "url": "https://www.interactivebrokers.com/en/trading/saudi-exchange.php",
+        "note": "For investors outside Saudi: add 'Saudi Arabia' in Trading Permissions"
+      }
+    ],
+    "steps": [
+      "Saudi residents: open an account with a CMA-licensed broker",
+      "Foreign investors: use a broker offering Tadawul access (e.g. IBKR)",
+      "Search the 4-digit code"
+    ]
+  },
+  ".JK": {
+    "market": "Indonesia",
+    "exchange": "Indonesia Stock Exchange (IDX)",
+    "currency": "IDR",
+    "hours": "09:00–15:50 Jakarta, Mon–Fri",
+    "code_hint": "Search the 4-letter code (e.g. TLKM). Shares trade in lots of 100.",
+    "brokers": [
+      {
+        "name": "IPOT Syariah (Indo Premier)",
+        "url": "https://www.indopremier.com",
+        "note": "Sharia Online Trading System (SOTS)"
+      },
+      {
+        "name": "MOST Syariah (Mandiri Sekuritas)",
+        "url": "https://www.most.co.id",
+        "note": "SOTS"
+      },
+      {
+        "name": "HOTS Syariah (Mirae Asset)",
+        "url": "https://sekuritas.miraeasset.co.id",
+        "note": "SOTS"
+      },
+      {
+        "name": "Official SOTS broker list",
+        "url": "https://idxislamic.idx.co.id/en/islamic-investors/list-of-sots-exchange-member/",
+        "note": "IDX Islamic"
+      }
+    ],
+    "steps": [
+      "Open an account with an IDX member broker (you receive an SID investor number)",
+      "Choose a SOTS (Sharia) account: it only allows ISSI-listed Sharia shares and no margin",
+      "Search the 4-letter code"
+    ]
+  },
+  ".KL": {
+    "market": "Malaysia",
+    "exchange": "Bursa Malaysia",
+    "currency": "MYR",
+    "hours": "09:00–17:00 Kuala Lumpur, Mon–Fri",
+    "code_hint": "Search the 4-digit stock code (e.g. 5347) or the stock name.",
+    "brokers": [
+      {
+        "name": "Maybank Investment Bank (Islamic broking)",
+        "url": "https://www.maybank2u.com.my/Investment-bank/en/retail-investors/products/islamic-broking.page",
+        "note": "Islamic stockbroking account"
+      },
+      {
+        "name": "Rakuten Trade",
+        "url": "https://www.rakutentrade.my",
+        "note": "Online broker"
+      },
+      {
+        "name": "moomoo Malaysia",
+        "url": "https://www.moomoo.com/my",
+        "note": "Online broker"
+      }
+    ],
+    "steps": [
+      "Open a CDS account plus a trading account with a Bursa participating broker",
+      "Ask for an Islamic stockbroking account where offered",
+      "Search the stock code; board lot is 100 shares"
+    ]
+  },
+  ".AE": {
+    "market": "United Arab Emirates",
+    "exchange": "Dubai Financial Market (DFM)",
+    "currency": "AED",
+    "hours": "10:00–14:45 Dubai, Mon–Fri",
+    "code_hint": "Search the ticker as shown without .AE (e.g. EMAAR).",
+    "brokers": [
+      {
+        "name": "DFM: how to trade",
+        "url": "https://www.dfm.ae/investing/services/how-to-trade",
+        "note": "Official steps and licensed broker list"
+      },
+      {
+        "name": "iVestor app (DFM)",
+        "url": "https://www.dfm.ae/investing/services/how-to-trade",
+        "note": "Trade with partnered brokers"
+      }
+    ],
+    "steps": [
+      "Get a free DFM Investor Number (NIN); non-residents can apply online",
+      "Appoint a DFM-licensed broker",
+      "Trade through the broker's app or iVestor"
+    ]
+  },
+  ".QA": {
+    "market": "Qatar",
+    "exchange": "Qatar Stock Exchange (QSE)",
+    "currency": "QAR",
+    "hours": "09:30–13:15 Doha, Sun–Thu",
+    "code_hint": "Search the ticker as shown without .QA (e.g. QIBK).",
+    "brokers": [
+      {
+        "name": "QSE: how to open an account",
+        "url": "https://www.qe.com.qa/how-to-open-an-account",
+        "note": "Official steps and broker list"
+      },
+      {
+        "name": "QNB Financial Services",
+        "url": "https://www.qnbfs.com",
+        "note": "QNBFS Trading app"
+      }
+    ],
+    "steps": [
+      "Get a National Investor Number (NIN) from the Qatar Central Securities Depository; a licensed broker can fast-track it with your trading account (QR 100 fee)",
+      "Open a trading account with that broker",
+      "Search the ticker"
+    ]
+  },
+  ".IS": {
+    "market": "Turkey",
+    "exchange": "Borsa Istanbul (BIST)",
+    "currency": "TRY",
+    "hours": "10:00–18:00 Istanbul, Mon–Fri",
+    "code_hint": "Search the ticker as shown without .IS (e.g. BIMAS).",
+    "brokers": [
+      {
+        "name": "Borsa Istanbul: first-time investors",
+        "url": "https://www.borsaistanbul.com/en/investment-guide/first-time-investors",
+        "note": "Official guide; lists licensed intermediaries"
+      }
+    ],
+    "steps": [
+      "Open an account with a CMB-licensed Turkish brokerage (foreigners usually need a Turkish tax number)",
+      "Transfer funds (TRY)",
+      "Search the ticker"
+    ]
+  },
+  "CRYPTO": {
+    "market": "Crypto (spot)",
+    "exchange": "Crypto exchanges",
+    "currency": "USD",
+    "hours": "24/7",
+    "code_hint": "Buy the coin itself (spot), e.g. BTC. POL was formerly MATIC.",
+    "brokers": [
+      {
+        "name": "Coinbase",
+        "url": "https://www.coinbase.com",
+        "note": "Source of the live prices on this page"
+      },
+      {
+        "name": "Kraken",
+        "url": "https://www.kraken.com",
+        "note": "Spot trading"
+      }
+    ],
+    "steps": [
+      "Use spot buying only: avoid futures, margin, leverage and lending/earn products",
+      "Check the exchange is licensed in your country",
+      "Consider moving long-term holdings to your own wallet"
+    ]
+  }
+}

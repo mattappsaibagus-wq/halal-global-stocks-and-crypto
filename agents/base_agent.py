@@ -307,6 +307,7 @@ def fetch_yf_financials(symbol):
             "currency": currency,
             "financial_currency": fin_ccy,
             "name": info.get("longName") or info.get("shortName") or "",
+            "exchange": info.get("fullExchangeName") or info.get("exchange") or "",
         }
     except Exception as e:
         result = dict(empty)
