@@ -125,11 +125,11 @@ class AdvisorAgent:
         if len(positive_signals) > len(negative_signals) and signal_count >= 2 and avg_confidence >= 0.5:
             action = "BUY"
             confidence = min(avg_confidence * 1.2, 1.0)
-        elif len(negative_signals) > len(positive_signals) and signal_count >= 2 and avg_confidence >= 0.5:
-            # SELL means exit an owned spot position. Short selling is never
-            # generated: this scanner is spot/cash only.
-            action = "SELL"
-            confidence = min(avg_confidence * 1.2, 1.0)
+        elif len(negative_signals) > len(positive_signals):
+            # SELL was retired: in the 3-year backtest prices ROSE after these
+            # "bearish" signals (edge +0.47%, right 47% of the time). Exits are
+            # handled by the stop in each BUY's trade plan instead.
+            return None
         elif avg_confidence >= 0.6 and len(data["alerts"]) >= 1:
             action = "WATCH"
             confidence = avg_confidence

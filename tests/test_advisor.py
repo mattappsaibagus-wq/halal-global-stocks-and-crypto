@@ -89,6 +89,16 @@ class TestAdvisorHalalEnforcement(unittest.TestCase):
 
 
 
+class TestSellRetired(unittest.TestCase):
+    def test_bearish_majority_gives_no_signal(self):
+        bearish = lambda sym, agent: {"symbol": sym, "agent": agent, "confidence": 0.9, "alert": True,
+                                      "signals": [{"type": "macd_bearish"}, {"type": "below_sma"}]}
+        recs = AdvisorAgent().consolidate([
+            _shariah("AAPL", "HALAL"), bearish("AAPL", "momentum_agent"), bearish("AAPL", "early_detector"),
+        ])
+        self.assertEqual(recs[0]["action"], "HOLD")
+
+
 class TestRiskPlan(unittest.TestCase):
     def test_plan_levels_and_size(self):
         from agents.advisor import build_risk_plan

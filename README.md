@@ -73,6 +73,8 @@ To pass, on that final year it must:
 
 A signal counts once, on the first day it turns on. The live scanner only adopts a rule that passes.
 
+**Result (September 2026): no rule passed.** The best rule on the older data ("volume spike on a 3-day up move", t = 3.2) fell to −0.05R per trade on the unseen year (t = 0.13). The dashboard therefore runs in **watchlist mode**: BUY/WATCH are setups to research, not trade calls. SELL signals were removed, because prices rose after them in the backtest. The study reruns daily, and the banner clears on its own if a rule ever passes.
+
 ### Live track record
 Every BUY/SELL/WATCH is recorded once, with its entry price and trading date, then scored against actual closes 5, 10 and 20 trading days later. BUY counts as right if the price rose after 20 days; SELL if it fell. The history is kept on the `scan-data` branch so it builds up between runs.
 

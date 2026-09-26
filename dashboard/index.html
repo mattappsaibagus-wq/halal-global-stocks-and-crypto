@@ -153,6 +153,7 @@
 
         <section id="tab-scanner">
         <div id="changes"></div>
+        <div id="mode"></div>
         <div class="stats">
             <div class="stat-card"><div class="stat-value" id="halal-count">--</div><div class="stat-label">Halal Status: Pass</div></div>
             <div class="stat-card"><div class="stat-value haram" id="haram-count">--</div><div class="stat-label">Haram</div></div>
@@ -164,7 +165,7 @@
         <div class="filters" id="filters">
             <button data-filter="all" class="active">All</button>
             <button data-filter="halal">Halal only</button>
-            <button data-filter="signals">Signals (Buy/Watch/Sell)</button>
+            <button data-filter="signals">Setups (Buy/Watch)</button>
             <button data-filter="rejected">Rejected</button>
         </div>
 
@@ -263,6 +264,7 @@
 
     <script>
         let allRecs = [];
+        let proven = null;  // set from the backtest's out-of-sample study
         let activeFilter = 'all';
 
         const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -312,19 +314,26 @@
                 summary.innerHTML = `<p class="verdict"><b>${esc(all.verdict)}</b></p>
                     <p>${bt.years} years &middot; ${bt.symbols.length} symbols &middot; run ${esc((bt.generated_at || '').slice(0, 10))}</p>`;
                 const rows = Object.entries(bt.groups).map(([name, g]) => {
-                    const b = g.BUY || {}, s = g.SELL || {};
+                    const b = g.BUY || {};
                     return `<tr><td>${esc(name)}${b.enough_data ? '' : ' <span class="muted">(few)</span>'}</td>
                         <td>${num(b.n || 0, 0)}</td><td>${b.win_rate_20d == null ? '-' : num(b.win_rate_20d, 1) + '%'}</td>
                         <td>${pct(b.avg_20d)}</td><td>${pct(g.baseline.avg_20d)}</td><td>${pct(b.edge_20d)}</td>
                         <td>${rr(b.expectancy_r)}</td><td>${b.stop_hit_pct == null ? '-' : num(b.stop_hit_pct, 0) + '%'}</td>
-                        <td>${num(s.n || 0, 0)}</td><td>${s.correct_20d == null ? '-' : num(s.correct_20d, 1) + '%'}</td></tr>`;
+</tr>`;
                 }).join('');
                 document.getElementById('bt-groups').innerHTML = `<thead><tr><th>Market</th><th>BUY N</th><th>Win 20d</th>
-                    <th>Avg 20d</th><th>Baseline</th><th>Edge</th><th>Expectancy</th><th>Stopped</th><th>SELL N</th><th>SELL right</th></tr></thead><tbody>${rows}</tbody>`;
+                    <th>Avg 20d</th><th>Baseline</th><th>Edge</th><th>Expectancy</th><th>Stopped</th></tr></thead><tbody>${rows}</tbody>`;
                 document.getElementById('bt-signals').innerHTML = `<thead><tr><th>Signal</th><th>N</th><th>Avg 20d</th><th>Edge</th><th>Up after 20d</th></tr></thead><tbody>${
                     (bt.signals || []).map(x => `<tr><td>${esc(x.signal)}</td><td>${num(x.n, 0)}</td><td>${pct(x.avg_20d)}</td><td>${pct(x.edge_20d)}</td><td>${num(x.up_pct_20d, 1)}%</td></tr>`).join('')
                 }</tbody>`;
                 renderStudy(bt.study);
+                proven = bt.study ? bt.study.passed : null;
+                document.getElementById('mode').innerHTML = proven === false
+                    ? `<div class="changes calm" style="border-color:#ffaa0066;background:#16130a"><h3 style="color:#ffc766">Watchlist mode: no BUY rule is proven yet</h3>
+                       <ul><li>The best rule on older data failed on the most recent, unseen year (see the Backtest tab). BUY and WATCH show setups to research, not trade calls.</li>
+                       <li>If you trade one anyway, use its stop and position size. The Shariah screen, zakat tools and HARAM alerts are not affected.</li></ul></div>`
+                    : '';
+                render();
             } catch (e) {
                 summary.textContent = 'The backtest has not run yet. It runs once a day after the US close, or start it from GitHub Actions.';
             }
@@ -360,7 +369,7 @@
 
         function passes(rec) {
             if (activeFilter === 'halal') return rec.halal_status === 'HALAL';
-            if (activeFilter === 'signals') return ['BUY', 'WATCH', 'SELL'].includes(rec.action);
+            if (activeFilter === 'signals') return ['BUY', 'WATCH'].includes(rec.action);
             if (activeFilter === 'rejected') return rec.action === 'AVOID';
             return true;
         }
@@ -390,7 +399,7 @@
                             <span class="chips">
                                 ${isCrypto ? '<span class="chip badge-crypto">Spot crypto</span>' : ''}
                                 ${badgeFor(rec)}
-                                <span class="chip action-${esc(action)}">${esc(rec.recommendation || rec.action)}</span>
+                                <span class="chip action-${esc(action)}">${esc(proven === false && ['BUY', 'WATCH'].includes(rec.action) ? rec.action + ' setup' : (rec.recommendation || rec.action))}</span>
                             </span>
                         </div>
                         ${action === 'avoid' ? '' : `<div class="confidence-bar"><div class="confidence-fill" style="width:${confPct}%"></div></div>`}
