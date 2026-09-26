@@ -181,6 +181,11 @@
                 <div class="zk-scroll" style="margin-top:12px"><table class="bt-table" id="bt-groups"></table></div>
             </div>
             <div class="zk-card">
+                <h2>Out-of-sample test: does any rule hold up on unseen data?</h2>
+                <div id="st-summary" class="zk-notes">Loading...</div>
+                <div class="zk-scroll" style="margin-top:12px"><table class="bt-table" id="st-table"></table></div>
+            </div>
+            <div class="zk-card">
                 <h2>Which individual signals carry an edge?</h2>
                 <div class="zk-scroll"><table class="bt-table" id="bt-signals"></table></div>
             </div>
@@ -319,9 +324,26 @@
                 document.getElementById('bt-signals').innerHTML = `<thead><tr><th>Signal</th><th>N</th><th>Avg 20d</th><th>Edge</th><th>Up after 20d</th></tr></thead><tbody>${
                     (bt.signals || []).map(x => `<tr><td>${esc(x.signal)}</td><td>${num(x.n, 0)}</td><td>${pct(x.avg_20d)}</td><td>${pct(x.edge_20d)}</td><td>${num(x.up_pct_20d, 1)}%</td></tr>`).join('')
                 }</tbody>`;
+                renderStudy(bt.study);
             } catch (e) {
                 summary.textContent = 'The backtest has not run yet. It runs once a day after the US close, or start it from GitHub Actions.';
             }
+        }
+
+        function renderStudy(st) {
+            const box = document.getElementById('st-summary');
+            if (!st) { box.textContent = 'The study runs with the next backtest.'; return; }
+            box.innerHTML = `<p class="verdict ${st.passed ? 'pos' : 'neg'}"><b>${esc(st.conclusion)}</b></p>
+                <p>Rules were fixed in advance. The best one on data before ${esc(st.cutoff)} is chosen, then judged only on the last ${st.test_days} days.
+                N counts the first day a signal turns on, so a signal lasting a week is one trade.</p>`;
+            const cell = x => `<td>${num(x.n || 0, 0)}</td><td>${rr(x.expectancy_r)}</td><td>${pct(x.edge_20d)}</td><td>${x.win_rate == null ? '-' : num(x.win_rate, 1) + '%'}</td>`;
+            document.getElementById('st-table').innerHTML = `<thead>
+                <tr><th></th><th colspan="4">Design period (older)</th><th colspan="4">Unseen last year</th></tr>
+                <tr><th>Rule</th><th>N</th><th>Per trade</th><th>Edge</th><th>Win</th><th>N</th><th>Per trade</th><th>Edge</th><th>Win</th></tr></thead><tbody>${
+                st.candidates.map(c => `<tr${c.rule === st.chosen ? ' style="background:#00d4aa14"' : ''}>
+                    <td title="${esc(c.description)}">${esc(c.rule)}${c.rule === st.chosen ? ' <span class="pos">&#9664; chosen</span>' : ''}<div class="muted" style="font-size:0.8em;white-space:normal">${esc(c.description)}</div></td>
+                    ${cell(c.train)}${cell(c.test)}</tr>`).join('')
+            }</tbody>`;
         }
 
         function renderTrack(track) {

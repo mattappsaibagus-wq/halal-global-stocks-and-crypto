@@ -83,10 +83,19 @@ def replay(symbol, hist, risk_cfg=None):
         if not entry or entry != entry:
             continue
         fwd = {h: (closes[t + h] / entry - 1) * 100 for h in HORIZONS if t + h < n}
-        event = {"action": action, "fwd": fwd,
-                 "signals": sorted({s["type"] for r in results for s in r["signals"]})}
+        tags = {s["type"] for r in results for s in r["signals"]}
+        for r in results:
+            for s in r["signals"]:
+                if s["type"] == "early_movement":
+                    tags.add("early_up" if s.get("direction") == "up" else "early_down")
+        sma50 = ind.sma(window, 50)
+        if sma50 and closes[t] > sma50:
+            tags.add("uptrend")
+        event = {"symbol": symbol, "date": hist.index[t].date().isoformat(), "action": action,
+                 "fwd": fwd, "signals": sorted(tags)}
 
-        if action == "BUY" and t + max(HORIZONS) < n:
+        # Every day gets a trade result, so any candidate rule can be scored.
+        if t + max(HORIZONS) < n:
             # Same plan the live advisor attaches to a BUY, anchored at the real entry.
             plan = build_risk_plan(entry, ind.atr(window, 14), risk_cfg)
             if plan:
@@ -149,15 +158,125 @@ def verdict(buy):
     if not buy.get("enough_data"):
         return f"Only {buy['n']} BUY signals: too few to judge."
     edge, exp = buy.get("edge_20d") or 0, buy.get("expectancy_r")
-    if edge > 0.5 and (exp is None or exp > 0):
-        return f"BUY signals beat the baseline by {edge:+.2f}% over 20 days (expectancy {exp:+.2f}R)."
-    if edge < -0.5 or (exp is not None and exp < 0):
-        return f"BUY signals did worse than random days ({edge:+.2f}% vs baseline, expectancy {exp:+.2f}R). Don't trade them as-is."
-    return f"BUY signals are roughly no better than random days ({edge:+.2f}% vs baseline)."
+    exp_txt = f"{exp:+.2f}R" if exp is not None else "n/a"
+    if exp is not None and exp < 0:
+        return (f"BUY trades lost money with the stop and target ({exp_txt} per trade; "
+                f"{edge:+.2f}% vs an average day over 20 days). Don't trade them as-is.")
+    if edge > 0.5 and (exp is None or exp > 0.05):
+        return f"BUY signals beat an average day by {edge:+.2f}% over 20 days, and trades averaged {exp_txt}."
+    if edge < -0.5:
+        return f"BUY signals did worse than an average day ({edge:+.2f}% over 20 days)."
+    return f"BUY signals are roughly no better than an average day ({edge:+.2f}% over 20 days, {exp_txt} per trade)."
+
+
+# ---------------------------------------------------------------------------
+# Out-of-sample study. The candidates below were written down BEFORE looking
+# at any results. One is chosen on the older data (train) and judged only on
+# the most recent year (test), which played no part in choosing it.
+# ---------------------------------------------------------------------------
+
+CANDIDATES = {
+    "current": ("Today's rule (advisor BUY)", lambda s, e: e["action"] == "BUY"),
+    "trend_volume": ("Volume spike while price is above SMA20 > SMA50",
+                     lambda s, e: {"volume_spike", "above_sma"} <= s),
+    "volume_up_day": ("Volume spike on a 3-day up move, price above SMA50",
+                      lambda s, e: {"volume_spike", "early_up", "uptrend"} <= s),
+    "momentum_continuation": ("Price above SMA20 > SMA50 and overbought or strong 1-month gain",
+                              lambda s, e: "above_sma" in s and bool({"rsi_overbought", "strong_momentum"} & s)),
+    "volume_breakout": ("Volume spike, above SMA20 > SMA50, and strong 1-month gain",
+                        lambda s, e: {"volume_spike", "above_sma", "strong_momentum"} <= s),
+}
+TEST_DAYS = 365
+MIN_TRAIN_N = 200
+MIN_TEST_N = 100
+
+
+def _rule_entries(events_by_symbol, rule):
+    """First day the rule turns on, per symbol (a signal that stays on for a
+    week is one trade, not five), so overlap barely inflates N."""
+    out = []
+    for events in events_by_symbol.values():
+        prev = False
+        for e in events:
+            on = bool(rule(set(e["signals"]), e))
+            if on and not prev:
+                out.append(e)
+            prev = on
+    return out
+
+
+def _rule_stats(entries, all_events):
+    """Rule results vs simply buying on ANY day of the same period.
+
+    In a rising market almost every long rule makes money, so a rule only
+    counts if it beats that baseline, by more than chance (t-stat >= 2).
+    """
+    r20 = [e["fwd"][20] for e in entries if 20 in e["fwd"]]
+    base = _avg([e["fwd"][20] for e in all_events if 20 in e["fwd"]])
+    trades = [e["trade"]["r"] for e in entries if "trade" in e]
+    base_r = [e["trade"]["r"] for e in all_events if "trade" in e]
+    base_mean = sum(base_r) / len(base_r) if base_r else None
+    excess = t_stat = None
+    if len(trades) > 1 and base_mean is not None:
+        mean = sum(trades) / len(trades)
+        sd = (sum((r - mean) ** 2 for r in trades) / (len(trades) - 1)) ** 0.5
+        excess = round(mean - base_mean, 3)
+        t_stat = round((mean - base_mean) / (sd / len(trades) ** 0.5), 2) if sd > 0 else None
+    return {
+        "n": len(trades),
+        "avg_20d": _avg(r20),
+        "edge_20d": round(_avg(r20) - base, 3) if r20 and base is not None else None,
+        "expectancy_r": _avg(trades),
+        "any_day_r": round(base_mean, 3) if base_mean is not None else None,
+        "excess_r": excess,
+        "t_stat": t_stat,
+        "win_rate": round(sum(r > 0 for r in trades) / len(trades) * 100, 1) if trades else None,
+    }
+
+
+def study(events_by_symbol, end_date):
+    from datetime import date, timedelta
+
+    cutoff = (date.fromisoformat(end_date) - timedelta(days=TEST_DAYS)).isoformat()
+    split = lambda part: {s: [e for e in ev if (e["date"] < cutoff) == (part == "train")]
+                          for s, ev in events_by_symbol.items()}
+    train, test = split("train"), split("test")
+    all_train = [e for ev in train.values() for e in ev]
+    all_test = [e for ev in test.values() for e in ev]
+
+    rows = []
+    for key, (desc, rule) in CANDIDATES.items():
+        rows.append({"rule": key, "description": desc,
+                     "train": _rule_stats(_rule_entries(train, rule), all_train),
+                     "test": _rule_stats(_rule_entries(test, rule), all_test)})
+
+    eligible = [r for r in rows if r["train"]["n"] >= MIN_TRAIN_N and r["train"]["excess_r"] is not None]
+    chosen = max(eligible, key=lambda r: r["train"]["excess_r"]) if eligible else None
+    t = chosen["test"] if chosen else {}
+    passed = bool(chosen) and t["n"] >= MIN_TEST_N \
+        and (t["expectancy_r"] or 0) > 0.05 and (t["edge_20d"] or 0) > 0 \
+        and (t["excess_r"] or 0) > 0 and (t["t_stat"] or 0) >= 2.0
+
+    if not chosen:
+        conclusion = "No candidate had enough signals in the training period."
+    elif passed:
+        t = chosen["test"]
+        conclusion = (f"'{chosen['rule']}' was picked on the older data and HELD UP on the unseen last year: "
+                      f"{t['n']} trades, {t['expectancy_r']:+.2f}R per trade vs {t['any_day_r']:+.2f}R for buying any day "
+                      f"(t = {t['t_stat']}), {t['edge_20d']:+.2f}% vs an average day.")
+    else:
+        t = chosen["test"]
+        exp_txt = f"{t['expectancy_r']:+.2f}R" if t["expectancy_r"] is not None else "n/a"
+        any_txt = f"{t['any_day_r']:+.2f}R" if t.get("any_day_r") is not None else "n/a"
+        conclusion = (f"'{chosen['rule']}' was the best on the older data but did NOT hold up on the unseen last year "
+                      f"({t['n']} trades, {exp_txt} per trade vs {any_txt} for buying any day, t = {t.get('t_stat')}). "
+                      f"No rule is proven; treat signals as a watchlist only.")
+    return {"cutoff": cutoff, "test_days": TEST_DAYS, "candidates": rows,
+            "chosen": chosen["rule"] if chosen else None, "passed": passed, "conclusion": conclusion}
 
 
 def run(symbols, years=3, fetch=fetch_history, risk_cfg=None, now=None):
-    by_region, all_events, covered = {}, [], []
+    by_region, all_events, covered, by_symbol = {}, [], [], {}
     for symbol in symbols:
         hist = fetch(symbol, years)
         if hist is None or len(hist) < WARMUP + max(HORIZONS) + 2:
@@ -166,6 +285,7 @@ def run(symbols, years=3, fetch=fetch_history, risk_cfg=None, now=None):
         events = replay(symbol, hist, risk_cfg)
         print(f"[backtest] {symbol}: {len(hist)} bars, {sum(e['action'] == 'BUY' for e in events)} BUY signals")
         covered.append(symbol)
+        by_symbol[symbol] = events
         all_events += events
         by_region.setdefault(region(symbol), []).extend(events)
 
@@ -175,8 +295,10 @@ def run(symbols, years=3, fetch=fetch_history, risk_cfg=None, now=None):
     for g in groups.values():
         g["verdict"] = verdict(g["BUY"])
 
+    end_date = max((e["date"] for e in all_events), default=None)
     return {
         "generated_at": (now or datetime.now(timezone.utc)).isoformat(),
+        "study": study(by_symbol, end_date) if end_date else None,
         "years": years,
         "symbols": covered,
         "method": {
@@ -206,6 +328,8 @@ def main(argv=None):
     with open(args.out, "w") as f:
         json.dump(result, f, indent=2)
     print(f"[backtest] {result['groups']['All markets']['verdict']}")
+    if result.get("study"):
+        print(f"[backtest] STUDY: {result['study']['conclusion']}")
     print(f"[backtest] saved {args.out}")
 
 

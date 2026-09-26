@@ -60,6 +60,19 @@ It runs daily after the US close and shows on the dashboard's **Backtest** tab. 
 
 Limits: news and fundamentals are not replayed; consecutive-day signals overlap; delisted companies are missing (survivorship bias).
 
+**Out-of-sample study.** Five candidate BUY rules were written down before any results were seen (see `CANDIDATES` in `backtest.py`):
+
+1. The rule with the best results on the older data (all but the last year) is chosen.
+2. It is then judged only on the most recent year, which played no part in choosing it.
+
+To pass, on that final year it must:
+- make money per trade;
+- beat simply buying on any day (t-stat ≥ 2);
+- beat an average day's 20-day return;
+- have at least 100 trades.
+
+A signal counts once, on the first day it turns on. The live scanner only adopts a rule that passes.
+
 ### Live track record
 Every BUY/SELL/WATCH is recorded once, with its entry price and trading date, then scored against actual closes 5, 10 and 20 trading days later. BUY counts as right if the price rose after 20 days; SELL if it fell. The history is kept on the `scan-data` branch so it builds up between runs.
 
