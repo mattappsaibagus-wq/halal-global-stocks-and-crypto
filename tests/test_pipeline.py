@@ -152,6 +152,13 @@ class TestPipelineIntegration(unittest.TestCase):
         self.assertEqual(data["fx_per_usd"]["USD"], 1.0)
         self.assertIn("TRY", data["fx_per_usd"])
 
+    def test_charts_written_for_every_asset(self):
+        self._run()
+        with open(os.path.join(self.tmp.name, "charts.json")) as f:
+            charts = json.load(f)["series"]
+        self.assertEqual(set(charts), {"AAPL", "JPM"})   # haram assets get a chart too
+        self.assertEqual(len(charts["AAPL"]["closes"]), 10)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -53,6 +53,10 @@ class TestDashboardHTML(unittest.TestCase):
         for needle in ("standardsHtml", "Standards: ", "36-mo avg market cap", "measured interest income"):
             self.assertIn(needle, self.html)
 
+    def test_cards_collapse_and_have_charts(self):
+        for needle in ("card-head", "card-body", "openCards", "aria-expanded", "charts.json", "drawChart", "50-day average", "Expand all"):
+            self.assertIn(needle, self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

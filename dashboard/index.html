@@ -33,8 +33,11 @@
         .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
         .filters button {
             background: #111; color: #aaa; border: 1px solid #333; border-radius: 6px;
-            padding: 6px 12px; cursor: pointer; font-size: 0.85em;
+            padding: 10px 18px; cursor: pointer; font-size: 1.02em; font-weight: 600; min-height: 44px;
         }
+        .filters button:hover { color: #ddd; border-color: #555; }
+        .filters .spacer { flex: 1; }
+        .filters button.ghost { font-weight: 500; font-size: 0.9em; color: #888; }
         .filters button.active { border-color: #00d4aa; color: #00d4aa; }
         .signal-list { display: flex; flex-direction: column; gap: 12px; }
         .signal-card { background: #111; border: 1px solid #333; border-radius: 10px; padding: 16px 18px; }
@@ -42,6 +45,19 @@
         .signal-card.sell { border-left: 4px solid #ff8844; }
         .signal-card.watch { border-left: 4px solid #ffaa00; }
         .signal-card.hold { border-left: 4px solid #3a7bd5; }
+        .card-head { cursor: pointer; outline: none; }
+        .card-head:focus-visible { box-shadow: 0 0 0 2px #00d4aa66; border-radius: 6px; }
+        .signal-card:hover { box-shadow: 0 0 0 1px #3a3a44; }
+        .chev { display: inline-block; color: #666; margin-left: 8px; transition: transform .15s; font-size: 0.8em; }
+        .signal-card.open .chev { transform: rotate(90deg); color: #00d4aa; }
+        .card-body { margin-top: 10px; border-top: 1px solid #1d1d24; padding-top: 10px; }
+        .chart-box { margin: 10px 0; background: #0a0a0f; border: 1px solid #222; border-radius: 8px; padding: 10px; }
+        .chart-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; font-size: 0.85em; }
+        .chart-ranges button { background: #111; color: #999; border: 1px solid #333; border-radius: 5px; padding: 4px 10px; cursor: pointer; font-size: 0.85em; }
+        .chart-ranges button.active { color: #00d4aa; border-color: #00d4aa; }
+        .chart-box svg { width: 100%; height: auto; display: block; touch-action: pan-y; }
+        .chart-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.75em; color: #888; margin-top: 4px; }
+        .chart-legend i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 4px; }
         .signal-card.avoid { border-left: 4px solid #ff4444; opacity: 0.85; }
         .signal-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
         .signal-symbol { font-size: 1.25em; font-weight: 700; }
@@ -123,8 +139,9 @@
         .tabs button { white-space: nowrap; flex: 0 0 auto; }
         .tabs button {
             background: none; border: none; border-bottom: 2px solid transparent; color: #888;
-            padding: 10px 14px; font-size: 0.95em; cursor: pointer; font-weight: 600;
+            padding: 14px 20px; font-size: 1.15em; cursor: pointer; font-weight: 700;
         }
+        .tabs button:hover { color: #ddd; }
         .tabs .short { display: none; }
         @media (max-width: 560px) { .tabs .long { display: none; } .tabs .short { display: inline; } }
         .tabs button.active { color: #00d4aa; border-bottom-color: #00d4aa; }
@@ -230,6 +247,9 @@
             <button data-filter="halal">Halal only</button>
             <button data-filter="signals">Setups (Buy/Watch)</button>
             <button data-filter="rejected">Rejected</button>
+            <span class="spacer"></span>
+            <button class="ghost" id="expand-all" type="button">Expand all</button>
+            <button class="ghost" id="collapse-all" type="button">Collapse all</button>
         </div>
 
         <div id="signal-container" class="signal-list"><div class="loading">Loading signals...</div></div>
@@ -437,6 +457,7 @@
         let allRecs = [];
         let proven = null;  // set from the backtest's out-of-sample study
         let activeFilter = 'all';
+        const openCards = new Set();   // cards the user expanded; kept across re-renders
 
         const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -964,8 +985,10 @@
                 const ratios = rec.ratios && Object.keys(rec.ratios).length
                     ? `<span title="Ratios divided by ${esc(basisTxt)}">Debt ${rec.ratios.debt_ratio_pct}% &middot; Cash ${rec.ratios.cash_ratio_pct}% &middot; AR ${rec.ratios.receivables_ratio_pct}%${basisTxt ? ` <span class="muted">(of ${esc(basisTxt)})</span>` : ''}</span>`
                     : '';
+                const open = openCards.has(rec.symbol);
                 return `
-                    <div class="signal-card ${esc(action)}">
+                    <div class="signal-card ${esc(action)}${open ? ' open' : ''}" data-sym="${esc(rec.symbol)}">
+                        <div class="card-head" role="button" tabindex="0" aria-expanded="${open}" title="Click for details and chart">
                         <div class="signal-header">
                             <span class="signal-symbol">${esc(rec.symbol)}${badgeFor(rec)}${rec.name && rec.name !== rec.symbol ? `<span class="asset-name">${esc(rec.name)}</span>` : ''}</span>
                             <span class="chips">
@@ -974,8 +997,12 @@
                                     : esc(proven === false && ['BUY', 'WATCH'].includes(rec.action) ? rec.action + ' setup'
                                     : rec.action === 'AVOID' ? 'Data incomplete'
                                     : (rec.recommendation || rec.action))}</span>
+                                <span class="chev" aria-hidden="true">&#9654;</span>
                             </span>
                         </div>
+                        ${priceLineHtml(rec)}
+                        </div>
+                        <div class="card-body"${open ? '' : ' hidden'}>
                         ${action === 'avoid' ? '' : `<div class="confidence-bar"><div class="confidence-fill" style="width:${confPct}%"></div></div>`}
                         <div class="signal-meta">
                             ${action === 'avoid' ? '' : `<span>Confidence: ${confPct}%</span><span>Signals: ${rec.signal_count || 0}</span>`}
@@ -984,13 +1011,14 @@
                             ${rec.sector ? `<span>${esc(rec.sector)}${rec.industry && rec.industry !== 'Unknown' ? ' · ' + esc(rec.industry) : ''}</span>` : ''}
                             ${rec.as_of ? `<span>Data as of ${esc(rec.as_of)}</span>` : ''}
                         </div>
-                        ${priceLineHtml(rec)}
+                        <div class="chart-box" id="chart-${esc(rec.symbol)}"><div class="muted">Loading chart…</div></div>
                         ${rec.personal_exclusion ? `<div class="compliance-note">Excluded by your personal filter: ${esc(rec.personal_exclusion)}</div>` : ''}
                         ${standardsHtml(rec)}
                         ${planHtml(rec)}
                         ${rec.compliance_note ? `<div class="compliance-note">${esc(rec.compliance_note)}</div>` : ''}
                         ${newsHtml(rec)}
                         ${reasons.length ? `<ul class="reasons ${rec.halal_status === 'QUESTIONABLE' ? 'questionable' : ''}">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
+                        </div>
                     </div>`;
             };
             // Stocks first, spot crypto below; each group keeps the advisor's ranking.
@@ -1001,6 +1029,7 @@
             container.innerHTML = groups.map(([title, items]) =>
                 `<h2 class="group-title">${title} <span class="count">${items.length}</span></h2>` + items.map(card).join('')
             ).join('');
+            openCards.forEach(sym => drawChart(sym));
         }
 
         async function loadData() {
@@ -1035,11 +1064,121 @@
             }
         }
 
+        // ---- Expand / collapse cards ----
+        function setOpen(cardEl, open) {
+            const sym = cardEl.dataset.sym;
+            open ? openCards.add(sym) : openCards.delete(sym);
+            cardEl.classList.toggle('open', open);
+            cardEl.querySelector('.card-body').hidden = !open;
+            cardEl.querySelector('.card-head').setAttribute('aria-expanded', open);
+            if (open) drawChart(sym);
+        }
+        const container0 = document.getElementById('signal-container');
+        container0.addEventListener('click', e => {
+            const head = e.target.closest('.card-head');
+            if (!head || e.target.closest('a')) return;
+            const cardEl = head.closest('.signal-card');
+            setOpen(cardEl, !cardEl.classList.contains('open'));
+        });
+        container0.addEventListener('keydown', e => {
+            const head = e.target.closest('.card-head');
+            if (head && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); head.click(); }
+        });
+        document.getElementById('expand-all').addEventListener('click', () =>
+            document.querySelectorAll('#signal-container .signal-card').forEach(c => setOpen(c, true)));
+        document.getElementById('collapse-all').addEventListener('click', () =>
+            document.querySelectorAll('#signal-container .signal-card').forEach(c => setOpen(c, false)));
+
+        // ---- Price charts (1 year of daily closes from charts.json, loaded on first click) ----
+        let chartsPromise = null;
+        const chartRange = {};   // symbol -> days shown
+        const RANGES = [['1M', 22], ['3M', 66], ['6M', 130], ['1Y', 260]];
+        const loadCharts = () => chartsPromise || (chartsPromise =
+            fetch('charts.json', {cache: 'no-store'}).then(r => r.ok ? r.json() : {series: {}}).catch(() => ({series: {}})));
+        function sma(arr, n) {
+            const out = []; let sum = 0;
+            arr.forEach((v, i) => { sum += v; if (i >= n) sum -= arr[i - n]; out.push(i >= n - 1 ? sum / n : null); });
+            return out;
+        }
+        async function drawChart(sym) {
+            const box = document.getElementById('chart-' + sym);
+            if (!box) return;
+            const s = ((await loadCharts()).series || {})[sym];
+            if (!s || !s.closes || s.closes.length < 2) { box.innerHTML = '<div class="muted">No chart data for this asset.</div>'; return; }
+            const rec = allRecs.find(r => r.symbol === sym) || {};
+            const days = chartRange[sym] || 130;
+            const ma50all = sma(s.closes, 50);
+            const start = Math.max(0, s.closes.length - days);
+            const dates = s.dates.slice(start), closes = s.closes.slice(start), ma50 = ma50all.slice(start);
+            const plan = rec.risk_plan;
+            const vals = closes.concat(ma50.filter(v => v != null), plan ? [plan.stop, plan.target] : []);
+            let lo = Math.min(...vals), hi = Math.max(...vals);
+            const pad = (hi - lo) * 0.06 || hi * 0.01 || 1; lo -= pad; hi += pad;
+            const W = 640, H = 220, L = 4, R = 58, T = 8, B = 20;
+            const x = i => L + (W - L - R) * (closes.length === 1 ? 0 : i / (closes.length - 1));
+            const y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
+            const up = closes[closes.length - 1] >= closes[0];
+            const col = up ? '#00d4aa' : '#ff7070';
+            const path = closes.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('');
+            const area = `${path}L${x(closes.length - 1).toFixed(1)},${H - B}L${x(0).toFixed(1)},${H - B}Z`;
+            const maPath = ma50.map((v, i) => v == null ? '' : `${ma50[i - 1] == null ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join('');
+            const hline = (v, c, label) => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="${c}" stroke-dasharray="4 4" stroke-width="1"/>
+                <text x="${L + 4}" y="${y(v) - 4}" fill="${c}" font-size="11">${label} ${fmtPx(v)}</text>`;
+            const chg = (closes[closes.length - 1] / closes[0] - 1) * 100;
+            const cur = esc(rec.currency || (rec.asset_type === 'crypto' ? 'USD' : ''));
+            const gid = 'g' + sym.replace(/[^\w]/g, '');
+            box.innerHTML = `
+                <div class="chart-top">
+                    <span><b class="${up ? 'pos' : 'neg'}">${chg >= 0 ? '+' : ''}${chg.toFixed(2)}%</b> <span class="muted">${esc(dates[0])} → ${esc(dates[dates.length - 1])} · daily close${cur ? ', ' + cur : ''}</span></span>
+                    <span class="chart-ranges">${RANGES.map(([k, d]) => `<button type="button" data-days="${d}" class="${d === days ? 'active' : ''}">${k}</button>`).join(' ')}</span>
+                </div>
+                <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(sym)} price chart">
+                    <defs><linearGradient id="${gid}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="${col}" stop-opacity="0.25"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+                    <text x="${W - R + 4}" y="${T + 10}" fill="#666" font-size="11">${fmtPx(hi - pad)}</text>
+                    <text x="${W - R + 4}" y="${H - B}" fill="#666" font-size="11">${fmtPx(lo + pad)}</text>
+                    <path d="${area}" fill="url(#${gid})"/>
+                    ${maPath ? `<path d="${maPath}" fill="none" stroke="#ffaa00" stroke-width="1.2" opacity="0.8"/>` : ''}
+                    <path d="${path}" fill="none" stroke="${col}" stroke-width="1.8"/>
+                    ${plan ? hline(plan.stop, '#ff7070', 'Stop') + hline(plan.target, '#00d4aa', 'Target') : ''}
+                    <text x="${L}" y="${H - 5}" fill="#666" font-size="11">${esc(dates[0])}</text>
+                    <text x="${W - R}" y="${H - 5}" fill="#666" font-size="11" text-anchor="end">${esc(dates[dates.length - 1])}</text>
+                    <g class="hover" visibility="hidden">
+                        <line class="hx" y1="${T}" y2="${H - B}" stroke="#888" stroke-width="0.7"/>
+                        <circle class="hc" r="3.5" fill="${col}"/>
+                        <rect class="hb" height="18" rx="3" fill="#1b1b22" stroke="#333"/>
+                        <text class="ht" font-size="11" fill="#ddd"></text>
+                    </g>
+                    <rect x="${L}" y="${T}" width="${W - L - R}" height="${H - T - B}" fill="transparent" class="hit"/>
+                </svg>
+                <div class="chart-legend"><span><i style="background:${col}"></i>Price</span><span><i style="background:#ffaa00"></i>50-day average</span>${plan ? '<span><i style="background:#ff7070"></i>Stop / <i style="background:#00d4aa"></i>Target from the trade plan</span>' : ''}<span>Source: Yahoo Finance, completed sessions</span></div>`;
+            box.querySelector('.chart-ranges').onclick = e => {
+                const b = e.target.closest('button'); if (!b) return;
+                chartRange[sym] = +b.dataset.days; drawChart(sym);
+            };
+            const svg = box.querySelector('svg'), g = svg.querySelector('.hover');
+            const move = ev => {
+                const pt = svg.getBoundingClientRect();
+                const px = (ev.clientX - pt.left) / pt.width * W;
+                const i = Math.max(0, Math.min(closes.length - 1, Math.round((px - L) / (W - L - R) * (closes.length - 1))));
+                const cx = x(i), cy = y(closes[i]);
+                const label = `${dates[i]}  ${fmtPx(closes[i])}`;
+                g.setAttribute('visibility', 'visible');
+                g.querySelector('.hx').setAttribute('x1', cx); g.querySelector('.hx').setAttribute('x2', cx);
+                g.querySelector('.hc').setAttribute('cx', cx); g.querySelector('.hc').setAttribute('cy', cy);
+                const bw = label.length * 6.4 + 10, bx = Math.min(Math.max(cx - bw / 2, L), W - R - bw);
+                const hb = g.querySelector('.hb'); hb.setAttribute('x', bx); hb.setAttribute('y', T); hb.setAttribute('width', bw);
+                const ht = g.querySelector('.ht'); ht.setAttribute('x', bx + 5); ht.setAttribute('y', T + 13); ht.textContent = label;
+            };
+            svg.addEventListener('pointermove', move);
+            svg.addEventListener('pointerdown', move);
+            svg.addEventListener('pointerleave', () => g.setAttribute('visibility', 'hidden'));
+        }
+
         document.getElementById('filters').addEventListener('click', e => {
-            const btn = e.target.closest('button');
+            const btn = e.target.closest('button[data-filter]');
             if (!btn) return;
             activeFilter = btn.dataset.filter;
-            document.querySelectorAll('#filters button').forEach(b => b.classList.toggle('active', b === btn));
+            document.querySelectorAll('#filters button[data-filter]').forEach(b => b.classList.toggle('active', b === btn));
             render();
         });
 

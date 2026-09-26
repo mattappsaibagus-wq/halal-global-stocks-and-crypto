@@ -53,8 +53,12 @@ def _series(hist, days=520):
             "closes": [round(float(c), 4) for c in tail["Close"]]}
 
 
+CHART_DAYS = 260   # ~1 trading year per asset, for the dashboard charts
+
+
 def main(watchlist_path=None, dashboard_dir=None, now=None):
     now = now or datetime.now(timezone.utc)
+    charts = {}
     data_dir = get_data_dir()
     print(f"{TAG} Starting pipeline - data dir: {data_dir}")
 
@@ -81,11 +85,13 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
         screening.append(shariah_result)
 
         if shariah_result.get("status") != "HALAL":
+            charts[symbol] = _series(daily_history(symbol, now=now), CHART_DAYS)  # chart only, no signals
             reasons = "; ".join(shariah_result.get("rejection_reasons", [])) or "not halal"
             print(f"{TAG} {symbol} is {shariah_result.get('status')} ({reasons}) - skipping signal agents")
             continue
 
         hist = daily_history(symbol, now=now)
+        charts[symbol] = _series(hist, CHART_DAYS)
         shariah_result["as_of"] = bar_date(hist)
         shariah_result["stale"] = is_stale(shariah_result["as_of"], now)
         above, _ = regime.trend(hist)
@@ -181,6 +187,9 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
         },
         os.path.join(dashboard_dir, "data.json"),
     )
+    # Separate file so the main page loads fast; charts are fetched on first click.
+    save_json({"generated_at": generated_at, "series": {k: v for k, v in charts.items() if v}},
+              os.path.join(dashboard_dir, "charts.json"))
     print(f"{TAG} Pipeline complete - dashboard data saved.")
     return report
 
