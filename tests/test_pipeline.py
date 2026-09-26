@@ -130,7 +130,8 @@ class TestPipelineIntegration(unittest.TestCase):
 
     def test_halal_to_haram_change_writes_alert_file(self):
         with open(os.path.join(self.tmp.name, "compliance_state.json"), "w") as f:
-            json.dump({"statuses": {"JPM": "HALAL"}, "changes": []}, f)
+            from agents.compliance_watch import METHOD_VERSION
+            json.dump({"statuses": {"JPM": "HALAL"}, "changes": [], "method": METHOD_VERSION}, f)
         report = self._run()
         self.assertEqual([a["symbol"] for a in report["compliance_alerts"]], ["JPM"])
         self.assertTrue(os.path.exists(os.path.join(self.tmp.name, "compliance_alerts.md")))

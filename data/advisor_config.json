@@ -24,12 +24,12 @@
   },
   "standard_profiles": {
     "AAOIFI_STANDARD_21": {
-      "label": "AAOIFI Standard No. 21",
+      "label": "AAOIFI Shariah Standard No. 21",
       "max_debt_ratio": 0.3,
       "max_cash_ratio": 0.3,
-      "max_receivables_ratio": 0.3,
+      "max_receivables_ratio": null,
       "max_haram_revenue": 0.05,
-      "denominator_basis": "market_cap"
+      "denominator_basis": "avg_market_cap_36m"
     },
     "DJIM": {
       "label": "Dow Jones Islamic Market",
@@ -37,7 +37,7 @@
       "max_cash_ratio": 0.33,
       "max_receivables_ratio": 0.33,
       "max_haram_revenue": 0.05,
-      "denominator_basis": "market_cap"
+      "denominator_basis": "avg_market_cap_36m"
     },
     "CUSTOM": {
       "label": "Custom (your scholar's limits)",
@@ -45,22 +45,25 @@
       "max_cash_ratio": 0.3,
       "max_receivables_ratio": 0.49,
       "max_haram_revenue": 0.05,
-      "denominator_basis": "market_cap"
+      "denominator_basis": "avg_market_cap_36m"
     }
   },
   "_notes": {
-    "denominator_basis": "AAOIFI/DJIM normally use a 24-36 month average market capitalisation. A 24-month average is not available from Yahoo Finance, so current market capitalisation is used as a documented fallback. Set to 'total_assets' to screen against total assets instead. Every screening result records which basis was applied in denominator_basis.",
-    "default_non_compliant_revenue_ratio": "Yahoo Finance does not publish a breakdown of non-compliant (haram) revenue by line of business. Until a manual override is supplied, this conservative estimate is used to derive the dividend purification obligation. It is an ESTIMATE, not a measured figure, and each result is tagged purification_basis: 'estimate' so it is never presented as fact. Override per-ticker by passing non_compliant_revenue_ratio in the agent's data payload.",
+    "denominator_basis": "Ratios divide by the trailing 36-month average market capitalisation (monthly closes x shares outstanding), as AAOIFI implementations (Musaffa, Islamicly) and S&P do. Falls back to current market cap, then total assets, and every result records which basis was used.",
+    "default_non_compliant_revenue_ratio": "Used only when a company's income statement does not report interest income. Otherwise impure income = reported interest income / total revenue (basis 'measured: interest income'). Revenue from other impure activities is not broken out by Yahoo, so the measured figure is a floor.",
     "data_incomplete_is_halal": "When sector or financial data cannot be resolved (Yahoo Finance returns no profile for some exchange-listed tickers), the asset is reported as QUESTIONABLE rather than silently passing the screen. A bank with no data must not be reported as Halal.",
     "standard": "Set shariah_compliance.standard to AAOIFI_STANDARD_21 (default), DJIM, or CUSTOM. The limits live in standard_profiles; edit the CUSTOM profile to match your own scholar.",
     "islamic_institution_allowlist": "Islamic banks and takaful operators listed here skip the sector and leverage screens (every bank is labelled 'Banks' by Yahoo, and deposits read as debt). Add or remove tickers to follow your scholar.",
     "exclude_defence": "true (default) rejects aerospace & defence companies, as stricter indices do. Set false if your scholar permits them.",
-    "risk": "Every BUY gets a plan: stop = entry - atr_stop_mult x ATR(14), target = entry + atr_target_mult x ATR(14). position_pct is how much of your account to put in so that hitting the stop loses risk_per_trade_pct of the account, capped at max_position_pct."
+    "risk": "Every BUY gets a plan: stop = entry - atr_stop_mult x ATR(14), target = entry + atr_target_mult x ATR(14). position_pct is how much of your account to put in so that hitting the stop loses risk_per_trade_pct of the account, capped at max_position_pct.",
+    "max_receivables_ratio": "null = not tested. AAOIFI Standard 21 as applied by Musaffa and Zoya has no receivables screen; DJIM uses 33%, S&P 49%.",
+    "personal_exclusions": "Your own extra filter, applied on top of the Shariah screen (like Amal Invest's custom filters / boycott list). Map ticker -> reason, e.g. {\"XYZ\": \"boycott list\"}. Listed symbols always show AVOID."
   },
   "risk": {
     "risk_per_trade_pct": 1.0,
     "atr_stop_mult": 2.0,
     "atr_target_mult": 3.0,
     "max_position_pct": 10.0
-  }
+  },
+  "personal_exclusions": {}
 }

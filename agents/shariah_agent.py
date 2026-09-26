@@ -1,6 +1,7 @@
 import os
 from datetime import datetime, timezone
 
+from agents import standards as multi
 from agents.base_agent import (
     BaseAgent,
     fetch_yf_financials,
@@ -57,9 +58,9 @@ DEFAULT_STANDARD = "AAOIFI_STANDARD_21"
 DEFAULT_LIMITS = {
     "max_debt_ratio": 0.30,
     "max_cash_ratio": 0.30,
-    "max_receivables_ratio": 0.30,
+    "max_receivables_ratio": None,     # AAOIFI has no receivables test
     "max_haram_revenue": 0.05,
-    "denominator_basis": "market_cap",
+    "denominator_basis": "avg_market_cap_36m",
 }
 
 
@@ -185,7 +186,7 @@ class ShariahScreenerAgent(BaseAgent):
                 ("Cash ratio", cash_ratio, self.max_cash_ratio),
                 ("Receivables ratio", receivables_ratio, self.max_receivables_ratio),
             ):
-                if value > limit:
+                if limit is not None and value > limit:
                     rejection_reasons.append(
                         f"{label} ({_percent(value)}%) exceeds {self.standard} limit "
                         f"({_limit_pct(limit)})"
@@ -203,6 +204,10 @@ class ShariahScreenerAgent(BaseAgent):
                 f"Non-compliant revenue ({_percent(non_compliant_ratio)}%) exceeds "
                 f"{self.standard} limit ({_limit_pct(self.max_haram_revenue)})"
             )
+
+        business_ok = not self._screen_business_activity(sector, industry)
+        standards = multi.evaluate(financials, non_compliant_ratio) if business_ok else \
+            {k: {"pass": False, "fails": ["prohibited business activity"]} for k in multi.STANDARDS}
 
         is_halal = not rejection_reasons and not data_issues
         if rejection_reasons:
@@ -234,6 +239,8 @@ class ShariahScreenerAgent(BaseAgent):
             "purification_per_share": purification_per_share,
             "purification_basis": basis if is_halal else "n/a",
             "denominator_basis": denominator_basis,
+            "standards": standards,
+            "standards_passed": multi.summary(standards),
             "sector": sector,
             "industry": industry,
             **self._quote_fields(financials),
@@ -298,15 +305,18 @@ class ShariahScreenerAgent(BaseAgent):
         return []
 
     def _resolve_denominator(self, financials):
-        """Pick the AAOIFI ratio denominator, falling back as documented."""
+        """Pick the ratio denominator, falling back as documented."""
         market_cap = to_float(financials.get("market_cap"))
+        avg_cap = to_float(financials.get("avg_market_cap_36m"))
         total_assets = to_float(financials.get("total_assets"))
 
         if self.denominator_basis == "total_assets" and total_assets > 0:
             return total_assets, "total_assets"
+        if self.denominator_basis == "avg_market_cap_36m" and avg_cap > 0:
+            # AAOIFI / S&P use a trailing 36-month average, so one volatile
+            # month cannot flip the verdict.
+            return avg_cap, "avg_market_cap_36m"
         if market_cap > 0:
-            # Documented fallback: a 24-36 month average market cap is not
-            # available from Yahoo Finance, so current market cap is used.
             return market_cap, "market_cap"
         if total_assets > 0:
             return total_assets, "total_assets"
@@ -315,12 +325,16 @@ class ShariahScreenerAgent(BaseAgent):
     def _resolve_non_compliant_ratio(self, financials):
         """Return (non_compliant_revenue_ratio, basis).
 
-        Yahoo Finance exposes no breakdown of impermissible revenue, so an
-        explicit override is used when supplied and a documented estimate is
-        used otherwise. The basis label keeps the output honest.
+        Order: an explicit override; else interest income measured from the
+        company's income statement (the main impure income of most
+        companies that pass the business screen); else a labelled estimate.
         """
         if financials.get("non_compliant_revenue_ratio") is not None:
             return to_float(financials["non_compliant_revenue_ratio"]), "supplied"
+        interest = financials.get("interest_income")
+        revenue = to_float(financials.get("total_revenue"))
+        if interest is not None and revenue > 0:
+            return max(to_float(interest), 0.0) / revenue, "measured: interest income"
         return to_float(self.default_non_compliant_revenue_ratio), "estimate"
 
     # -- spot crypto ------------------------------------------------------

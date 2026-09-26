@@ -49,6 +49,10 @@ class TestDashboardHTML(unittest.TestCase):
         self.assertIn("Not financial advice", self.html)
         self.assertIn("Not a fatwa", self.html)
 
+    def test_multi_standard_display(self):
+        for needle in ("standardsHtml", "Standards: ", "36-mo avg market cap", "measured interest income"):
+            self.assertIn(needle, self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

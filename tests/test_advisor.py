@@ -89,6 +89,20 @@ class TestAdvisorHalalEnforcement(unittest.TestCase):
 
 
 
+class TestPersonalFilter(unittest.TestCase):
+    def test_excluded_symbol_is_avoided_with_reason(self):
+        adv = AdvisorAgent({"personal_exclusions": {"aapl": "boycott list"}})
+        recs = adv.consolidate([_shariah("AAPL", "HALAL"), _bullish("AAPL", "early_detector"), _bullish("AAPL", "momentum_agent")])
+        self.assertEqual(recs[0]["action"], "AVOID")
+        self.assertEqual(recs[0]["recommendation"], "EXCLUDED (PERSONAL FILTER)")
+        self.assertEqual(recs[0]["personal_exclusion"], "boycott list")
+        self.assertFalse(recs[0]["is_halal"])
+
+    def test_industry_passed_through(self):
+        sh = _shariah("MSFT", "HALAL"); sh["industry"] = "Software - Infrastructure"
+        self.assertEqual(AdvisorAgent().consolidate([sh])[0]["industry"], "Software - Infrastructure")
+
+
 class TestSellRetired(unittest.TestCase):
     def test_bearish_majority_gives_no_signal(self):
         bearish = lambda sym, agent: {"symbol": sym, "agent": agent, "confidence": 0.9, "alert": True,

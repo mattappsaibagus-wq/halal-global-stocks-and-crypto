@@ -65,7 +65,7 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
     shariah_screener = ShariahScreenerAgent()
     downstream = [EarlyDetectorAgent(), MomentumAgent(), DdAgent()]
     news_agent = NewsScannerAgent()   # headlines are information only, never a signal
-    advisor = AdvisorAgent({"risk": config.get("risk", {})})
+    advisor = AdvisorAgent({"risk": config.get("risk", {}), "personal_exclusions": config.get("personal_exclusions", {})})
     learning_loop = LearningLoop(history_file=os.path.join(data_dir, "learning_history.json"))
 
     all_results = []

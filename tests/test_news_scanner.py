@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime, timezone
 from unittest import mock
 
-from agents.news_scanner import NewsScannerAgent, parse_feed, search_query
+from agents.news_scanner import NewsScannerAgent, editions_for, parse_feed, search_query
 
 NOW = datetime(2026, 9, 26, 12, tzinfo=timezone.utc)
 
@@ -38,6 +38,23 @@ class TestNews(unittest.TestCase):
         self.assertEqual(search_query("5347.KL", "Tenaga Nasional Berhad"), '"Tenaga Nasional"')
         self.assertEqual(search_query("BTC-USD", "BTC-USD"), '"Bitcoin"')
         self.assertEqual(search_query("2222.SR", ""), '"2222" stock')
+
+    def test_local_edition_for_regional_stocks(self):
+        self.assertEqual([t for t, _ in editions_for("AAPL")], ["en"])
+        self.assertEqual([t for t, _ in editions_for("TLKM.JK")], ["en", "jk"])
+        self.assertIn("gl=ID", editions_for("TLKM.JK")[1][1])
+        self.assertIn("gl=TR", editions_for("BIMAS.IS")[1][1])
+
+    def test_editions_merged_and_deduplicated(self):
+        class R:
+            text = FEED
+            def raise_for_status(self): pass
+        with mock.patch("requests.get", return_value=R()), \
+             mock.patch("agents.news_scanner.parse_feed", side_effect=lambda t, limit=10: parse_feed(t, now=NOW, limit=limit)):
+            res = NewsScannerAgent().analyze("TLKM.JK", name="Telkom Indonesia")
+        titles = [i["title"] for i in res["news"]]
+        self.assertEqual(len(titles), len(set(titles)))   # same feed twice, no duplicates
+        self.assertIsNone(res["news_error"])
 
     def test_network_failure_gives_no_news_and_no_signal(self):
         with mock.patch("requests.get", side_effect=ConnectionError("blocked")):

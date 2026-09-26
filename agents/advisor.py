@@ -51,6 +51,8 @@ class AdvisorAgent:
         self.weighted_signals = []
         self.risk_tolerance = self.config.get("risk_tolerance", "moderate")
         self.risk_cfg = self.config.get("risk", {})
+        # Your own extra filter (e.g. a boycott list): always AVOID, whatever the screen says.
+        self.exclusions = {s.upper(): why for s, why in (self.config.get("personal_exclusions") or {}).items()}
 
     def consolidate(self, agent_results):
         summary = {}
@@ -95,6 +97,13 @@ class AdvisorAgent:
         recommendations = []
         for symbol, data in summary.items():
             shariah = data["shariah"]
+            if symbol.upper() in self.exclusions:
+                rec = self._base(symbol, data, "AVOID", 0.0, 0)
+                rec.update(self._shariah_fields(shariah))
+                rec.update(recommendation="EXCLUDED (PERSONAL FILTER)", is_halal=False, purification_pct=0.0,
+                           purification_per_share=0.0, personal_exclusion=self.exclusions[symbol.upper()] or "on your list")
+                recommendations.append(rec)
+                continue
             if shariah is not None and shariah.get("status", "HARAM") != "HALAL":
                 recommendations.append(self._rejected(symbol, data, shariah))
                 continue
@@ -174,6 +183,7 @@ class AdvisorAgent:
             "standard_used": shariah.get("standard_used", "N/A"),
             "asset_type": shariah.get("asset_type", "unknown"),
             "sector": shariah.get("sector"),
+            "industry": shariah.get("industry"),
             "ratios": shariah.get("ratios", {}),
             "name": shariah.get("name", ""),
             "price": shariah.get("price", 0.0),
@@ -183,6 +193,9 @@ class AdvisorAgent:
             "as_of": shariah.get("as_of"),
             "above_200d": shariah.get("above_200d"),
             "stale": shariah.get("stale"),
+            "standards": shariah.get("standards"),
+            "standards_passed": shariah.get("standards_passed"),
+            "denominator_basis": shariah.get("denominator_basis"),
             "news": shariah.get("news", []),
             "region": shariah.get("region"),
         }

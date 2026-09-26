@@ -142,12 +142,48 @@ def _first_bs_value(balance_sheet, labels):
     return None
 
 
+def _statement_value(frame, labels):
+    """Most recent reported value of the first matching row, or None.
+
+    Unlike _first_bs_value, a missing/NaN figure stays None: "not reported"
+    must never be read as "zero" (e.g. zero interest income).
+    """
+    if frame is None or getattr(frame, "empty", True):
+        return None
+    for label in labels:
+        if label in frame.index:
+            for value in frame.loc[label].tolist():   # newest period first
+                try:
+                    v = float(value)
+                except (TypeError, ValueError):
+                    continue
+                if v == v:
+                    return v
+    return None
+
+
+def _fx_rate(from_ccy, to_ccy):
+    """Units of `to_ccy` per 1 `from_ccy` (Yahoo FX), or None."""
+    if not from_ccy or not to_ccy or from_ccy == to_ccy:
+        return 1.0
+    try:
+        import yfinance as yf
+        hist = yf.Ticker(f"{from_ccy}{to_ccy}=X").history(period="5d")
+        rate = to_float(hist["Close"].iloc[-1]) if not hist.empty else 0.0
+        return rate or None
+    except Exception:
+        return None
+
+
 def fetch_yf_financials(symbol):
     """Fetch screening fundamentals for an equity.
 
     Never raises: on failure it returns a zeroed payload carrying an 'error'
     key, so the screener can report the asset as data-incomplete instead of
     silently passing it.
+
+    Market values are converted into the currency the company reports its
+    accounts in, so debt/cash ratios never mix currencies.
     """
     empty = {
         "error": None,
@@ -155,15 +191,18 @@ def fetch_yf_financials(symbol):
         "sector": "Unknown",
         "industry": "Unknown",
         "market_cap": 0.0,
+        "avg_market_cap_36m": 0.0,
         "total_debt": 0.0,
         "cash_and_equivalents": 0.0,
         "accounts_receivable": 0.0,
         "total_assets": 0.0,
         "total_revenue": 0.0,
+        "interest_income": None,
         "dividend_yield": 0.0,
         "dividend_rate": 0.0,
         "price": 0.0,
         "currency": "",
+        "financial_currency": "",
         "name": "",
     }
 
@@ -175,32 +214,64 @@ def fetch_yf_financials(symbol):
 
         sector = info.get("sector") or "Unknown"
         industry = info.get("industry") or "Unknown"
-        market_cap = to_float(info.get("marketCap"))
+        currency = info.get("currency") or ""
+        fin_ccy = info.get("financialCurrency") or currency
 
-        total_assets = to_float(info.get("totalAssets"))
-        receivables = 0.0
-        if total_assets == 0.0:
+        try:
             balance_sheet = ticker.balance_sheet
-            if total_assets == 0.0:
-                total_assets = to_float(_first_bs_value(balance_sheet, ["Total Assets"]))
-            receivables = to_float(
-                _first_bs_value(
-                    balance_sheet,
-                    ["Net Receivables", "Receivables", "Accounts Receivable"],
-                )
-            )
+        except Exception:
+            balance_sheet = None
+        try:
+            income = ticker.income_stmt
+        except Exception:
+            income = None
+
+        total_assets = to_float(info.get("totalAssets")) or \
+            (_statement_value(balance_sheet, ["Total Assets"]) or 0.0)
+        receivables = _statement_value(balance_sheet, ["Accounts Receivable", "Receivables", "Net Receivables"]) or 0.0
+        total_debt = to_float(info.get("totalDebt")) or \
+            (_statement_value(balance_sheet, ["Total Debt"]) or 0.0)
+        cash = to_float(info.get("totalCash")) or \
+            (_statement_value(balance_sheet, ["Cash Cash Equivalents And Short Term Investments",
+                                              "Cash And Cash Equivalents"]) or 0.0)
+        revenue = to_float(info.get("totalRevenue")) or (_statement_value(income, ["Total Revenue"]) or 0.0)
+        interest_income = _statement_value(income, ["Interest Income", "Interest Income Non Operating"])
+
+        # Market values are quoted in the trading currency; statements may not be.
+        market_cap = to_float(info.get("marketCap"))
+        shares = to_float(info.get("sharesOutstanding"))
+        avg_cap = 0.0
+        if shares > 0:
+            try:
+                monthly = ticker.history(period="3y", interval="1mo", auto_adjust=False)
+                closes = [to_float(c) for c in monthly["Close"] if to_float(c) > 0]
+                if len(closes) >= 12:
+                    avg_cap = sum(closes) / len(closes) * shares
+            except Exception:
+                avg_cap = 0.0
+        error = None
+        if fin_ccy and currency and fin_ccy != currency:
+            rate = _fx_rate(currency, fin_ccy)
+            if rate:
+                market_cap *= rate
+                avg_cap *= rate
+            else:
+                error = f"reports in {fin_ccy} but trades in {currency}; no exchange rate available"
+                market_cap = avg_cap = 0.0
 
         return {
-            "error": None,
+            "error": error,
             "has_data": bool(market_cap > 0 and sector != "Unknown"),
             "sector": sector,
             "industry": industry,
             "market_cap": market_cap,
-            "total_debt": to_float(info.get("totalDebt")),
-            "cash_and_equivalents": to_float(info.get("totalCash")),
+            "avg_market_cap_36m": avg_cap,
+            "total_debt": total_debt,
+            "cash_and_equivalents": cash,
             "accounts_receivable": receivables,
             "total_assets": total_assets,
-            "total_revenue": to_float(info.get("totalRevenue")),
+            "total_revenue": revenue,
+            "interest_income": interest_income,
             "dividend_yield": to_float(info.get("dividendYield")),
             "dividend_rate": to_float(info.get("dividendRate")),
             "price": to_float(
@@ -208,7 +279,8 @@ def fetch_yf_financials(symbol):
                 or info.get("regularMarketPrice")
                 or info.get("previousClose")
             ),
-            "currency": info.get("currency") or "",
+            "currency": currency,
+            "financial_currency": fin_ccy,
             "name": info.get("longName") or info.get("shortName") or "",
         }
     except Exception as e:

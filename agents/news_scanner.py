@@ -15,7 +15,24 @@ from email.utils import parsedate_to_datetime
 
 from agents.base_agent import BaseAgent
 
-FEED = "https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
+FEED = "https://news.google.com/rss/search?q={q}&{edition}"
+EDITIONS = {  # Google News editions: English/US for all, plus the local edition for regional stocks
+    "US": "hl=en-US&gl=US&ceid=US:en",
+    ".JK": "hl=id&gl=ID&ceid=ID:id",
+    ".KL": "hl=en-MY&gl=MY&ceid=MY:en",
+    ".SR": "hl=en&gl=SA&ceid=SA:en",
+    ".AE": "hl=en&gl=AE&ceid=AE:en",
+    ".QA": "hl=en&gl=QA&ceid=QA:en",
+    ".IS": "hl=tr&gl=TR&ceid=TR:tr",
+}
+
+
+def editions_for(symbol):
+    eds = [("en", EDITIONS["US"])]
+    for suffix, ed in EDITIONS.items():
+        if suffix.startswith(".") and symbol.upper().endswith(suffix):
+            eds.append((suffix[1:].lower(), ed))
+    return eds
 MAX_AGE_DAYS = 7
 MAX_ITEMS = 5
 
@@ -79,20 +96,33 @@ class NewsScannerAgent(BaseAgent):
 
     def analyze(self, symbol, data=None, name=""):
         query = search_query(symbol, name) + f" when:{MAX_AGE_DAYS}d"
+        items, errors = [], []
         try:
             import requests
-            resp = requests.get(FEED.format(q=urllib.parse.quote(query)), timeout=10,
-                                headers={"User-Agent": "Mozilla/5.0 (HalalGlobalScanner/1.0)"})
-            resp.raise_for_status()
-            items = parse_feed(resp.text)
-            error = None
-        except Exception as exc:
-            items, error = [], f"{type(exc).__name__}"
+        except ImportError:
+            requests = None
+        for tag, edition in editions_for(symbol):
+            try:
+                resp = requests.get(FEED.format(q=urllib.parse.quote(query), edition=edition), timeout=10,
+                                    headers={"User-Agent": "Mozilla/5.0 (HalalGlobalScanner/1.0)"})
+                resp.raise_for_status()
+                for item in parse_feed(resp.text, limit=MAX_ITEMS * 2):
+                    item["edition"] = tag
+                    items.append(item)
+            except Exception as exc:
+                errors.append(type(exc).__name__)
+        items.sort(key=lambda i: i["published"], reverse=True)
+        seen, merged = set(), []
+        for i in items:
+            key = i["title"].lower()[:70]
+            if key not in seen:
+                seen.add(key)
+                merged.append(i)
         return {
             "symbol": symbol,
             "agent": self.name,
             "query": query,
-            "news": items,
-            "news_error": error,
+            "news": merged[:MAX_ITEMS],
+            "news_error": errors[0] if errors and not merged else None,
             "fetched_at": datetime.now(timezone.utc).isoformat(),
         }

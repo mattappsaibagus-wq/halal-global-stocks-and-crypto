@@ -86,6 +86,13 @@
         .news li { list-style: none; margin: 6px 0 0; line-height: 1.4; }
         .news a { color: #d8e6ff; text-decoration: none; } .news a:hover { text-decoration: underline; }
         .news .meta { color: #777; font-size: 0.9em; }
+        .stds { margin-top: 6px; font-size: 0.78em; color: #999; }
+        .stds details { display: inline; }
+        .stds summary { display: inline; cursor: pointer; list-style: none; }
+        .stds summary::-webkit-details-marker { display: none; }
+        .stds .std-pill { display: inline-block; border-radius: 10px; padding: 1px 8px; font-weight: 700; margin-right: 4px; }
+        .std-all { background: #00d4aa22; color: #00d4aa; } .std-some { background: #ffaa0022; color: #ffc766; } .std-none { background: #ff444422; color: #ff8888; }
+        .stds ul { margin: 6px 0 0 16px; } .stds li { margin: 2px 0; }
         .chip-sub { display: block; font-size: 0.72em; font-weight: 600; letter-spacing: 0.8px; opacity: 0.85; margin-top: 2px; text-align: center; }
         .chip { font-size: 0.72em; padding: 4px 9px; border-radius: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.4px; }
         .action-buy { background: rgba(0,212,170,0.2); color: #00d4aa; }
@@ -468,6 +475,16 @@
                 ${rec.stale ? '<span class="stale">STALE</span>' : ''}`;
         }
         const priceLineHtml = rec => `<div class="price-line" id="px-${esc(rec.symbol)}">${priceLineInner(rec)}</div>`;
+        function standardsHtml(rec) {
+            const s = rec.standards, sum = rec.standards_passed;
+            if (!s || !sum || !sum.of) return '';
+            const cls = sum.passed === sum.of ? 'std-all' : sum.passed === 0 ? 'std-none' : 'std-some';
+            return `<div class="stds"><details><summary><span class="std-pill ${cls}">Standards: ${sum.passed}/${sum.of} pass</span>
+                <span class="muted">AAOIFI · S&amp;P · FTSE · MSCI</span></summary><ul>${
+                Object.entries(s).map(([k, v]) => `<li>${v.pass === true ? '<span class="pos">&#10003;</span>' : v.pass === false ? '<span class="neg">&#10007;</span>' : '<span class="muted">?</span>'}
+                    <b>${esc(k)}</b>${v.fails && v.fails.length ? ' <span class="muted">' + esc(v.fails.join('; ')) + '</span>' : ''}</li>`).join('')
+            }</ul></details></div>`;
+        }
         function newsHtml(rec) {
             const items = rec.news || [];
             if (!items.length) return '';
@@ -547,9 +564,12 @@
             const recent = (changes || []).slice(0, 12);
             if (!recent.length) { box.innerHTML = ''; return; }
             const toHaram = recent.some(c => c.from === 'HALAL' && c.to === 'HARAM');
+            const line = c => c.symbol === '*'
+                ? `<li><b>${esc(c.name)}</b> on ${esc(c.date)}: ${esc((c.reasons || [])[0] || '')}</li>`
+                : `<li><b>${esc(c.symbol)}</b> ${esc(c.name || '')}: ${esc(c.from)} &rarr; ${esc(c.to)} on ${esc(c.date)}${c.reasons && c.reasons.length ? ` (${esc(c.reasons[0])})` : ''}</li>`;
             box.innerHTML = `<div class="changes ${toHaram ? '' : 'calm'}">
                 <h3>${toHaram ? 'Shariah status changes: check your holdings' : 'Recent Shariah status changes'}</h3>
-                <ul>${recent.map(c => `<li><b>${esc(c.symbol)}</b> ${esc(c.name || '')}: ${esc(c.from)} &rarr; ${esc(c.to)} on ${esc(c.date)}${c.reasons && c.reasons.length ? ` (${esc(c.reasons[0])})` : ''}</li>`).join('')}</ul>
+                <ul>${recent.map(line).join('')}</ul>
             </div>`;
         }
 
@@ -938,10 +958,11 @@
                 const isCrypto = rec.asset_type === 'crypto';
                 const reasons = rec.rejection_reasons || [];
                 const purification = rec.halal_status === 'HALAL' && !isCrypto
-                    ? `<span>Purification: ${Number(rec.purification_pct || 0).toFixed(2)}%${rec.purification_basis === 'estimate' ? ' (estimate)' : ''}</span>`
+                    ? `<span title="Share of dividends to give to charity">Purification: ${Number(rec.purification_pct || 0).toFixed(2)}%${rec.purification_basis === 'estimate' ? ' (estimate)' : String(rec.purification_basis || '').startsWith('measured') ? ' (measured interest income)' : ''}</span>`
                     : '';
+                const basisTxt = {avg_market_cap_36m: '36-mo avg market cap', market_cap: 'current market cap', total_assets: 'total assets'}[rec.denominator_basis] || '';
                 const ratios = rec.ratios && Object.keys(rec.ratios).length
-                    ? `<span>Debt ${rec.ratios.debt_ratio_pct}% &middot; Cash ${rec.ratios.cash_ratio_pct}% &middot; AR ${rec.ratios.receivables_ratio_pct}%</span>`
+                    ? `<span title="Ratios divided by ${esc(basisTxt)}">Debt ${rec.ratios.debt_ratio_pct}% &middot; Cash ${rec.ratios.cash_ratio_pct}% &middot; AR ${rec.ratios.receivables_ratio_pct}%${basisTxt ? ` <span class="muted">(of ${esc(basisTxt)})</span>` : ''}</span>`
                     : '';
                 return `
                     <div class="signal-card ${esc(action)}">
@@ -960,10 +981,12 @@
                             ${action === 'avoid' ? '' : `<span>Confidence: ${confPct}%</span><span>Signals: ${rec.signal_count || 0}</span>`}
                             ${purification}
                             ${ratios}
-                            ${rec.sector ? `<span>${esc(rec.sector)}</span>` : ''}
+                            ${rec.sector ? `<span>${esc(rec.sector)}${rec.industry && rec.industry !== 'Unknown' ? ' · ' + esc(rec.industry) : ''}</span>` : ''}
                             ${rec.as_of ? `<span>Data as of ${esc(rec.as_of)}</span>` : ''}
                         </div>
                         ${priceLineHtml(rec)}
+                        ${rec.personal_exclusion ? `<div class="compliance-note">Excluded by your personal filter: ${esc(rec.personal_exclusion)}</div>` : ''}
+                        ${standardsHtml(rec)}
                         ${planHtml(rec)}
                         ${rec.compliance_note ? `<div class="compliance-note">${esc(rec.compliance_note)}</div>` : ''}
                         ${newsHtml(rec)}

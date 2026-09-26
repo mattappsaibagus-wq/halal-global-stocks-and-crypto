@@ -29,7 +29,8 @@ class TestConfig(unittest.TestCase):
         active = data["standard_profiles"][shariah["standard"]]
         self.assertEqual(active["max_debt_ratio"], 0.30)
         self.assertEqual(active["max_cash_ratio"], 0.30)
-        self.assertEqual(active["max_receivables_ratio"], 0.30)
+        self.assertIsNone(active["max_receivables_ratio"])   # AAOIFI has no receivables test
+        self.assertEqual(active["denominator_basis"], "avg_market_cap_36m")
         self.assertEqual(active["max_haram_revenue"], 0.05)
 
     def test_limits_live_only_in_profiles(self):

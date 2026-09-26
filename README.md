@@ -24,18 +24,25 @@ data/signals.json · dashboard/data.json · Learning loop
 Rejects conventional banking and insurance, alcohol, gambling, tobacco, adult content and defence. It matches on Yahoo Finance `sector` / `industry` values.
 
 ### 2. Financial-ratio screen
+The default is **AAOIFI Shariah Standard 21**, the standard used by Musaffa (and, through Musaffa, Baraka), Zoya and Islamicly.
 
-| Ratio | AAOIFI Standard 21 (default) | DJIM |
-|---|---|---|
-| Interest-bearing debt / market cap | < 30% | < 33% |
-| Cash + interest securities / market cap | < 30% | < 33% |
-| Accounts receivable / market cap | < 30% | < 33% |
-| Non-compliant revenue / total revenue | < 5% | < 5% |
+| Ratio | AAOIFI (default) | S&P Shariah | FTSE Shariah | MSCI Islamic |
+|---|---|---|---|---|
+| Denominator | 36-month average market cap | 36-month average market cap | Total assets | Total assets |
+| Interest-bearing debt | < 30% | < 33% | < 33.33% | < 33.33% |
+| Cash + interest-bearing securities | < 30% | < 33% | < 33.33% | < 33.33% |
+| Receivables | not tested | < 49% | (receivables + cash) < 50% | < 33.33% |
+| Impermissible income / revenue | < 5% | < 5% | < 5% | < 5% |
 
-Switch standards with `shariah_compliance.standard` in `data/advisor_config.json` (`AAOIFI_STANDARD_21`, `DJIM` or `CUSTOM`).
+- **36-month average market cap**: monthly closes over 3 years × shares outstanding, converted into the company's reporting currency. This smooths out a single-day price swing flipping a verdict.
+- The verdict follows your chosen standard (`shariah_compliance.standard`). Every stock card also shows **"Standards: x/4 pass"** with the reason each standard fails, so you can see how robust a verdict is.
+- Switch standards in `data/advisor_config.json` (`AAOIFI_STANDARD_21`, `DJIM` or `CUSTOM`). Changing the method re-baselines the compliance watch, so a methodology change never raises false HARAM alerts.
 
 ### 3. Dividend purification
-Purification per share = dividend × non-compliant revenue ratio. Yahoo Finance does not break out haram revenue, so the default is a labelled **estimate** (0.5%). Every result carries `purification_basis`.
+Purification per share = dividend × impermissible-income ratio. When the company reports **interest income**, the ratio is measured (interest income ÷ revenue, labelled "measured interest income"). Otherwise it is a labelled **estimate** (0.5%). Every result carries `purification_basis`.
+
+### 4. Your personal filter
+`personal_exclusions` in `data/advisor_config.json` lets you add your own list on top of the Shariah screen (like Amal Invest's custom filters or a boycott list): `{"XYZ": "boycott list"}`. Listed symbols always show **AVOID** with your reason.
 
 ### Spot crypto
 Only pairs listed in `data/halal_crypto_registry.json` pass: BTC, ETH, SOL, AVAX, POL (Yahoo symbol `POL28321-USD`), LINK, ADA, DOT, NEAR and ATOM, all against USD. Stablecoins, lending/yield tokens, privacy coins and meme tokens are excluded. Edit the registry to follow your own scholar's view.
@@ -137,7 +144,7 @@ Log real trades (entry, units, stop, fees, reason); a stop is required. The **Jo
 | US stock prices | Finnhub (free key, stored only in your browser) | **Live** during US market hours, every 60 s. Without a key: official close |
 | Other stock prices | Yahoo Finance daily bars | Official close of the date shown. The scan runs right after each market closes |
 | Shariah ratios | Yahoo Finance company data | As last reported by the company (quarterly) |
-| News | Google News RSS (aggregates publishers) | Last 7 days; each headline shows publisher, age and a link. Information only |
+| News | Google News RSS (aggregates publishers), English edition plus the local edition for regional stocks (Indonesian, Malaysian, Saudi, UAE, Qatari, Turkish) | Last 7 days, merged and de-duplicated; each headline shows publisher, age and a link. Information only |
 
 A red **STALE** tag means the latest price is more than 3 trading days old. No free, reliable real-time feed exists for the Indonesian, Malaysian, Gulf or Turkish exchanges; real-time data there requires a paid exchange subscription.
 
@@ -148,6 +155,7 @@ Everything is set in two files, with no code changes needed:
 |---|---|---|
 | `shariah_compliance.standard` | `data/advisor_config.json` | `AAOIFI_STANDARD_21` (30%). Use `DJIM` for 33%, or `CUSTOM` |
 | `standard_profiles.CUSTOM` | `data/advisor_config.json` | Your own debt / cash / receivables / haram-revenue limits |
+| `personal_exclusions` | `data/advisor_config.json` | Empty. Your own extra exclusions with a reason |
 | `shariah_compliance.exclude_defence` | `data/advisor_config.json` | `true` (defence companies rejected) |
 | `shariah_compliance.islamic_institution_allowlist` | `data/advisor_config.json` | BRIS.JK, 5258.KL, 1120.SR, 1150.SR, DIB.AE, QIBK.QA |
 | `allowed_spot_cryptos` / `denylisted_symbols` | `data/halal_crypto_registry.json` | 10 utility coins; stablecoins denied |

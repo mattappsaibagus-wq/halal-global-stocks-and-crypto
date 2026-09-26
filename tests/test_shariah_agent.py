@@ -59,10 +59,51 @@ class TestQuantitativeScreen(unittest.TestCase):
         self.assertFalse(res["is_halal"])
         self.assertTrue(any("Cash ratio" in r for r in res["rejection_reasons"]))
 
-    def test_high_receivables_ratio_rejection(self):
+    def test_aaoifi_has_no_receivables_test(self):
+        # AAOIFI as applied by Musaffa/Zoya screens debt, interest-bearing cash and
+        # impure income only; high receivables alone must not reject.
         res = self.agent.analyze("DEBTOR", data=financials(accounts_receivable=400e6))
+        self.assertTrue(res["is_halal"])
+        self.assertFalse(any("Receivables" in r for r in res["rejection_reasons"]))
+
+    def test_djim_still_tests_receivables(self):
+        res = ShariahScreenerAgent(standard="DJIM").analyze("DEBTOR", data=financials(accounts_receivable=400e6))
         self.assertFalse(res["is_halal"])
         self.assertTrue(any("Receivables ratio" in r for r in res["rejection_reasons"]))
+
+    def test_36_month_average_cap_is_the_denominator(self):
+        # Today's cap 1000 (debt 25%) but the 3-year average is 700 (debt 35.7%).
+        res = self.agent.analyze("VOL", data=financials(total_debt=250e6, avg_market_cap_36m=700e6))
+        self.assertEqual(res["denominator_basis"], "avg_market_cap_36m")
+        self.assertFalse(res["is_halal"])
+        fallback = self.agent.analyze("NEW", data=financials(total_debt=250e6))
+        self.assertEqual(fallback["denominator_basis"], "market_cap")
+        self.assertTrue(fallback["is_halal"])
+
+    def test_measured_interest_income_drives_purification(self):
+        res = self.agent.analyze("INT", data=financials(interest_income=10e6))   # 2% of revenue
+        self.assertEqual(res["purification_basis"], "measured: interest income")
+        self.assertEqual(res["purification_pct"], 2.0)
+        high = self.agent.analyze("INT2", data=financials(interest_income=40e6))  # 8% > 5%
+        self.assertFalse(high["is_halal"])
+
+    def test_unreported_interest_falls_back_to_estimate(self):
+        res = self.agent.analyze("NOINT", data=financials(interest_income=None))
+        self.assertEqual(res["purification_basis"], "estimate")
+
+    def test_multi_standard_summary(self):
+        # debt 300/1000 cap = 30% (AAOIFI ok), but 300/500 assets = 60% (FTSE, MSCI fail)
+        res = self.agent.analyze("MIX", data=financials(total_debt=300e6))
+        std = res["standards"]
+        self.assertTrue(std["AAOIFI"]["pass"])
+        self.assertTrue(std["S&P"]["pass"])
+        self.assertFalse(std["FTSE"]["pass"])
+        self.assertFalse(std["MSCI"]["pass"])
+        self.assertEqual(res["standards_passed"], {"passed": 2, "of": 4})
+
+    def test_haram_business_fails_every_standard(self):
+        res = self.agent.analyze("BANK", data=financials(sector="Financial Services", industry="Banks - Regional"))
+        self.assertEqual(res["standards_passed"]["passed"], 0)
 
     def test_boundary_exactly_at_limit_passes(self):
         res = self.agent.analyze("EDGE", data=financials(total_debt=300e6))
