@@ -81,6 +81,28 @@ class TestRotation(unittest.TestCase):
             if t["total_pct"] > t["bench_total_pct"]:
                 self.assertIn("more risk", out["conclusion"])
 
+    def test_currency_collapse_is_not_mistaken_for_momentum(self):
+        months = _months(40)
+        # Turkish stock: flat in dollars, but the lira halves every year, so it "soars" in lira.
+        fx = {m: 10 * (2 ** (i / 12)) for i, m in enumerate(months)}
+        lira_stock = {m: 100 * fx[m] / 10 for m in months}
+        usd = rotation.to_usd(lira_stock, fx)
+        self.assertAlmostEqual(usd[months[-1]] / usd[months[0]], 1.0)
+        self.assertEqual(rotation.currency_of("TUPRS.IS"), "TRY")
+        self.assertEqual(rotation.currency_of("AAPL"), "USD")
+
+    def test_run_converts_before_ranking(self):
+        months = _months(40)
+        fx = {m: 10 * (2 ** (i / 12)) for i, m in enumerate(months)}
+        panel = {f"S{k}": {m: 100 * (1.01 ** i) for i, m in enumerate(months)} for k in range(12)}
+        panel["TRK.IS"] = {m: 100 * fx[m] / 10 for m in months}          # flat in USD
+        calls = []
+        out = rotation.run(list(panel), fetch=lambda s: panel[s], state_path="/nonexistent",
+                           fetch_fx=lambda c: calls.append(c) or fx)
+        self.assertEqual(calls, ["TRY"])
+        self.assertNotIn("TRK.IS", [p["symbol"] for p in out["current"]["picks"][:5]])
+        self.assertIn("USD", out["currency"])
+
     def test_universe_is_halal_stocks_only(self):
         with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
             json.dump({"statuses": {"AAPL": "HALAL", "JPM": "HARAM", "BTC-USD": "HALAL"}}, f)

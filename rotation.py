@@ -28,6 +28,24 @@ COST_PCT = 0.2          # round-trip cost per position replaced
 TEST_MONTHS = 12
 REGIME_SMA = 10         # months; market is "risk-on" if >= half the stocks are above it
 
+# Stocks are ranked and measured in US dollars. In local currency a falling
+# currency (the Turkish lira lost ~80% over 2021-2026) makes stocks look like
+# winners when a dollar-based investor made nothing.
+CURRENCY_BY_SUFFIX = {".JK": "IDR", ".KL": "MYR", ".SR": "SAR", ".AE": "AED", ".QA": "QAR", ".IS": "TRY"}
+
+
+def currency_of(symbol):
+    for suffix, ccy in CURRENCY_BY_SUFFIX.items():
+        if symbol.upper().endswith(suffix):
+            return ccy
+    return "USD"
+
+
+def to_usd(series, fx):
+    """Divide local closes by the month's USD/local rate; months without a rate are dropped."""
+    return {m: v / fx[m] for m, v in series.items() if fx.get(m)}
+
+
 CANDIDATES = {
     "mom6": ("Top 10 by 6-month return (skip last month)", 6, False),
     "mom12": ("Top 10 by 12-month return (skip last month)", 12, False),
@@ -168,10 +186,22 @@ def current_picks(panel, lookback, regime, top_n=TOP_N):
     }
 
 
-def run(symbols, fetch=fetch_monthly, state_path=None, now=None):
+def run(symbols, fetch=fetch_monthly, state_path=None, now=None, fetch_fx=None):
     universe = halal_universe(symbols, state_path)
-    panel = {s: p for s in universe if (p := fetch(s))}
-    print(f"[rotation] {len(panel)} halal stocks with monthly history")
+    fetch_fx = fetch_fx or (lambda ccy: fetch(f"{ccy}=X"))
+    fx_cache, panel, dropped = {}, {}, []
+    for s in universe:
+        series = fetch(s)
+        ccy = currency_of(s)
+        if series and ccy != "USD":
+            if ccy not in fx_cache:
+                fx_cache[ccy] = fetch_fx(ccy) or {}
+            series = to_usd(series, fx_cache[ccy])
+            if not series:
+                dropped.append(s)  # no exchange rate: better to skip than mix currencies
+        if series:
+            panel[s] = series
+    print(f"[rotation] {len(panel)} halal stocks with monthly history (in USD); skipped for missing FX: {dropped}")
 
     rows = []
     for key, (desc, lookback, regime) in CANDIDATES.items():
@@ -205,6 +235,7 @@ def run(symbols, fetch=fetch_monthly, state_path=None, now=None):
     return {
         "generated_at": (now or datetime.now(timezone.utc)).isoformat(),
         "universe": sorted(panel),
+        "currency": "USD (local prices converted at each month-end exchange rate)",
         "top_n": TOP_N, "cost_pct_round_trip": COST_PCT, "test_months": TEST_MONTHS,
         "candidates": rows,
         "chosen": chosen["rule"] if chosen else None,

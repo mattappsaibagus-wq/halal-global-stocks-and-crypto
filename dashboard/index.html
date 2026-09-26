@@ -555,7 +555,8 @@
             if (!rot) { box.textContent = 'The rotation test runs with the next backtest.'; return; }
             box.innerHTML = `<p class="verdict ${rot.passed ? 'pos' : 'neg'}"><b>${esc(rot.conclusion)}</b></p>
                 <p>Each month: hold the ${rot.top_n} halal stocks with the strongest past returns, equal weights, ${rot.cost_pct_round_trip}% cost per swap.
-                Benchmark = holding all ${rot.universe.length} halal stocks equally. Chosen on older months, judged on the last ${rot.test_months}.</p>`;
+                Benchmark = holding all ${rot.universe.length} halal stocks equally. Chosen on older months, judged on the last ${rot.test_months}.
+                All returns in ${esc(rot.currency || 'local currency')}.</p>`;
             const c = x => `<td>${pct(x.total_pct)}</td><td>${x.sharpe ?? '-'}</td><td>${pct(x.max_dd_pct)}</td>`;
             document.getElementById('rot-table').innerHTML = `<thead>
                 <tr><th></th><th colspan="3">Older months</th><th colspan="3">Unseen last 12 months</th></tr>
