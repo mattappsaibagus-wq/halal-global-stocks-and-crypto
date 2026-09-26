@@ -424,6 +424,58 @@
         .wtb-brokers span { color: var(--text-3); font-size: 0.9em; }
         .wtb-steps { margin: 10px 0 0 18px; color: var(--text-2); line-height: 1.6; }
         .wtb-foot { margin-top: 8px; font-size: 0.88em; line-height: 1.5; }
+        .status-panel, .sources-panel {
+            margin-top: 28px; border: 1px solid var(--line); border-radius: var(--radius); padding: 20px 22px;
+            background: linear-gradient(180deg, var(--surface-2), var(--surface)); box-shadow: var(--shadow);
+        }
+        .sources-panel { margin-top: 14px; }
+        .sp-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .sp-status { display: flex; align-items: center; gap: 14px; }
+        .sp-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; flex: 0 0 10px; }
+        .sp-dot.ok { background: var(--halal); animation: pulse 2s infinite; }
+        .sp-dot.warn { background: var(--warn); } .sp-dot.old { background: var(--haram); }
+        .sp-title { font-weight: 700; font-size: 1.02em; letter-spacing: -0.01em; }
+        .sp-sub { color: var(--text-2); font-size: 0.86em; }
+        .sp-btn {
+            display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font: inherit; font-weight: 600; font-size: 0.92em;
+            color: var(--text); background: var(--surface); border: 1px solid var(--line-2); border-radius: 10px; padding: 10px 16px; min-height: 42px;
+            transition: border-color .15s, background .15s;
+        }
+        .sp-btn:hover { border-color: rgba(34,211,166,0.5); background: rgba(34,211,166,0.06); }
+        .sp-btn:disabled { cursor: progress; opacity: 0.8; }
+        .sp-btn.busy .sp-ico { animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .sp-ico { color: var(--halal); }
+        .sp-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 16px; }
+        .sp-meta > div { background: var(--inset); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
+        .sp-meta .k, .fh-row label span { color: var(--text-3); font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+        .sp-meta .v { font-size: 0.9em; color: var(--text); font-weight: 500; }
+        .sp-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; min-height: 18px; font-size: 0.82em; }
+        .sp-msg { color: var(--halal); }
+        .sp-admin { color: var(--text-3); text-decoration: none; margin-left: auto; }
+        .sp-admin:hover { color: var(--text-2); text-decoration: underline; }
+        .sources-panel h2 { font-size: 1.02em; letter-spacing: -0.01em; margin-bottom: 12px; }
+        .src-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+        .src { background: var(--inset); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
+        .src b { font-size: 0.92em; }
+        .src > span:last-child { color: var(--text-2); font-size: 0.82em; line-height: 1.45; }
+        .src-badge { font-size: 0.66em; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; margin-bottom: 2px; }
+        .src-badge.live { background: var(--halal-soft); color: var(--halal); }
+        .src-badge.daily { background: var(--info-soft); color: var(--info); }
+        .src-badge.quarterly { background: rgba(217,178,95,0.12); color: var(--gold); }
+        .src-badge.info { background: rgba(255,255,255,0.06); color: var(--text-2); }
+        .src .stale { margin-bottom: 2px; }
+        .src-note { color: var(--text-3); font-size: 0.8em; margin-top: 12px; line-height: 1.5; }
+        .fh-row { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: center; }
+        .fh-row label { display: flex; flex-direction: column; gap: 2px; font-size: 0.92em; }
+        .fh-row label span { text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 0.86em; }
+        .fh-ctrl { display: flex; gap: 8px; align-items: center; }
+        .fh-ctrl input { width: 220px; padding: 9px 10px; }
+        .fh-row #fh-msg { grid-column: 1 / -1; }
+        @media (max-width: 640px) {
+            .fh-row { grid-template-columns: 1fr; } .fh-ctrl { flex-wrap: wrap; } .fh-ctrl input { flex: 1; width: auto; min-width: 0; }
+            .sp-btn { width: 100%; justify-content: center; }
+        }
         .refresh-note { text-align: center; color: var(--text-3); font-size: 0.8em; margin-top: 10px; line-height: 1.6; }
         .refresh-note a { color: var(--halal); text-decoration: none; font-weight: 600; margin-left: 4px; white-space: nowrap; }
         .refresh-note a:hover { text-decoration: underline; }
@@ -504,27 +556,53 @@
 
         <div id="signal-container" class="signal-list"><div class="loading">Loading signals...</div></div>
 
-        <button class="refresh-btn" id="refresh-btn" type="button">Reload latest scan</button>
-        <div class="refresh-note" id="refresh-note">The page also reloads the latest scan by itself every minute. New scans run on GitHub every 3 hours and after each market closes.
-            <a id="run-scan-link" href="#" target="_blank" rel="noopener noreferrer">Run a new scan now on GitHub &rarr;</a></div>
-        <div class="generated-time" id="generated-time">--</div>
-        <div class="zk-card zk-notes" style="margin-top:18px">
-            <h2>Data sources &amp; how current they are</h2>
-            <ul>
-                <li><b>Crypto prices: LIVE.</b> Coinbase Exchange, fetched by your browser every 15 s. Each price shows how many seconds ago it last traded.</li>
-                <li><b>US stock prices: live with a free Finnhub key</b> (below), refreshed every 60 s during US market hours. Without a key: official close.</li>
-                <li><b>Indonesia, Malaysia, Saudi, UAE, Qatar, Turkey: official closing price</b> of the date shown (Yahoo Finance). There is no free, reliable real-time feed for these exchanges; the scan runs right after each market closes.</li>
-                <li><b>Shariah ratios:</b> Yahoo Finance company data, as last reported by the company (quarterly).</li>
-                <li><b>News:</b> Google News, which collects headlines from publishers. Every item shows its publisher, age and a link to the original. Headlines are information only, never a signal.</li>
-                <li>A red <span class="stale">STALE</span> tag means the latest price is more than 3 trading days old (suspension, delisting or a feed problem). Don't trade on it.</li>
-            </ul>
-            <div class="jn-form" style="margin-top:10px">
-                <label style="grid-column: 1 / -1">Finnhub API key (free at finnhub.io, stored only in this browser)
-                    <input id="fh-key" type="password" autocomplete="off" placeholder="paste key for live US prices"></label>
+        <section class="status-panel" aria-label="Data status">
+            <div class="sp-head">
+                <div class="sp-status">
+                    <span class="sp-dot" id="sp-dot" aria-hidden="true"></span>
+                    <div>
+                        <div class="sp-title">Market data</div>
+                        <div class="sp-sub" id="sp-updated">Loading…</div>
+                    </div>
+                </div>
+                <button class="sp-btn" id="refresh-btn" type="button" aria-describedby="refresh-note">
+                    <svg class="sp-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+                    <span id="refresh-label">Refresh data</span>
+                </button>
             </div>
-            <div class="jn-actions"><button class="btn" id="fh-save">Save key</button><button class="btn ghost" id="fh-clear">Remove key</button>
-                <span class="zk-notes" id="fh-msg" style="align-self:center"></span></div>
-        </div>
+            <div class="sp-meta">
+                <div><span class="k">Next scheduled update</span><span class="v" id="sp-next">—</span></div>
+                <div><span class="k">Update schedule</span><span class="v">Every 3 hours and after each market close</span></div>
+                <div><span class="k">This page</span><span class="v">Refreshes automatically every minute</span></div>
+            </div>
+            <div class="sp-foot">
+                <span class="sp-msg" id="refresh-note" role="status" aria-live="polite"></span>
+                <a class="sp-admin" id="run-scan-link" href="#" target="_blank" rel="noopener noreferrer" title="For the site maintainer: start an update now">Admin console &#8599;</a>
+            </div>
+            <div class="generated-time" id="generated-time" hidden>--</div>
+        </section>
+
+        <section class="sources-panel" aria-labelledby="src-title">
+            <h2 id="src-title">Data sources</h2>
+            <div class="src-grid">
+                <div class="src"><span class="src-badge live">Live</span><b>Crypto prices</b><span>Coinbase Exchange · every 15 seconds</span></div>
+                <div class="src"><span class="src-badge live">Live*</span><b>US stock prices</b><span>Finnhub · every 60 seconds in market hours. *With your free key below; otherwise official close</span></div>
+                <div class="src"><span class="src-badge daily">Daily close</span><b>Other markets</b><span>Yahoo Finance · IDX, Bursa, Tadawul, DFM, QSE, Borsa Istanbul</span></div>
+                <div class="src"><span class="src-badge quarterly">Quarterly</span><b>Shariah ratios</b><span>Company filings via Yahoo Finance</span></div>
+                <div class="src"><span class="src-badge info">7 days</span><b>News</b><span>Google News · publisher, time and link on every headline. Information only</span></div>
+                <div class="src"><span class="stale">STALE</span><b>Price warning</b><span>Last price is over 3 trading days old (suspension or feed issue). Do not trade on it</span></div>
+            </div>
+            <p class="src-note">No free real-time feed exists for Indonesian, Malaysian, Gulf or Turkish exchanges, so those prices update right after each market closes.</p>
+            <div class="fh-row">
+                <label for="fh-key"><b>Live US prices</b><span>Optional. Paste a free Finnhub API key; it is stored only in this browser.</span></label>
+                <div class="fh-ctrl">
+                    <input id="fh-key" type="password" autocomplete="off" placeholder="Finnhub API key">
+                    <button class="btn" id="fh-save" type="button">Save</button>
+                    <button class="btn ghost" id="fh-clear" type="button">Remove</button>
+                </div>
+                <span class="zk-notes" id="fh-msg"></span>
+            </div>
+        </section>
         </section>
 
         <section id="tab-basket" hidden>
@@ -1328,6 +1406,7 @@
                 dataGeneratedAt = data.generated_at;
 
                 document.getElementById('generated-time').textContent = 'Generated: ' + (data.generated_at || 'Unknown');
+                if (typeof updateStatusPanel === 'function') updateStatusPanel();
                 document.getElementById('standard-chip').textContent = 'Standard: ' + (data.shariah_standard || 'N/A').replace(/_/g, ' ');
                 const count = s => allRecs.filter(r => r.halal_status === s).length;
                 document.getElementById('halal-count').textContent = count('HALAL');
@@ -1619,27 +1698,52 @@
         loadBacktest();
         setInterval(loadData, 60000);
 
-        // ---- Manual reload: fetch the newest published scan and say what happened ----
+        // ---- Data status panel: last update, next scheduled update, manual refresh ----
+        const SCHEDULE_UTC = [   // mirrors .github/workflows/scan.yml (days: 0=Sun)
+            {h: 9, m: 30, days: [1,2,3,4,5]}, {h: 12, m: 30, days: [0,1,2,3,4,5]},
+            {h: 15, m: 45, days: [1,2,3,4,5]}, {h: 21, m: 30, days: [1,2,3,4,5]},
+            ...[0,3,6,9,12,15,18,21].map(h => ({h, m: 0, days: [0,1,2,3,4,5,6]})),
+        ];
+        function nextScheduled(from = new Date()) {
+            let best = null;
+            for (let d = 0; d < 3; d++) for (const s of SCHEDULE_UTC) {
+                const t = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate() + d, s.h, s.m));
+                if (t > from && s.days.includes(t.getUTCDay()) && (!best || t < best)) best = t;
+            }
+            return best;
+        }
+        const fmtLocal = d => d.toLocaleString(undefined, {weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
+        function updateStatusPanel() {
+            const sub = document.getElementById('sp-updated'), dot = document.getElementById('sp-dot');
+            if (dataGeneratedAt) {
+                const g = new Date(dataGeneratedAt), hrs = (Date.now() - g) / 3.6e6;
+                sub.textContent = `Updated ${ago(dataGeneratedAt)} · ${fmtLocal(g)}`;
+                dot.className = 'sp-dot ' + (hrs < 4 ? 'ok' : hrs < 12 ? 'warn' : 'old');
+            }
+            const n = nextScheduled();
+            document.getElementById('sp-next').textContent = n ? `${fmtLocal(n)} (approx.)` : '—';
+        }
         (() => {
-            const btn = document.getElementById('refresh-btn'), note = document.getElementById('refresh-note');
+            const btn = document.getElementById('refresh-btn'), label = document.getElementById('refresh-label'), note = document.getElementById('refresh-note');
             const owner = location.hostname.split('.')[0], repo = location.pathname.split('/').filter(Boolean)[0];
             const link = document.getElementById('run-scan-link');
             if (CFG.repo) link.href = `https://github.com/${CFG.repo}/actions/workflows/scan.yml`;
             else if (location.hostname.endsWith('github.io') && repo) link.href = `https://github.com/${owner}/${repo}/actions/workflows/scan.yml`;
             else link.hidden = true;
-            const base = note.firstChild.textContent;
             btn.addEventListener('click', async () => {
                 const before = dataGeneratedAt;
-                btn.disabled = true; btn.textContent = 'Checking…';
+                btn.disabled = true; btn.classList.add('busy'); label.textContent = 'Refreshing…';
                 chartsPromise = null;                  // pick up new charts too
                 await loadData();
                 openCards.forEach(sym => drawChart(sym));
-                btn.disabled = false; btn.textContent = 'Reload latest scan';
-                const age = dataGeneratedAt ? ago(dataGeneratedAt) : 'unknown';
-                note.firstChild.textContent = (dataGeneratedAt && dataGeneratedAt !== before
-                    ? `Updated: loaded a newer scan (finished ${age}). `
-                    : `Already up to date: the latest scan finished ${age}. `) + base;
+                btn.disabled = false; btn.classList.remove('busy'); label.textContent = 'Refresh data';
+                note.textContent = dataGeneratedAt && dataGeneratedAt !== before
+                    ? 'New data loaded.' : 'You are viewing the latest data.';
+                updateStatusPanel();
+                clearTimeout(note._t); note._t = setTimeout(() => { note.textContent = ''; }, 6000);
             });
+            updateStatusPanel();
+            setInterval(updateStatusPanel, 30000);
         })();
     </script>
 </body>

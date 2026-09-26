@@ -58,7 +58,7 @@ class TestDashboardHTML(unittest.TestCase):
             self.assertIn(needle, self.html)
 
     def test_manual_reload_and_run_link(self):
-        for needle in ('id="refresh-btn"', "Reload latest scan", "run-scan-link", "actions/workflows/scan.yml", "chartsPromise = null"):
+        for needle in ('id="refresh-btn"', "Refresh data", "run-scan-link", "actions/workflows/scan.yml", "chartsPromise = null", "nextScheduled", "Admin console"):
             self.assertIn(needle, self.html)
 
     def test_workflow_runs_every_three_hours(self):

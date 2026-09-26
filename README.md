@@ -102,7 +102,7 @@ Change these under `risk` in `data/advisor_config.json`.
 
 If a market is still trading, today's partial bar is ignored (see `agents/market_hours.py`). Signals are recorded once per completed bar, so the extra runs never double-count the track record.
 
-The dashboard reloads the newest scan every minute. **Reload latest scan** does the same on demand, and **Run a new scan now** opens the workflow on GitHub so you can start one (Run workflow button).
+The dashboard reloads the newest scan every minute and shows when the next scheduled update is due. **Refresh data** reloads it on demand. **Admin console** (for you, the maintainer) opens the workflow on GitHub, where **Run workflow** starts a scan immediately.
 
 ### HARAM alerts
 When a stock that was HALAL fails the screen, the run opens a GitHub issue, which GitHub emails to you, and the dashboard shows a red banner. Changes back to HALAL, or to QUESTIONABLE, appear on the dashboard only.
