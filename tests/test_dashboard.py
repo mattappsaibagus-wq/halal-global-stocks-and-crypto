@@ -24,6 +24,10 @@ class TestDashboardHTML(unittest.TestCase):
     def test_stocks_listed_before_crypto(self):
         self.assertLess(self.html.index("['Stocks'"), self.html.index("['Crypto'"))
 
+    def test_trader_features_present(self):
+        for needle in ("risk_plan", "backtest.json", "compliance_changes", "track_record", "Data as of"):
+            self.assertIn(needle, self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

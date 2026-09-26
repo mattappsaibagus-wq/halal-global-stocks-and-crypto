@@ -54,6 +54,13 @@
     "data_incomplete_is_halal": "When sector or financial data cannot be resolved (Yahoo Finance returns no profile for some exchange-listed tickers), the asset is reported as QUESTIONABLE rather than silently passing the screen. A bank with no data must not be reported as Halal.",
     "standard": "Set shariah_compliance.standard to AAOIFI_STANDARD_21 (default), DJIM, or CUSTOM. The limits live in standard_profiles; edit the CUSTOM profile to match your own scholar.",
     "islamic_institution_allowlist": "Islamic banks and takaful operators listed here skip the sector and leverage screens (every bank is labelled 'Banks' by Yahoo, and deposits read as debt). Add or remove tickers to follow your scholar.",
-    "exclude_defence": "true (default) rejects aerospace & defence companies, as stricter indices do. Set false if your scholar permits them."
+    "exclude_defence": "true (default) rejects aerospace & defence companies, as stricter indices do. Set false if your scholar permits them.",
+    "risk": "Every BUY gets a plan: stop = entry - atr_stop_mult x ATR(14), target = entry + atr_target_mult x ATR(14). position_pct is how much of your account to put in so that hitting the stop loses risk_per_trade_pct of the account, capped at max_position_pct."
+  },
+  "risk": {
+    "risk_per_trade_pct": 1.0,
+    "atr_stop_mult": 2.0,
+    "atr_target_mult": 3.0,
+    "max_position_pct": 10.0
   }
 }

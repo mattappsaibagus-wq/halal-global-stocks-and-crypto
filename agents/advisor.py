@@ -3,6 +3,37 @@ from datetime import datetime, timezone
 SHARIAH_AGENT = "shariah_agent"
 ACTIONABLE = ("BUY", "SELL", "WATCH")
 
+DEFAULT_RISK = {
+    "risk_per_trade_pct": 1.0,   # % of account you accept losing if the stop hits
+    "atr_stop_mult": 2.0,        # stop = entry - 2 x ATR(14)
+    "atr_target_mult": 3.0,      # target = entry + 3 x ATR(14)  -> reward:risk 1.5
+    "max_position_pct": 10.0,    # never more than this % of the account in one asset
+}
+
+
+def build_risk_plan(entry, atr, risk_cfg=None):
+    """Entry / stop / target / position size for a long spot position."""
+    cfg = {**DEFAULT_RISK, **(risk_cfg or {})}
+    if not entry or not atr or entry <= 0 or atr <= 0:
+        return None
+    stop = entry - cfg["atr_stop_mult"] * atr
+    if stop <= 0:
+        return None
+    target = entry + cfg["atr_target_mult"] * atr
+    stop_pct = (entry - stop) / entry * 100
+    position_pct = min(cfg["risk_per_trade_pct"] / stop_pct * 100, cfg["max_position_pct"])
+    return {
+        "entry": round(entry, 6),
+        "stop": round(stop, 6),
+        "target": round(target, 6),
+        "stop_pct": round(-stop_pct, 2),
+        "target_pct": round((target - entry) / entry * 100, 2),
+        "reward_risk": round(cfg["atr_target_mult"] / cfg["atr_stop_mult"], 2),
+        "risk_per_trade_pct": cfg["risk_per_trade_pct"],
+        "position_pct": round(position_pct, 2),
+        "atr14": round(atr, 6),
+    }
+
 
 class AdvisorAgent:
     """Consolidates signals from all agents and generates investment advice.
@@ -19,6 +50,7 @@ class AdvisorAgent:
         self.config = config or {}
         self.weighted_signals = []
         self.risk_tolerance = self.config.get("risk_tolerance", "moderate")
+        self.risk_cfg = self.config.get("risk", {})
 
     def consolidate(self, agent_results):
         summary = {}
@@ -39,6 +71,7 @@ class AdvisorAgent:
                     "alerts": [],
                     "agents": [],
                     "shariah": None,
+                    "indicators": None,
                 }
 
             # The screener's verdict is a gate, not a trading signal: it must
@@ -47,6 +80,8 @@ class AdvisorAgent:
                 summary[symbol]["shariah"] = result
                 continue
 
+            if result.get("indicators"):
+                summary[symbol]["indicators"] = result["indicators"]
             summary[symbol]["signals"].extend(result.get("signals", []))
             summary[symbol]["agents"].append(result.get("agent"))
 
@@ -75,6 +110,9 @@ class AdvisorAgent:
                 # shows their compliance status even without a signal.
                 action = self._base(symbol, data, "HOLD", avg_confidence, signal_count)
             action.update(self._shariah_fields(shariah))
+            if action["action"] == "BUY":
+                ind = data["indicators"] or {}
+                action["risk_plan"] = build_risk_plan(ind.get("close"), ind.get("atr14"), self.risk_cfg)
             recommendations.append(action)
 
         recommendations.sort(key=lambda x: x["confidence"], reverse=True)
@@ -142,6 +180,8 @@ class AdvisorAgent:
             "currency": shariah.get("currency", ""),
             "dividend_rate": shariah.get("dividend_rate", 0.0),
             "compliance_note": shariah.get("compliance_note", ""),
+            "as_of": shariah.get("as_of"),
+            "region": shariah.get("region"),
         }
 
     def _rejected(self, symbol, data, shariah):

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
-from agents.base_agent import BaseAgent, fetch_yf_history, get_price_change
+from agents import indicators as ind
+from agents.base_agent import BaseAgent, daily_history, get_price_change
 
 
 class DdAgent(BaseAgent):
@@ -13,11 +14,12 @@ class DdAgent(BaseAgent):
         self.min_market_cap = config.get("min_market_cap", 1e9) if config else 1e9
 
     def analyze(self, symbol, data=None):
-        hist = data.get("history") if data else None
+        hist = (data or {}).get("history")
         if hist is None:
-            hist = fetch_yf_history(symbol, period="5d", interval="5m")
-
-        price_info = get_price_change(hist)
+            hist = daily_history(symbol)
+        if hist is None or len(hist) < 6:
+            return None
+        price_info = get_price_change(hist.iloc[-6:])  # last 5 sessions
         if price_info is None:
             return None
 

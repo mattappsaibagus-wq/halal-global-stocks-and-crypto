@@ -46,6 +46,42 @@ Only pairs listed in `data/halal_crypto_registry.json` pass: BTC, ETH, SOL, AVAX
 - **Execution gate.** `trading/executor.py` refuses anything that isn't a screened-halal BUY or SELL.
 - **No fabricated signals.** If news can't be fetched, the news agent emits no signal.
 
+## Trading tools
+
+### Backtest (`backtest.py`)
+Replays 3 years of daily prices through the same agent code the live scan uses, then measures every BUY/SELL/WATCH:
+
+- **Forward returns** after 5, 10 and 20 days, with entry at the next day's open.
+- **Edge:** return vs the same stocks on an average day.
+- **Expectancy:** each BUY traded with its stop and target, in R, after a 0.2% round-trip cost.
+- **Per signal:** which individual signals help or hurt.
+
+It runs daily after the US close and shows on the dashboard's **Backtest** tab. Run it locally with `python backtest.py --years 3`.
+
+Limits: news and fundamentals are not replayed; consecutive-day signals overlap; delisted companies are missing (survivorship bias).
+
+### Live track record
+Every BUY/SELL/WATCH is recorded once, with its entry price and trading date, then scored against actual closes 5, 10 and 20 trading days later. BUY counts as right if the price rose after 20 days; SELL if it fell. The history is kept on the `scan-data` branch so it builds up between runs.
+
+### Trade plan on every BUY
+- **Stop** = entry − 2 × ATR(14); **target** = entry + 3 × ATR(14), so reward:risk is 1.5.
+- **Position size:** risks 1% of the account if the stop hits, capped at 10% of the account.
+
+Change these under `risk` in `data/advisor_config.json`.
+
+### Scan schedule (completed trading days only)
+| UTC | Tokyo | After the close of |
+|---|---|---|
+| 09:30 Mon–Fri | 18:30 | Indonesia, Malaysia |
+| 12:30 Sun–Fri | 21:30 | Saudi Arabia, UAE, Qatar |
+| 15:45 Mon–Fri | 00:45 | Turkey |
+| 21:30 Mon–Fri | 06:30 | United States (+ backtest) |
+
+If a market is still trading, today's partial bar is ignored (see `agents/market_hours.py`).
+
+### HARAM alerts
+When a stock that was HALAL fails the screen, the run opens a GitHub issue, which GitHub emails to you, and the dashboard shows a red banner. Changes back to HALAL, or to QUESTIONABLE, appear on the dashboard only.
+
 ## Match your scholar's view
 Everything is set in two files, with no code changes needed:
 
@@ -87,10 +123,12 @@ python run_pipeline.py     # live scan (needs internet access to Yahoo Finance)
 
 Then open `dashboard/index.html` via a local server (`python -m http.server -d dashboard`).
 
+Run `python backtest.py --years 3` to measure the signals on your machine.
+
 Outputs: `data/signals.json`, `data/learning_history.json` and `dashboard/data.json`. The learning loop also writes tuning stats into `data/advisor_config.json`.
 
 ## Automation
-`.github/workflows/scan.yml` runs the tests and the scan on weekdays at 14:00 UTC, then deploys the dashboard to GitHub Pages. Enable Pages with source **GitHub Actions** in the repo settings.
+`.github/workflows/scan.yml` runs the tests and the scan four times a day (see the schedule above), then deploys the dashboard to GitHub Pages. Enable Pages with source **GitHub Actions** in the repo settings.
 
 ## Design docs
 - Spec: `docs/superpowers/specs/2026-09-26-halal-stock-crypto-scanner-design.md`

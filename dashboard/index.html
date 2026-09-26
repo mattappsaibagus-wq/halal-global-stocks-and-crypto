@@ -76,7 +76,24 @@
             background: none; border: none; border-bottom: 2px solid transparent; color: #888;
             padding: 10px 14px; font-size: 0.95em; cursor: pointer; font-weight: 600;
         }
+        .tabs .short { display: none; }
+        @media (max-width: 560px) { .tabs .long { display: none; } .tabs .short { display: inline; } }
         .tabs button.active { color: #00d4aa; border-bottom-color: #00d4aa; }
+        .plan { margin-top: 10px; display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+        .plan div { background: #0a0a0f; border: 1px solid #222; border-radius: 6px; padding: 7px 9px; }
+        .plan .k { color: #888; font-size: 0.68em; text-transform: uppercase; letter-spacing: 0.5px; }
+        .plan .v { font-size: 0.92em; font-weight: 600; font-variant-numeric: tabular-nums; }
+        .plan .stop { color: #ff7070; } .plan .target { color: #00d4aa; }
+        .changes { background: #1a0f0f; border: 1px solid #ff444466; border-radius: 10px; padding: 12px 16px; margin-bottom: 18px; }
+        .changes h3 { font-size: 0.9em; color: #ff8888; margin-bottom: 6px; }
+        .changes.calm { background: #0f1614; border-color: #00d4aa44; } .changes.calm h3 { color: #6fd8c0; }
+        .changes li { font-size: 0.83em; color: #ccc; margin: 3px 0 3px 18px; }
+        .bt-table { width: 100%; border-collapse: collapse; font-size: 0.84em; }
+        .bt-table th { text-align: right; color: #888; font-weight: 600; font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px; border-bottom: 1px solid #222; }
+        .bt-table th:first-child, .bt-table td:first-child { text-align: left; }
+        .bt-table td { text-align: right; padding: 7px 6px; border-bottom: 1px solid #1a1a1a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .pos { color: #00d4aa; } .neg { color: #ff7070; } .muted { color: #666; }
+        .verdict { font-size: 0.9em; line-height: 1.5; margin-bottom: 4px; }
         .group-title { display: flex; align-items: baseline; gap: 10px; font-size: 1.05em; color: #e0e0e0; margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #222; }
         .group-title:first-child { margin-top: 0; }
         .group-title .count { color: #888; font-size: 0.8em; font-weight: 400; }
@@ -130,10 +147,12 @@
 
         <nav class="tabs" id="tabs">
             <button data-tab="scanner" class="active">Scanner</button>
-            <button data-tab="zakat">Zakat &amp; Purification</button>
+            <button data-tab="zakat"><span class="long">Zakat &amp; Purification</span><span class="short">Zakat</span></button>
+            <button data-tab="backtest"><span class="long">Backtest &amp; Track Record</span><span class="short">Backtest</span></button>
         </nav>
 
         <section id="tab-scanner">
+        <div id="changes"></div>
         <div class="stats">
             <div class="stat-card"><div class="stat-value" id="halal-count">--</div><div class="stat-label">Halal Status: Pass</div></div>
             <div class="stat-card"><div class="stat-value haram" id="haram-count">--</div><div class="stat-label">Haram</div></div>
@@ -153,6 +172,30 @@
 
         <button class="refresh-btn" onclick="loadData()">Refresh Signals</button>
         <div class="generated-time" id="generated-time">--</div>
+        </section>
+
+        <section id="tab-backtest" hidden>
+            <div class="zk-card">
+                <h2>Does the BUY signal work? (backtest)</h2>
+                <div id="bt-summary" class="zk-notes">Loading backtest...</div>
+                <div class="zk-scroll" style="margin-top:12px"><table class="bt-table" id="bt-groups"></table></div>
+            </div>
+            <div class="zk-card">
+                <h2>Which individual signals carry an edge?</h2>
+                <div class="zk-scroll"><table class="bt-table" id="bt-signals"></table></div>
+            </div>
+            <div class="zk-card">
+                <h2>Live track record (signals scored against real prices)</h2>
+                <div class="zk-scroll"><table class="bt-table" id="track"></table></div>
+            </div>
+            <div class="zk-card zk-notes">
+                <ul>
+                    <li><b>Edge</b> = the signal's average 20-day return minus the same stocks' average 20-day return on any day. Near zero means the signal is noise.</li>
+                    <li><b>Expectancy</b> = average result of each BUY traded with its stop and target, in R (1R = the amount risked), after a 0.2% round-trip cost. Positive over many trades is the goal.</li>
+                    <li>Entry is the next day's open, so no future price is used. News and fundamentals are not replayed. Consecutive-day signals overlap, so N is signal-days, not independent trades.</li>
+                    <li>Past results do not guarantee future results. This is research tooling, not financial advice.</li>
+                </ul>
+            </div>
         </section>
 
         <section id="tab-zakat" hidden>
@@ -225,6 +268,74 @@
             return `<span class="chip ${cls}" title="Halal Status">${esc(status)}</span>`;
         }
 
+        const num = (v, d = 2) => Number(v).toLocaleString(undefined, {maximumFractionDigits: d});
+        function planHtml(rec) {
+            const p = rec.risk_plan;
+            if (rec.action !== 'BUY' || !p) return '';
+            const cur = esc(rec.currency || '');
+            return `<div class="plan">
+                <div><div class="k">Entry ~</div><div class="v">${num(p.entry, 4)} ${cur}</div></div>
+                <div><div class="k">Stop</div><div class="v stop">${num(p.stop, 4)} (${num(p.stop_pct)}%)</div></div>
+                <div><div class="k">Target</div><div class="v target">${num(p.target, 4)} (+${num(p.target_pct)}%)</div></div>
+                <div><div class="k">Reward : risk</div><div class="v">${num(p.reward_risk)} : 1</div></div>
+                <div><div class="k">Max position</div><div class="v">${num(p.position_pct)}% of account</div></div>
+            </div>`;
+        }
+
+        function renderChanges(changes) {
+            const box = document.getElementById('changes');
+            const recent = (changes || []).slice(0, 12);
+            if (!recent.length) { box.innerHTML = ''; return; }
+            const toHaram = recent.some(c => c.from === 'HALAL' && c.to === 'HARAM');
+            box.innerHTML = `<div class="changes ${toHaram ? '' : 'calm'}">
+                <h3>${toHaram ? 'Shariah status changes: check your holdings' : 'Recent Shariah status changes'}</h3>
+                <ul>${recent.map(c => `<li><b>${esc(c.symbol)}</b> ${esc(c.name || '')}: ${esc(c.from)} &rarr; ${esc(c.to)} on ${esc(c.date)}${c.reasons && c.reasons.length ? ` (${esc(c.reasons[0])})` : ''}</li>`).join('')}</ul>
+            </div>`;
+        }
+
+        const pct = (v, sign = true) => v == null ? '<span class="muted">-</span>'
+            : `<span class="${v > 0 ? 'pos' : v < 0 ? 'neg' : ''}">${sign && v > 0 ? '+' : ''}${num(v)}%</span>`;
+        const rr = v => v == null ? '<span class="muted">-</span>' : `<span class="${v > 0 ? 'pos' : 'neg'}">${v > 0 ? '+' : ''}${num(v)}R</span>`;
+
+        async function loadBacktest() {
+            const summary = document.getElementById('bt-summary');
+            try {
+                const r = await fetch('backtest.json', {cache: 'no-store'});
+                if (!r.ok) throw new Error('not run yet');
+                const bt = await r.json();
+                const all = bt.groups['All markets'];
+                summary.innerHTML = `<p class="verdict"><b>${esc(all.verdict)}</b></p>
+                    <p>${bt.years} years &middot; ${bt.symbols.length} symbols &middot; run ${esc((bt.generated_at || '').slice(0, 10))}</p>`;
+                const rows = Object.entries(bt.groups).map(([name, g]) => {
+                    const b = g.BUY || {}, s = g.SELL || {};
+                    return `<tr><td>${esc(name)}${b.enough_data ? '' : ' <span class="muted">(few)</span>'}</td>
+                        <td>${num(b.n || 0, 0)}</td><td>${b.win_rate_20d == null ? '-' : num(b.win_rate_20d, 1) + '%'}</td>
+                        <td>${pct(b.avg_20d)}</td><td>${pct(g.baseline.avg_20d)}</td><td>${pct(b.edge_20d)}</td>
+                        <td>${rr(b.expectancy_r)}</td><td>${b.stop_hit_pct == null ? '-' : num(b.stop_hit_pct, 0) + '%'}</td>
+                        <td>${num(s.n || 0, 0)}</td><td>${s.correct_20d == null ? '-' : num(s.correct_20d, 1) + '%'}</td></tr>`;
+                }).join('');
+                document.getElementById('bt-groups').innerHTML = `<thead><tr><th>Market</th><th>BUY N</th><th>Win 20d</th>
+                    <th>Avg 20d</th><th>Baseline</th><th>Edge</th><th>Expectancy</th><th>Stopped</th><th>SELL N</th><th>SELL right</th></tr></thead><tbody>${rows}</tbody>`;
+                document.getElementById('bt-signals').innerHTML = `<thead><tr><th>Signal</th><th>N</th><th>Avg 20d</th><th>Edge</th><th>Up after 20d</th></tr></thead><tbody>${
+                    (bt.signals || []).map(x => `<tr><td>${esc(x.signal)}</td><td>${num(x.n, 0)}</td><td>${pct(x.avg_20d)}</td><td>${pct(x.edge_20d)}</td><td>${num(x.up_pct_20d, 1)}%</td></tr>`).join('')
+                }</tbody>`;
+            } catch (e) {
+                summary.textContent = 'The backtest has not run yet. It runs once a day after the US close, or start it from GitHub Actions.';
+            }
+        }
+
+        function renderTrack(track) {
+            const t = document.getElementById('track');
+            const stats = (track && track.stats) || {};
+            const actions = ['BUY', 'SELL', 'WATCH'].filter(a => stats[a]);
+            if (!actions.length) { t.innerHTML = '<tbody><tr><td class="muted">No signals recorded yet. Each is scored 5, 10 and 20 trading days after it fires.</td></tr></tbody>'; return; }
+            t.innerHTML = `<thead><tr><th>Action</th><th>Signals</th><th>Scored</th><th>Right</th><th>Avg 5d</th><th>Avg 10d</th><th>Avg 20d</th></tr></thead><tbody>${
+                actions.map(a => { const s = stats[a]; return `<tr><td>${a}</td><td>${num(s.signals, 0)}</td><td>${num(s.resolved, 0)}</td>
+                    <td>${s.win_rate_pct == null ? '-' : num(s.win_rate_pct, 1) + '%'}</td><td>${pct(s.avg_return_5d_pct)}</td>
+                    <td>${pct(s.avg_return_10d_pct)}</td><td>${pct(s.avg_return_20d_pct)}</td></tr>`; }).join('')
+            }</tbody>`;
+        }
+
         function passes(rec) {
             if (activeFilter === 'halal') return rec.halal_status === 'HALAL';
             if (activeFilter === 'signals') return ['BUY', 'WATCH', 'SELL'].includes(rec.action);
@@ -266,7 +377,9 @@
                             ${purification}
                             ${ratios}
                             ${rec.sector ? `<span>${esc(rec.sector)}</span>` : ''}
+                            ${rec.as_of ? `<span>Data as of ${esc(rec.as_of)}</span>` : ''}
                         </div>
+                        ${planHtml(rec)}
                         ${rec.compliance_note ? `<div class="compliance-note">${esc(rec.compliance_note)}</div>` : ''}
                         ${reasons.length ? `<ul class="reasons ${rec.halal_status === 'QUESTIONABLE' ? 'questionable' : ''}">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
                     </div>`;
@@ -298,6 +411,8 @@
                 document.getElementById('buy-count').textContent = allRecs.filter(r => r.action === 'BUY').length;
                 document.getElementById('watch-count').textContent = allRecs.filter(r => r.action === 'WATCH').length;
                 render();
+                renderChanges(data.compliance_changes);
+                renderTrack(data.track_record);
                 zkRender();
             } catch (err) {
                 container.innerHTML = '<div class="error">Error loading data: ' + esc(err.message) + '</div>';
@@ -319,6 +434,7 @@
             document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b === btn));
             document.getElementById('tab-scanner').hidden = btn.dataset.tab !== 'scanner';
             document.getElementById('tab-zakat').hidden = btn.dataset.tab !== 'zakat';
+            document.getElementById('tab-backtest').hidden = btn.dataset.tab !== 'backtest';
         });
 
         // ---- Zakat & purification calculator (browser-only storage) ----
@@ -438,6 +554,7 @@
 
         zkRender();
         loadData();
+        loadBacktest();
         setInterval(loadData, 60000);
     </script>
 </body>

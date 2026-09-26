@@ -1,19 +1,35 @@
 name: Halal Scan
 
+# Four runs, each just after a group of markets closes, so every region is
+# scanned on a completed trading day. Spot crypto is refreshed on every run.
 on:
   schedule:
-    - cron: '0 14 * * 1-5'
+    - cron: '30 9 * * 1-5'    # 18:30 Tokyo: after Indonesia & Malaysia close
+    - cron: '30 12 * * 0-5'   # 21:30 Tokyo: after Saudi, UAE & Qatar close (Saudi/Qatar trade Sun-Thu)
+    - cron: '45 15 * * 1-5'   # 00:45 Tokyo: after Turkey closes
+    - cron: '30 21 * * 1-5'   # 06:30 Tokyo: after the US closes, plus the daily backtest
   workflow_dispatch:
+    inputs:
+      backtest:
+        description: 'Also run the 3-year backtest (about 3 minutes)'
+        type: boolean
+        default: true
 
 permissions:
-  contents: read
+  contents: write     # save scan state to the scan-data branch
   pages: write
   id-token: write
+  issues: write       # HALAL -> HARAM alerts are opened as issues (GitHub emails you)
+
+concurrency:
+  group: halal-scan
+  cancel-in-progress: false
 
 jobs:
   scan:
     environment: github-pages
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v5
@@ -22,6 +38,7 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: '3.11'
+          cache: pip
 
       - name: Install dependencies
         run: |
@@ -31,8 +48,48 @@ jobs:
       - name: Run tests
         run: python -m pytest -q
 
+      # Track record, compliance history and the last backtest live on the
+      # scan-data branch, so they survive between runs.
+      - name: Restore saved state
+        run: |
+          if git fetch --depth=1 origin scan-data 2>/dev/null; then
+            for f in learning_history.json compliance_state.json; do
+              git show "FETCH_HEAD:$f" > "data/$f" 2>/dev/null || rm -f "data/$f"
+            done
+            git show FETCH_HEAD:backtest.json > dashboard/backtest.json 2>/dev/null || rm -f dashboard/backtest.json
+          else
+            echo "No saved state yet (first run)."
+          fi
+
       - name: Run pipeline
         run: python run_pipeline.py
+
+      - name: Run backtest
+        if: github.event.schedule == '30 21 * * 1-5' || (github.event_name == 'workflow_dispatch' && inputs.backtest)
+        run: python backtest.py --years 3
+
+      - name: Save state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p /tmp/state
+          cp data/learning_history.json data/compliance_state.json /tmp/state/ 2>/dev/null || true
+          cp dashboard/backtest.json /tmp/state/ 2>/dev/null || true
+          cd /tmp/state
+          git init -q -b scan-data
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Scan state $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -qf "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" scan-data
+
+      - name: Alert if a stock turned HARAM
+        if: hashFiles('data/compliance_alerts.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Shariah alert: stocks turned HARAM ($(date -u +%Y-%m-%d))" \
+            --body-file data/compliance_alerts.md
 
       - name: Upload scan results
         uses: actions/upload-artifact@v4

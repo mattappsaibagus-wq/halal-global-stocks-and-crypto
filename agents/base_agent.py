@@ -217,6 +217,20 @@ def fetch_yf_financials(symbol):
         return result
 
 
+def daily_history(symbol, period="6mo", now=None):
+    """Daily OHLCV with any still-trading session removed.
+
+    Shared by all price agents so one scan reads one consistent set of bars,
+    and never a half-finished day (see agents/market_hours.py).
+    """
+    from agents.market_hours import completed_bars
+
+    hist = fetch_yf_history(symbol, period=period, interval="1d")
+    if hist is None or hist.empty:
+        return None
+    return completed_bars(hist, symbol, now=now)
+
+
 def fetch_yf_history(symbol, period="5d", interval="5m"):
     try:
         import yfinance as yf

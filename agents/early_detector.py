@@ -1,48 +1,47 @@
 from datetime import datetime, timezone
-from agents.base_agent import BaseAgent, fetch_yf_history, get_price_change
+
+from agents import indicators as ind
+from agents.base_agent import BaseAgent, daily_history, get_price_change
 
 
 class EarlyDetectorAgent(BaseAgent):
-    """Detects early-stage price movements and unusual volume spikes."""
+    """Detects early price moves and unusual volume on completed daily bars."""
 
     name = "early_detector"
     description = "Detects early price movements and volume anomalies"
 
     def __init__(self, config=None):
         super().__init__(config)
-        self.min_change_pct = config.get("min_change_pct", 2.0) if config else 2.0
-        self.volume_spike_mult = config.get("volume_spike_mult", 1.5) if config else 1.5
+        self.min_change_pct = self.config.get("min_change_pct", 2.0)
+        self.volume_spike_mult = self.config.get("volume_spike_mult", 1.5)
+        self.move_bars = self.config.get("move_bars", 3)
 
     def analyze(self, symbol, data=None):
-        hist = data.get("history") if data else None
+        hist = (data or {}).get("history")
         if hist is None:
-            hist = fetch_yf_history(symbol, period="3d", interval="5m")
-
-        price_info = get_price_change(hist)
-        if price_info is None:
+            hist = daily_history(symbol)
+        if hist is None or len(hist) < self.move_bars + 1:
             return None
 
         signals = []
-
-        if abs(price_info["change_pct"]) >= self.min_change_pct:
-            direction = "up" if price_info["change_pct"] > 0 else "down"
+        change = ind.pct_change_over(hist, self.move_bars)
+        if change is not None and abs(change) >= self.min_change_pct:
             signals.append({
                 "type": "early_movement",
-                "direction": direction,
-                "change_pct": price_info["change_pct"],
-                "confidence": min(abs(price_info["change_pct"]) / 5.0, 1.0),
+                "direction": "up" if change > 0 else "down",
+                "change_pct": round(change, 2),
+                "confidence": min(abs(change) / 5.0, 1.0),
             })
 
-        if price_info.get("volume", 0) > 0:
-            avg_volume = self._get_avg_volume(symbol, hist)
-            if avg_volume and avg_volume > 0:
-                vol_ratio = price_info["volume"] / avg_volume
-                if vol_ratio >= self.volume_spike_mult:
-                    signals.append({
-                        "type": "volume_spike",
-                        "volume_ratio": round(vol_ratio, 2),
-                        "confidence": min(vol_ratio / 3.0, 1.0),
-                    })
+        # Latest day's volume vs the prior 20 days (the old code compared one
+        # 5-minute bar to a daily average, so it almost never fired).
+        vol = ind.volume_ratio(hist, 20)
+        if vol is not None and vol >= self.volume_spike_mult:
+            signals.append({
+                "type": "volume_spike",
+                "volume_ratio": round(vol, 2),
+                "confidence": min(vol / 3.0, 1.0),
+            })
 
         if not signals:
             return None
@@ -52,19 +51,8 @@ class EarlyDetectorAgent(BaseAgent):
             "symbol": symbol,
             "agent": self.name,
             "signals": signals,
-            "price": price_info,
+            "price": get_price_change(hist.iloc[-(self.move_bars + 1):]),
             "confidence": round(max_conf, 2),
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "alert": max_conf >= 0.7,
         }
-
-    def _get_avg_volume(self, symbol, hist):
-        try:
-            import yfinance as yf
-            ticker = yf.Ticker(symbol)
-            hist_daily = ticker.history(period="5d")
-            if hist_daily.empty or "Volume" not in hist_daily.columns:
-                return None
-            return hist_daily["Volume"].mean()
-        except Exception:
-            return None

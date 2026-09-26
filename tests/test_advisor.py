@@ -88,5 +88,34 @@ class TestAdvisorHalalEnforcement(unittest.TestCase):
         self.assertEqual(recs[0]["halal_status"], "UNSCREENED")
 
 
+
+class TestRiskPlan(unittest.TestCase):
+    def test_plan_levels_and_size(self):
+        from agents.advisor import build_risk_plan
+        plan = build_risk_plan(100.0, 2.5)  # stop 95 (-5%), target 107.5
+        self.assertEqual((plan["stop"], plan["target"]), (95.0, 107.5))
+        self.assertEqual(plan["stop_pct"], -5.0)
+        self.assertEqual(plan["reward_risk"], 1.5)
+        self.assertEqual(plan["position_pct"], 10.0)  # 1%/5% = 20%, capped at 10%
+
+    def test_volatile_asset_gets_smaller_position(self):
+        from agents.advisor import build_risk_plan
+        plan = build_risk_plan(100.0, 10.0)  # stop 80 (-20%)
+        self.assertEqual(plan["position_pct"], 5.0)
+
+    def test_no_plan_without_atr(self):
+        from agents.advisor import build_risk_plan
+        self.assertIsNone(build_risk_plan(100.0, None))
+
+    def test_buy_recommendation_carries_plan(self):
+        recs = AdvisorAgent().consolidate([
+            _shariah("AAPL", "HALAL"),
+            {**_bullish("AAPL", "momentum_agent"), "indicators": {"close": 200.0, "atr14": 4.0}},
+            _bullish("AAPL", "early_detector"),
+        ])
+        self.assertEqual(recs[0]["action"], "BUY")
+        self.assertEqual(recs[0]["risk_plan"]["stop"], 192.0)
+
+
 if __name__ == "__main__":
     unittest.main()

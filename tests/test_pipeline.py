@@ -4,7 +4,14 @@ import tempfile
 import unittest
 from unittest import mock
 
+import pandas as pd
+
 import run_pipeline
+
+
+def _fake_history(symbol, now=None):
+    idx = pd.bdate_range("2026-09-01", periods=10, tz="UTC")
+    return pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": 1}, index=idx)
 
 
 def _fake_screen(symbol):
@@ -25,8 +32,9 @@ class _FakeSignalAgent:
         self.name = name
         self.calls = []
 
-    def analyze(self, symbol):
+    def analyze(self, symbol, data=None):
         self.calls.append(symbol)
+        self.data = data
         return {
             "symbol": symbol,
             "agent": self.name,
@@ -50,7 +58,7 @@ class TestPipelineIntegration(unittest.TestCase):
         screener = mock.Mock(standard="AAOIFI_STANDARD_21")
         screener.analyze.side_effect = _fake_screen
         learning = mock.Mock()
-        learning.run.return_value = {"stats": {}}
+        learning.run.return_value = {"stats": {"BUY": {"signals": 1}}, "total_predictions": 1}
         self.learning = learning
 
         patches = [
@@ -61,6 +69,8 @@ class TestPipelineIntegration(unittest.TestCase):
             mock.patch.object(run_pipeline, "DdAgent", return_value=self.agents[3]),
             mock.patch.object(run_pipeline, "LearningLoop", return_value=learning),
             mock.patch.object(run_pipeline, "get_data_dir", return_value=self.tmp.name),
+            mock.patch.object(run_pipeline, "daily_history", side_effect=_fake_history),
+            mock.patch.object(run_pipeline, "load_advisor_config", return_value={}),
         ]
         for p in patches:
             p.start()
@@ -94,12 +104,32 @@ class TestPipelineIntegration(unittest.TestCase):
         recs = {r["symbol"]: r for r in report["recommendations"]}
         self.assertEqual(recs["AAPL"]["price"], 123.45)
 
+    def test_price_agents_share_one_history_and_as_of_is_set(self):
+        report = self._run()
+        self.assertIsNotNone(self.agents[0].data["history"])
+        self.assertIs(self.agents[0].data["history"], self.agents[1].data["history"])
+        self.assertIsNone(self.agents[2].data)  # news scanner gets no price bars
+        aapl = next(r for r in report["recommendations"] if r["symbol"] == "AAPL")
+        self.assertEqual(aapl["as_of"], "2026-09-14")
+        self.assertEqual(aapl["region"], "United States")
+
+    def test_halal_to_haram_change_writes_alert_file(self):
+        with open(os.path.join(self.tmp.name, "compliance_state.json"), "w") as f:
+            json.dump({"statuses": {"JPM": "HALAL"}, "changes": []}, f)
+        report = self._run()
+        self.assertEqual([a["symbol"] for a in report["compliance_alerts"]], ["JPM"])
+        self.assertTrue(os.path.exists(os.path.join(self.tmp.name, "compliance_alerts.md")))
+        self._run()  # next scan: still HARAM, no new alert, file removed
+        self.assertFalse(os.path.exists(os.path.join(self.tmp.name, "compliance_alerts.md")))
+
     def test_dashboard_data_written(self):
         self._run()
         with open(os.path.join(self.tmp.name, "data.json")) as f:
             data = json.load(f)
         self.assertEqual(data["shariah_standard"], "AAOIFI_STANDARD_21")
         self.assertEqual(data["total_recommendations"], 2)
+        self.assertEqual(data["track_record"]["total_predictions"], 1)
+        self.assertIn("compliance_changes", data)
 
 
 if __name__ == "__main__":

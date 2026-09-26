@@ -7,3 +7,4 @@ data/*
 *.log
 .pytest_cache/
 dashboard/data.json
+dashboard/backtest.json
