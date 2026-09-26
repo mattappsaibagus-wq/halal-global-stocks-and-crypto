@@ -1,0 +1,32 @@
+{
+  "_comment": "Spot-only Halal crypto registry. Only utility / store-of-value assets traded spot. Leverage, yield-bearing and interest-linked products are excluded by design: this scanner does not support margin, derivatives or DeFi lending.",
+  "allowed_spot_cryptos": [
+    "BTC-USD",
+    "ETH-USD",
+    "SOL-USD",
+    "AVAX-USD",
+    "POL-USD",
+    "LINK-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "NEAR-USD",
+    "ATOM-USD"
+  ],
+  "banned_categories": [
+    "algorithmic_stablecoin",
+    "lending_borrowing_yield",
+    "interest_bearing_token",
+    "privacy_token",
+    "zero_utility_meme",
+    "derivative_or_leveraged_token"
+  ],
+  "denylisted_symbols": [
+    "USDT-USD",
+    "USDC-USD",
+    "DAI-USD",
+    "UST-USD",
+    "TUSD-USD",
+    "BUSD-USD"
+  ],
+  "_denylist_reason": "Interest/algorithmic-backed or fiat-collateralised stablecoins are excluded from this scanner's default Halal spot set. They may be permitted by some fiqh committees (subject to asset backing) and by AAOIFI Shariah Standard 59; a user who follows that view should add the ticker to allowed_spot_cryptos and remove it from denylisted_symbols."
+}

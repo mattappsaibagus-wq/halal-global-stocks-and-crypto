@@ -1,0 +1,44 @@
+{
+  "min_confidence": 0.6,
+  "risk_tolerance": "moderate",
+  "weights": {
+    "early_detector": 0.3,
+    "momentum_agent": 0.3,
+    "news_scanner": 0.2,
+    "dd_agent": 0.2
+  },
+  "shariah_compliance": {
+    "enabled": true,
+    "standard": "AAOIFI_STANDARD_21",
+    "max_debt_ratio": 0.30,
+    "max_cash_ratio": 0.30,
+    "max_receivables_ratio": 0.30,
+    "max_haram_revenue": 0.05,
+    "denominator_basis": "market_cap",
+    "default_non_compliant_revenue_ratio": 0.005,
+    "data_incomplete_is_halal": false
+  },
+  "standard_profiles": {
+    "AAOIFI_STANDARD_21": {
+      "label": "AAOIFI Standard No. 21",
+      "max_debt_ratio": 0.30,
+      "max_cash_ratio": 0.30,
+      "max_receivables_ratio": 0.30,
+      "max_haram_revenue": 0.05,
+      "denominator_basis": "market_cap"
+    },
+    "DJIM": {
+      "label": "Dow Jones Islamic Market",
+      "max_debt_ratio": 0.33,
+      "max_cash_ratio": 0.33,
+      "max_receivables_ratio": 0.33,
+      "max_haram_revenue": 0.05,
+      "denominator_basis": "market_cap"
+    }
+  },
+  "_notes": {
+    "denominator_basis": "AAOIFI/DJIM normally use a 24-36 month average market capitalisation. A 24-month average is not available from Yahoo Finance, so current market capitalisation is used as a documented fallback. Set to 'total_assets' to screen against total assets instead. Every screening result records which basis was applied in denominator_basis.",
+    "default_non_compliant_revenue_ratio": "Yahoo Finance does not publish a breakdown of non-compliant (haram) revenue by line of business. Until a manual override is supplied, this conservative estimate is used to derive the dividend purification obligation. It is an ESTIMATE, not a measured figure, and each result is tagged purification_basis: 'estimate' so it is never presented as fact. Override per-ticker by passing non_compliant_revenue_ratio in the agent's data payload.",
+    "data_incomplete_is_halal": "When sector or financial data cannot be resolved (Yahoo Finance returns no profile for some exchange-listed tickers), the asset is reported as QUESTIONABLE rather than silently passing the screen. A bank with no data must not be reported as Halal."
+  }
+}
