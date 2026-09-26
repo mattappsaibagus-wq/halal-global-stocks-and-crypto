@@ -76,6 +76,16 @@ class TestDashboardHTML(unittest.TestCase):
             for b in m[key]["brokers"]:
                 self.assertTrue(b["url"].startswith("https://"), b)
 
+    def test_render_ready(self):
+        self.assertIn('src="config.js"', self.html)
+        self.assertIn("DATA_BASE + 'data.json'", self.html)
+        root = os.path.join(os.path.dirname(__file__), "..")
+        with open(os.path.join(root, "render.yaml")) as f:
+            y = f.read()
+        self.assertIn("name: barakahfinance", y)
+        self.assertIn("staticPublishPath: ./public", y)
+        self.assertTrue(os.path.exists(os.path.join(root, "dashboard", "config.js")))
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

@@ -1,0 +1,28 @@
+# Render Blueprint: a free static site, requested name "barakahfinance"
+# (https://barakahfinance.onrender.com if the name is free).
+# The page loads scan data from GitHub Pages, which GitHub Actions refreshes
+# after every scan, so this site is always as current as the scanner.
+services:
+  - type: web
+    runtime: static
+    name: barakahfinance
+    branch: main
+    buildCommand: bash render-build.sh
+    staticPublishPath: ./public
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: SAMEORIGIN
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /index.html
+        name: Cache-Control
+        value: no-cache
+      - path: /config.js
+        name: Cache-Control
+        value: no-cache

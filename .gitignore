@@ -8,3 +8,4 @@ data/*
 .pytest_cache/
 dashboard/data.json
 dashboard/backtest.json
+public/
