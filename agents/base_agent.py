@@ -175,6 +175,28 @@ def _fx_rate(from_ccy, to_ccy):
         return None
 
 
+def _month_key(ts):
+    return (ts.year, ts.month)
+
+
+def usd_average(closes, fx_per_usd):
+    """Average of monthly closes in USD, each month at that month's rate.
+
+    `closes` and `fx_per_usd` map (year, month) -> value; fx is units of the
+    trading currency per 1 USD. Averaging in a hard currency stops a falling,
+    high-inflation currency (e.g. the lira) from shrinking old prices and
+    inflating debt ratios. Returns None with fewer than 12 matched months.
+    """
+    vals = [closes[k] / fx_per_usd[k] for k in closes if closes[k] > 0 and fx_per_usd.get(k, 0) > 0]
+    return sum(vals) / len(vals) if len(vals) >= 12 else None
+
+
+def _monthly(ticker_symbol):
+    import yfinance as yf
+    hist = yf.Ticker(ticker_symbol).history(period="3y", interval="1mo", auto_adjust=False)
+    return {_month_key(ts): to_float(c) for ts, c in zip(hist.index, hist["Close"]) if to_float(c) > 0}
+
+
 def fetch_yf_financials(symbol):
     """Fetch screening fundamentals for an equity.
 
@@ -240,24 +262,27 @@ def fetch_yf_financials(symbol):
         # Market values are quoted in the trading currency; statements may not be.
         market_cap = to_float(info.get("marketCap"))
         shares = to_float(info.get("sharesOutstanding"))
-        avg_cap = 0.0
-        if shares > 0:
-            try:
-                monthly = ticker.history(period="3y", interval="1mo", auto_adjust=False)
-                closes = [to_float(c) for c in monthly["Close"] if to_float(c) > 0]
-                if len(closes) >= 12:
-                    avg_cap = sum(closes) / len(closes) * shares
-            except Exception:
-                avg_cap = 0.0
+        avg_cap = 0.0          # in the reporting currency
         error = None
         if fin_ccy and currency and fin_ccy != currency:
             rate = _fx_rate(currency, fin_ccy)
             if rate:
                 market_cap *= rate
-                avg_cap *= rate
             else:
                 error = f"reports in {fin_ccy} but trades in {currency}; no exchange rate available"
-                market_cap = avg_cap = 0.0
+                market_cap = 0.0
+        if shares > 0 and not error:
+            try:
+                closes = _monthly(symbol)
+                if currency in ("", "USD"):
+                    avg_px_usd = usd_average(closes, {k: 1.0 for k in closes})
+                else:
+                    avg_px_usd = usd_average(closes, _monthly(f"{currency}=X"))
+                to_fin = _fx_rate("USD", fin_ccy or "USD")
+                if avg_px_usd and to_fin:
+                    avg_cap = avg_px_usd * shares * to_fin
+            except Exception:
+                avg_cap = 0.0
 
         return {
             "error": error,
