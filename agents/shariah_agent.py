@@ -180,7 +180,7 @@ class ShariahScreenerAgent(BaseAgent):
                 if value > limit:
                     rejection_reasons.append(
                         f"{label} ({_percent(value)}%) exceeds {self.standard} limit "
-                        f"({_limit_pct(limit)}%)"
+                        f"({_limit_pct(limit)})"
                     )
         else:
             data_issues.append(
@@ -193,7 +193,7 @@ class ShariahScreenerAgent(BaseAgent):
         if non_compliant_ratio > self.max_haram_revenue:
             rejection_reasons.append(
                 f"Non-compliant revenue ({_percent(non_compliant_ratio)}%) exceeds "
-                f"{self.standard} limit ({_limit_pct(self.max_haram_revenue)}%)"
+                f"{self.standard} limit ({_limit_pct(self.max_haram_revenue)})"
             )
 
         is_halal = not rejection_reasons and not data_issues
