@@ -1,0 +1,27 @@
+# Halal Global Stocks and Crypto - watchlist
+# One Yahoo Finance ticker per line. Every entry is Shariah-screened on each
+# run; non-compliant tickers are shown as HARAM on the dashboard, not traded.
+# Crypto must use the spot pair form (BTC-USD, not BTC).
+
+# United States
+AAPL
+MSFT
+NVDA
+GOOGL
+
+# Indonesia (IDX)
+TLKM.JK
+ICBP.JK
+UNVR.JK
+
+# Malaysia (Bursa, numeric codes)
+5347.KL
+5183.KL
+
+# Saudi Arabia (Tadawul)
+2222.SR
+
+# Spot crypto (see data/halal_crypto_registry.json)
+BTC-USD
+ETH-USD
+SOL-USD
