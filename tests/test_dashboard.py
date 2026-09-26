@@ -10,7 +10,7 @@ class TestDashboardHTML(unittest.TestCase):
             self.html = f.read()
 
     def test_dashboard_contains_halal_elements(self):
-        for needle in ("Halal Status", "Purification", "badge-halal", "badge-haram", "rejection_reasons", "shariah_standard"):
+        for needle in ("Purification", "badge-halal", "badge-haram", "rejection_reasons", "shariah_standard", "حلال", "حرام"):
             self.assertIn(needle, self.html)
 
     def test_dashboard_has_zakat_calculator(self):

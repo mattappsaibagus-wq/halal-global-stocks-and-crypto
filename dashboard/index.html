@@ -46,6 +46,11 @@
         .signal-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
         .signal-symbol { font-size: 1.25em; font-weight: 700; }
         .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+        .ar-badge {
+            font-family: 'Noto Naskh Arabic', 'Amiri', 'Scheherazade New', 'Geeza Pro', 'Segoe UI', serif;
+            font-size: 0.8em; font-weight: 700; line-height: 1; padding: 5px 10px 6px; border-radius: 6px;
+            margin-left: 10px; vertical-align: middle; display: inline-block; cursor: help;
+        }
         .chip { font-size: 0.72em; padding: 4px 9px; border-radius: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.4px; }
         .action-buy { background: rgba(0,212,170,0.2); color: #00d4aa; }
         .action-sell { background: rgba(255,136,68,0.2); color: #ff8844; }
@@ -269,10 +274,16 @@
 
         const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
+        // Shariah status in Arabic, shown next to the ticker. English stays in the tooltip.
+        const STATUS_AR = {
+            HALAL: ['حلال', 'badge-halal', 'Halal: passed the Shariah screen'],
+            HARAM: ['حرام', 'badge-haram', 'Haram: failed the Shariah screen'],
+            QUESTIONABLE: ['مشبوه', 'badge-questionable', 'Mashbooh (doubtful): data incomplete, verify before investing'],
+        };
         function badgeFor(rec) {
             const status = (rec.halal_status || 'UNSCREENED').toUpperCase();
-            const cls = {HALAL: 'badge-halal', HARAM: 'badge-haram', QUESTIONABLE: 'badge-questionable'}[status] || 'badge-unscreened';
-            return `<span class="chip ${cls}" title="Halal Status">${esc(status)}</span>`;
+            const [word, cls, title] = STATUS_AR[status] || ['؟', 'badge-unscreened', 'Not screened'];
+            return `<span class="ar-badge ${cls}" lang="ar" dir="rtl" title="${esc(title)}" aria-label="${esc(title)}">${word}</span>`;
         }
 
         const num = (v, d = 2) => Number(v).toLocaleString(undefined, {maximumFractionDigits: d});
@@ -395,11 +406,12 @@
                 return `
                     <div class="signal-card ${esc(action)}">
                         <div class="signal-header">
-                            <span class="signal-symbol">${esc(rec.symbol)}${rec.name && rec.name !== rec.symbol ? `<span class="asset-name">${esc(rec.name)}</span>` : ''}</span>
+                            <span class="signal-symbol">${esc(rec.symbol)}${badgeFor(rec)}${rec.name && rec.name !== rec.symbol ? `<span class="asset-name">${esc(rec.name)}</span>` : ''}</span>
                             <span class="chips">
                                 ${isCrypto ? '<span class="chip badge-crypto">Spot crypto</span>' : ''}
-                                ${badgeFor(rec)}
-                                <span class="chip action-${esc(action)}">${esc(proven === false && ['BUY', 'WATCH'].includes(rec.action) ? rec.action + ' setup' : (rec.recommendation || rec.action))}</span>
+                                <span class="chip action-${esc(action)}">${esc(proven === false && ['BUY', 'WATCH'].includes(rec.action) ? rec.action + ' setup'
+                                    : rec.action === 'AVOID' ? (rec.halal_status === 'HARAM' ? 'Rejected' : 'Data incomplete')
+                                    : (rec.recommendation || rec.action))}</span>
                             </span>
                         </div>
                         ${action === 'avoid' ? '' : `<div class="confidence-bar"><div class="confidence-fill" style="width:${confPct}%"></div></div>`}
