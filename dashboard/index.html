@@ -77,6 +77,9 @@
             padding: 10px 14px; font-size: 0.95em; cursor: pointer; font-weight: 600;
         }
         .tabs button.active { color: #00d4aa; border-bottom-color: #00d4aa; }
+        .group-title { display: flex; align-items: baseline; gap: 10px; font-size: 1.05em; color: #e0e0e0; margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #222; }
+        .group-title:first-child { margin-top: 0; }
+        .group-title .count { color: #888; font-size: 0.8em; font-weight: 400; }
         .compliance-note { margin-top: 8px; font-size: 0.8em; color: #6fd8c0; }
         .asset-name { color: #888; font-size: 0.8em; font-weight: 400; margin-left: 6px; }
         .zk-card { background: #111; border: 1px solid #222; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
@@ -236,7 +239,7 @@
                 container.innerHTML = '<div class="loading">Nothing to show for this filter.</div>';
                 return;
             }
-            container.innerHTML = recs.map(rec => {
+            const card = rec => {
                 const action = (rec.action || 'HOLD').toLowerCase();
                 const confPct = Math.round((rec.confidence || 0) * 100);
                 const isCrypto = rec.asset_type === 'crypto';
@@ -267,7 +270,15 @@
                         ${rec.compliance_note ? `<div class="compliance-note">${esc(rec.compliance_note)}</div>` : ''}
                         ${reasons.length ? `<ul class="reasons ${rec.halal_status === 'QUESTIONABLE' ? 'questionable' : ''}">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
                     </div>`;
-            }).join('');
+            };
+            // Stocks first, spot crypto below; each group keeps the advisor's ranking.
+            const groups = [
+                ['Stocks', recs.filter(r => r.asset_type !== 'crypto')],
+                ['Crypto', recs.filter(r => r.asset_type === 'crypto')],
+            ].filter(([, items]) => items.length);
+            container.innerHTML = groups.map(([title, items]) =>
+                `<h2 class="group-title">${title} <span class="count">${items.length}</span></h2>` + items.map(card).join('')
+            ).join('');
         }
 
         async function loadData() {

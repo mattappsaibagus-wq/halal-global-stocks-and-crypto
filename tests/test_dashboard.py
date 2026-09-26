@@ -21,6 +21,9 @@ class TestDashboardHTML(unittest.TestCase):
         # Private windows can throw on localStorage; the page must keep working.
         self.assertIn("try { localStorage.setItem", self.html)
 
+    def test_stocks_listed_before_crypto(self):
+        self.assertLess(self.html.index("['Stocks'"), self.html.index("['Crypto'"))
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 
