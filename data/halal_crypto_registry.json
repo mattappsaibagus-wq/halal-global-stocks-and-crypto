@@ -5,7 +5,7 @@
     "ETH-USD",
     "SOL-USD",
     "AVAX-USD",
-    "POL-USD",
+    "POL28321-USD",
     "LINK-USD",
     "ADA-USD",
     "DOT-USD",
@@ -28,5 +28,6 @@
     "TUSD-USD",
     "BUSD-USD"
   ],
-  "_denylist_reason": "Interest/algorithmic-backed or fiat-collateralised stablecoins are excluded from this scanner's default Halal spot set. They may be permitted by some fiqh committees (subject to asset backing) and by AAOIFI Shariah Standard 59; a user who follows that view should add the ticker to allowed_spot_cryptos and remove it from denylisted_symbols."
+  "_denylist_reason": "Interest/algorithmic-backed or fiat-collateralised stablecoins are excluded from this scanner's default Halal spot set. They may be permitted by some fiqh committees (subject to asset backing) and by AAOIFI Shariah Standard 59; a user who follows that view should add the ticker to allowed_spot_cryptos and remove it from denylisted_symbols.",
+  "_symbol_note": "Symbols are Yahoo Finance spot pairs. Polygon trades on Yahoo as POL28321-USD (POL-USD does not resolve)."
 }

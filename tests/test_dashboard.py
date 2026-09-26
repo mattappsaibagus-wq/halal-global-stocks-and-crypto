@@ -13,6 +13,14 @@ class TestDashboardHTML(unittest.TestCase):
         for needle in ("Halal Status", "Purification", "badge-halal", "badge-haram", "rejection_reasons", "shariah_standard"):
             self.assertIn(needle, self.html)
 
+    def test_dashboard_has_zakat_calculator(self):
+        for needle in ("Zakat &amp; Purification", "zk-rows", "halal-zakat-v1", "0.025"):
+            self.assertIn(needle, self.html)
+
+    def test_storage_access_is_guarded(self):
+        # Private windows can throw on localStorage; the page must keep working.
+        self.assertIn("try { localStorage.setItem", self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

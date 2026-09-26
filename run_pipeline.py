@@ -60,6 +60,12 @@ def main(watchlist_path=None, dashboard_dir=None):
                 continue
             if result:
                 all_results.append(result)
+            # Price agents report the latest close; use it where the screener
+            # has none (spot crypto has no fundamentals feed).
+            price = (result or {}).get("price")
+            close = price.get("close") if isinstance(price, dict) else None
+            if close and not shariah_result.get("price"):
+                shariah_result["price"] = float(close)
 
     print(f"{TAG} Collected {len(all_results)} agent results")
 

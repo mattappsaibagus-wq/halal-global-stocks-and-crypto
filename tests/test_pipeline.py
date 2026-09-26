@@ -33,6 +33,7 @@ class _FakeSignalAgent:
             "signals": [{"type": "bullish", "direction": "up"}],
             "confidence": 0.8,
             "alert": True,
+            "price": {"close": 123.45},
         }
 
 
@@ -87,6 +88,11 @@ class TestPipelineIntegration(unittest.TestCase):
         self._run()
         passed = self.learning.run.call_args[0][0]
         self.assertEqual([r["symbol"] for r in passed], ["AAPL"])
+
+    def test_price_agents_fill_missing_price(self):
+        report = self._run()
+        recs = {r["symbol"]: r for r in report["recommendations"]}
+        self.assertEqual(recs["AAPL"]["price"], 123.45)
 
     def test_dashboard_data_written(self):
         self._run()

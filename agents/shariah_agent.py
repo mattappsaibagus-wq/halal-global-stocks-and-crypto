@@ -24,7 +24,6 @@ PROHIBITED_SECTORS = [
     "gambling",
     "casinos",
     "alcoholic beverages",
-    "beverages - non-alcoholic",
     "brewers",
     "distillers",
     "wineries",
@@ -118,6 +117,12 @@ class ShariahScreenerAgent(BaseAgent):
             "default_non_compliant_revenue_ratio", 0.005
         )
 
+        # Scholar-view switches (see README "Match your scholar's view").
+        self.exclude_defence = shariah_cfg.get("exclude_defence", True)
+        self.islamic_allowlist = {
+            t.upper() for t in shariah_cfg.get("islamic_institution_allowlist", [])
+        }
+
         self.crypto_registry = (
             crypto_registry if crypto_registry is not None else load_halal_crypto_registry()
         )
@@ -132,6 +137,9 @@ class ShariahScreenerAgent(BaseAgent):
     def _analyze_equity(self, symbol, financials):
         if not financials:
             financials = fetch_yf_financials(symbol)
+
+        if symbol.upper() in self.islamic_allowlist:
+            return self._allowlisted_institution(symbol, financials)
 
         # Data-quality problems are tracked apart from compliance violations:
         # a feed that returned nothing is not evidence of non-compliance, and
@@ -228,6 +236,44 @@ class ShariahScreenerAgent(BaseAgent):
             "denominator_basis": denominator_basis,
             "sector": sector,
             "industry": industry,
+            **self._quote_fields(financials),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+    @staticmethod
+    def _quote_fields(financials):
+        return {
+            "name": financials.get("name") or "",
+            "price": to_float(financials.get("price")),
+            "currency": financials.get("currency") or "",
+            "dividend_rate": to_float(financials.get("dividend_rate")),
+        }
+
+    def _allowlisted_institution(self, symbol, financials):
+        """Islamic banks / takaful operators named in the config allowlist.
+
+        Their business is Shariah-governed by charter, so the conventional
+        sector screen (which rejects every "Bank") and the leverage ratios
+        (deposits look like debt) do not apply. Listing is a user decision
+        and is labelled as such in the output.
+        """
+        return {
+            "symbol": symbol,
+            "agent": self.name,
+            "asset_type": "equity",
+            "is_halal": True,
+            "status": STATUS_HALAL,
+            "standard_used": "ISLAMIC_INSTITUTION_ALLOWLIST",
+            "rejection_reasons": [],
+            "compliance_note": "Islamic financial institution on your allowlist (sector and ratio screens not applied)",
+            "ratios": {},
+            "purification_pct": 0.0,
+            "purification_per_share": 0.0,
+            "purification_basis": "n/a",
+            "denominator_basis": "n/a",
+            "sector": financials.get("sector") or "Islamic Finance",
+            "industry": financials.get("industry") or "Unknown",
+            **self._quote_fields(financials),
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
@@ -235,11 +281,17 @@ class ShariahScreenerAgent(BaseAgent):
         sector_label = (sector or "").lower()
         industry_label = (industry or "").lower()
 
+        defence = ("aerospace & defense", "arms")
+
         for prohibited in PROHIBITED_SECTORS:
+            if not self.exclude_defence and prohibited in defence:
+                continue
             if prohibited in sector_label:
                 return [f"Prohibited sector: {sector} (matched '{prohibited}')"]
 
         for prohibited in PROHIBITED_INDUSTRIES:
+            if not self.exclude_defence and prohibited in defence:
+                continue
             if prohibited in industry_label:
                 return [f"Prohibited industry: {industry} (matched '{prohibited}')"]
 
@@ -307,5 +359,9 @@ class ShariahScreenerAgent(BaseAgent):
             "denominator_basis": "n/a",
             "sector": "Cryptocurrency",
             "industry": "Spot Utility / Store of Value",
+            "name": pair,
+            "price": 0.0,  # filled by the pipeline from the price agents
+            "currency": "USD",
+            "dividend_rate": 0.0,
             "timestamp": datetime.now(timezone.utc).isoformat(),
         }

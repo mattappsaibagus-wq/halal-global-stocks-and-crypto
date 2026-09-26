@@ -1,27 +1,81 @@
 # Halal Global Stocks and Crypto - watchlist
 # One Yahoo Finance ticker per line. Every entry is Shariah-screened on each
 # run; non-compliant tickers are shown as HARAM on the dashboard, not traded.
-# Crypto must use the spot pair form (BTC-USD, not BTC).
+# Crypto must use the Yahoo spot pair form (BTC-USD, not BTC).
+# All symbols below were checked against Yahoo Finance on 2026-09-26.
 
 # United States
 AAPL
 MSFT
 NVDA
 GOOGL
+AMZN
+META
+TSLA
+AVGO
+ADBE
+AMD
+QCOM
+JNJ
+PG
+LLY
+ABT
+NKE
+LIN
 
-# Indonesia (IDX)
+# Indonesia (IDX, .JK)
 TLKM.JK
 ICBP.JK
 UNVR.JK
+INDF.JK
+ASII.JK
+KLBF.JK
+UNTR.JK
+ANTM.JK
+BRIS.JK
 
-# Malaysia (Bursa, numeric codes)
+# Malaysia (Bursa, numeric codes, .KL)
 5347.KL
 5183.KL
+6947.KL
+5225.KL
+4863.KL
+5258.KL
+3816.KL
+5681.KL
 
-# Saudi Arabia (Tadawul)
+# Saudi Arabia (Tadawul, .SR)
 2222.SR
+1120.SR
+1150.SR
+2010.SR
+7010.SR
+1211.SR
 
-# Spot crypto (see data/halal_crypto_registry.json)
+# UAE (Dubai Financial Market, .AE)
+EMAAR.AE
+DIB.AE
+DEWA.AE
+SALIK.AE
+AIRARABIA.AE
+
+# Qatar (.QA)
+QIBK.QA
+IQCD.QA
+
+# Turkey (Borsa Istanbul, .IS)
+BIMAS.IS
+THYAO.IS
+TUPRS.IS
+
+# Spot crypto (must also be in data/halal_crypto_registry.json)
 BTC-USD
 ETH-USD
 SOL-USD
+AVAX-USD
+POL28321-USD
+LINK-USD
+ADA-USD
+DOT-USD
+NEAR-USD
+ATOM-USD

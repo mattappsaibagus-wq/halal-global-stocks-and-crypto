@@ -137,6 +137,11 @@ class AdvisorAgent:
             "asset_type": shariah.get("asset_type", "unknown"),
             "sector": shariah.get("sector"),
             "ratios": shariah.get("ratios", {}),
+            "name": shariah.get("name", ""),
+            "price": shariah.get("price", 0.0),
+            "currency": shariah.get("currency", ""),
+            "dividend_rate": shariah.get("dividend_rate", 0.0),
+            "compliance_note": shariah.get("compliance_note", ""),
         }
 
     def _rejected(self, symbol, data, shariah):

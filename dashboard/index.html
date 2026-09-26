@@ -71,6 +71,50 @@
         .error { color: #ff4444; text-align: center; padding: 20px; }
         .generated-time { text-align: center; color: #666; font-size: 0.8em; margin-top: 16px; }
         .disclaimer { color: #666; font-size: 0.75em; line-height: 1.5; margin-top: 16px; text-align: center; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 1px solid #222; }
+        .tabs button {
+            background: none; border: none; border-bottom: 2px solid transparent; color: #888;
+            padding: 10px 14px; font-size: 0.95em; cursor: pointer; font-weight: 600;
+        }
+        .tabs button.active { color: #00d4aa; border-bottom-color: #00d4aa; }
+        .compliance-note { margin-top: 8px; font-size: 0.8em; color: #6fd8c0; }
+        .asset-name { color: #888; font-size: 0.8em; font-weight: 400; margin-left: 6px; }
+        .zk-card { background: #111; border: 1px solid #222; border-radius: 10px; padding: 16px; margin-bottom: 14px; }
+        .zk-card h2 { font-size: 1em; color: #e0e0e0; margin-bottom: 10px; }
+        .zk-settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+        .zk-settings label { display: flex; flex-direction: column; gap: 4px; font-size: 0.78em; color: #888; }
+        .zk-card input, .zk-card select {
+            background: #0a0a0f; color: #e0e0e0; border: 1px solid #333; border-radius: 6px;
+            padding: 7px 8px; font-size: 0.9em; width: 100%; min-width: 0;
+        }
+        .zk-scroll { overflow-x: auto; }
+        .zk-table { width: 100%; border-collapse: collapse; font-size: 0.85em; min-width: 760px; }
+        .zk-table th { text-align: left; color: #888; font-weight: 600; font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.5px; padding: 6px; border-bottom: 1px solid #222; }
+        .zk-table td { padding: 6px; border-bottom: 1px solid #1a1a1a; vertical-align: top; }
+        .zk-table td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; padding-top: 12px; }
+        .zk-hint { font-size: 0.75em; margin-top: 4px; }
+        .zk-hint.warn { color: #ff8888; }
+        .zk-hint.info { color: #888; }
+        .zk-remove { background: none; border: 1px solid #333; color: #888; border-radius: 6px; cursor: pointer; padding: 6px 9px; }
+        .zk-add { background: #00d4aa22; color: #00d4aa; border: 1px solid #00d4aa66; border-radius: 6px; padding: 8px 14px; cursor: pointer; margin-top: 10px; font-weight: 600; }
+        .zk-totals { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .zk-total { background: #0a0a0f; border: 1px solid #222; border-radius: 8px; padding: 12px; }
+        .zk-total .cur { color: #888; font-size: 0.75em; letter-spacing: 1px; }
+        .zk-total .big { font-size: 1.4em; font-weight: 700; color: #00d4aa; font-variant-numeric: tabular-nums; }
+        .zk-total .line { font-size: 0.82em; color: #aaa; margin-top: 4px; font-variant-numeric: tabular-nums; }
+        .zk-notes { font-size: 0.78em; color: #888; line-height: 1.6; }
+        .zk-notes li { margin-left: 18px; }
+        @media (max-width: 700px) {
+            .zk-table { min-width: 0; }
+            .zk-table thead { display: none; }
+            .zk-table tr { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; padding: 12px 0; border-bottom: 1px solid #222; }
+            .zk-table td { display: flex; flex-direction: column; gap: 3px; border: none; padding: 0; }
+            .zk-table td::before { content: attr(data-label); color: #888; font-size: 0.7em; text-transform: uppercase; letter-spacing: 0.5px; }
+            .zk-table td.num { text-align: left; padding-top: 0; }
+            .zk-table td.sym { grid-column: 1 / -1; }
+            .zk-table td.act { grid-column: 1 / -1; align-items: flex-end; }
+            .zk-table td.act::before { content: none; }
+        }
     </style>
 </head>
 <body>
@@ -81,6 +125,12 @@
             <span class="standard-chip" id="standard-chip">Standard: --</span>
         </header>
 
+        <nav class="tabs" id="tabs">
+            <button data-tab="scanner" class="active">Scanner</button>
+            <button data-tab="zakat">Zakat &amp; Purification</button>
+        </nav>
+
+        <section id="tab-scanner">
         <div class="stats">
             <div class="stat-card"><div class="stat-value" id="halal-count">--</div><div class="stat-label">Halal Status: Pass</div></div>
             <div class="stat-card"><div class="stat-value haram" id="haram-count">--</div><div class="stat-label">Haram</div></div>
@@ -100,6 +150,59 @@
 
         <button class="refresh-btn" onclick="loadData()">Refresh Signals</button>
         <div class="generated-time" id="generated-time">--</div>
+        </section>
+
+        <section id="tab-zakat" hidden>
+            <div class="zk-card">
+                <h2>Settings</h2>
+                <div class="zk-settings">
+                    <label>Nisab threshold (value of 85 g gold)
+                        <input id="zk-nisab" type="number" min="0" step="any" placeholder="e.g. 9000">
+                    </label>
+                    <label>Nisab currency
+                        <input id="zk-nisab-cur" type="text" maxlength="3" placeholder="e.g. USD">
+                    </label>
+                    <label>Long-term shares are zakatable on
+                        <select id="zk-method">
+                            <option value="proxy">25% of market value (simplified proxy)</option>
+                            <option value="full">Full market value (cautious)</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+
+            <div class="zk-card">
+                <h2>Your holdings</h2>
+                <div class="zk-scroll">
+                    <table class="zk-table">
+                        <thead><tr>
+                            <th style="width:16%">Symbol</th><th style="width:11%">Shares / units</th><th style="width:14%">Intent</th>
+                            <th style="width:13%">Price</th><th style="width:13%">Dividends received (this year)</th>
+                            <th style="width:11%">Market value</th><th style="width:10%">Zakat 2.5%</th><th style="width:9%">Purify</th><th></th>
+                        </tr></thead>
+                        <tbody id="zk-rows"></tbody>
+                    </table>
+                </div>
+                <datalist id="zk-symbols"></datalist>
+                <button class="zk-add" id="zk-add">+ Add holding</button>
+            </div>
+
+            <div class="zk-card">
+                <h2>Totals (per currency)</h2>
+                <div class="zk-totals" id="zk-totals"><div class="zk-notes">Add a holding to see totals.</div></div>
+            </div>
+
+            <div class="zk-card zk-notes">
+                <ul>
+                    <li><b>Trading</b> holdings (bought to resell) and spot crypto: zakat is 2.5% of full market value.</li>
+                    <li><b>Long-term</b> shares (held for dividends): many scholars take 2.5% of the company's zakatable assets per share. The 25% proxy approximates that; choose "full market value" to be cautious.</li>
+                    <li><b>Purification</b> = dividends you received &times; the stock's non-compliant income % from the latest scan. Scanner figures marked "estimate" are estimates. Donate it to charity without expecting reward.</li>
+                    <li>Nisab should include all your zakatable wealth (cash, gold, other assets), not only these holdings. Values are in each asset's own currency; totals are not converted.</li>
+                    <li>Your holdings are saved only in this browser. Nothing is uploaded.</li>
+                    <li>This is a calculation aid, not a fatwa. Confirm with a qualified scholar.</li>
+                </ul>
+            </div>
+        </section>
         <p class="disclaimer">
             Screening follows AAOIFI Standard 21 / DJIM ratio rules using Yahoo Finance data, with current market cap as the denominator.
             Purification figures marked "estimate" are not measured. This is research tooling, not a fatwa or financial advice.
@@ -147,7 +250,7 @@
                 return `
                     <div class="signal-card ${esc(action)}">
                         <div class="signal-header">
-                            <span class="signal-symbol">${esc(rec.symbol)}</span>
+                            <span class="signal-symbol">${esc(rec.symbol)}${rec.name && rec.name !== rec.symbol ? `<span class="asset-name">${esc(rec.name)}</span>` : ''}</span>
                             <span class="chips">
                                 ${isCrypto ? '<span class="chip badge-crypto">Spot crypto</span>' : ''}
                                 ${badgeFor(rec)}
@@ -161,6 +264,7 @@
                             ${ratios}
                             ${rec.sector ? `<span>${esc(rec.sector)}</span>` : ''}
                         </div>
+                        ${rec.compliance_note ? `<div class="compliance-note">${esc(rec.compliance_note)}</div>` : ''}
                         ${reasons.length ? `<ul class="reasons ${rec.halal_status === 'QUESTIONABLE' ? 'questionable' : ''}">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
                     </div>`;
             }).join('');
@@ -183,6 +287,7 @@
                 document.getElementById('buy-count').textContent = allRecs.filter(r => r.action === 'BUY').length;
                 document.getElementById('watch-count').textContent = allRecs.filter(r => r.action === 'WATCH').length;
                 render();
+                zkRender();
             } catch (err) {
                 container.innerHTML = '<div class="error">Error loading data: ' + esc(err.message) + '</div>';
             }
@@ -196,6 +301,131 @@
             render();
         });
 
+        // ---- Tabs ----
+        document.getElementById('tabs').addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('active', b === btn));
+            document.getElementById('tab-scanner').hidden = btn.dataset.tab !== 'scanner';
+            document.getElementById('tab-zakat').hidden = btn.dataset.tab !== 'zakat';
+        });
+
+        // ---- Zakat & purification calculator (browser-only storage) ----
+        const ZK_KEY = 'halal-zakat-v1';
+        let zk = {nisab: '', nisabCur: '', method: 'proxy', rows: []};
+        try {
+            const saved = JSON.parse(localStorage.getItem(ZK_KEY) || 'null');
+            if (saved && Array.isArray(saved.rows)) zk = Object.assign(zk, saved);
+        } catch (e) { /* storage unavailable: calculator still works for this visit */ }
+        const zkSave = () => { try { localStorage.setItem(ZK_KEY, JSON.stringify(zk)); } catch (e) {} };
+        const fmt = n => Number(n || 0).toLocaleString(undefined, {maximumFractionDigits: 2});
+        const recFor = sym => allRecs.find(r => r.symbol === String(sym || '').trim().toUpperCase());
+
+        function zkCalc(row) {
+            const rec = recFor(row.symbol);
+            const isCrypto = rec ? rec.asset_type === 'crypto' : /-USDT?$/i.test(row.symbol || '');
+            const manual = row.price !== '' && row.price != null;
+            const price = manual ? Number(row.price) : Number(rec?.price || 0);
+            const cur = (rec?.currency || (isCrypto ? 'USD' : '') || '?').toUpperCase();
+            const mv = Number(row.shares || 0) * price;
+            const fullValue = isCrypto || row.intent === 'trading' || zk.method === 'full';
+            const zakat = (fullValue ? mv : mv * 0.25) * 0.025;
+            const purPct = Number(rec?.purification_pct || 0);
+            const purification = Number(row.dividends || 0) * purPct / 100;
+            let hint = '', hintCls = 'info';
+            if (!row.symbol) hint = '';
+            else if (!rec) hint = 'Not in the latest scan: enter the price yourself.';
+            else if (rec.halal_status === 'HARAM') { hint = 'HARAM in latest scan: consider divesting and ask a scholar about purifying gains.'; hintCls = 'warn'; }
+            else if (rec.halal_status === 'QUESTIONABLE') { hint = 'Data incomplete in latest scan: verify compliance.'; hintCls = 'warn'; }
+            else if (!manual && !price) hint = 'No price in latest scan: enter it yourself.';
+            else hint = `${rec.halal_status}${purPct ? ` · purification ${purPct}%` : ''}${isCrypto ? ' · crypto: full value' : ''}`;
+            return {rec, price, manual, cur, mv, zakat, purification, hint, hintCls};
+        }
+
+        function zkRowHtml(row, i) {
+            const c = zkCalc(row);
+            return `<tr data-i="${i}">
+                <td class="sym" data-label="Symbol"><input list="zk-symbols" data-f="symbol" value="${esc(row.symbol)}" placeholder="e.g. AAPL">
+                    <div class="zk-hint ${c.hintCls}" id="zk-hint-${i}">${esc(c.hint)}</div></td>
+                <td data-label="Shares / units"><input type="number" min="0" step="any" data-f="shares" value="${esc(row.shares)}"></td>
+                <td data-label="Intent"><select data-f="intent">
+                    <option value="longterm" ${row.intent !== 'trading' ? 'selected' : ''}>Long-term</option>
+                    <option value="trading" ${row.intent === 'trading' ? 'selected' : ''}>Trading</option>
+                </select></td>
+                <td data-label="Price"><input type="number" min="0" step="any" data-f="price" value="${esc(row.price)}" placeholder="${c.rec?.price ? esc(fmt(c.rec.price)) : 'price'}"></td>
+                <td data-label="Dividends this year"><input type="number" min="0" step="any" data-f="dividends" value="${esc(row.dividends)}" placeholder="0"></td>
+                <td class="num" data-label="Market value" id="zk-mv-${i}"></td>
+                <td class="num" data-label="Zakat 2.5%" id="zk-zk-${i}"></td>
+                <td class="num" data-label="Purify" id="zk-pu-${i}"></td>
+                <td class="act"><button class="zk-remove" data-remove="${i}" aria-label="Remove">&times;</button></td>
+            </tr>`;
+        }
+
+        function zkUpdate() {
+            const totals = {};
+            zk.rows.forEach((row, i) => {
+                const c = zkCalc(row);
+                const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+                set(`zk-mv-${i}`, `${fmt(c.mv)} ${c.cur}`);
+                set(`zk-zk-${i}`, fmt(c.zakat));
+                set(`zk-pu-${i}`, fmt(c.purification));
+                const hint = document.getElementById(`zk-hint-${i}`);
+                if (hint) { hint.textContent = c.hint; hint.className = `zk-hint ${c.hintCls}`; }
+                if (!row.symbol) return;
+                const t = totals[c.cur] = totals[c.cur] || {mv: 0, zakat: 0, purification: 0};
+                t.mv += c.mv; t.zakat += c.zakat; t.purification += c.purification;
+            });
+            const box = document.getElementById('zk-totals');
+            const curs = Object.keys(totals);
+            if (!curs.length) { box.innerHTML = '<div class="zk-notes">Add a holding to see totals.</div>'; return; }
+            const nisab = Number(zk.nisab || 0), nisabCur = String(zk.nisabCur || '').toUpperCase();
+            box.innerHTML = curs.map(cur => {
+                const t = totals[cur];
+                let nisabLine = '';
+                if (nisab > 0 && nisabCur === cur) {
+                    nisabLine = t.mv >= nisab
+                        ? '<div class="line">Holdings alone meet the nisab.</div>'
+                        : '<div class="line">Below nisab on these holdings alone. Add your other zakatable wealth.</div>';
+                }
+                return `<div class="zk-total"><div class="cur">${esc(cur)}</div>
+                    <div class="big">${fmt(t.zakat)}</div><div class="line">zakat due (2.5%)</div>
+                    <div class="line">Purification: ${fmt(t.purification)}</div>
+                    <div class="line">Market value: ${fmt(t.mv)}</div>${nisabLine}</div>`;
+            }).join('');
+        }
+
+        function zkRender() {
+            document.getElementById('zk-symbols').innerHTML = allRecs.map(r => `<option value="${esc(r.symbol)}">${esc(r.name || '')}</option>`).join('');
+            document.getElementById('zk-nisab').value = zk.nisab;
+            document.getElementById('zk-nisab-cur').value = zk.nisabCur;
+            document.getElementById('zk-method').value = zk.method;
+            document.getElementById('zk-rows').innerHTML = zk.rows.map(zkRowHtml).join('');
+            zkUpdate();
+        }
+
+        document.getElementById('zk-rows').addEventListener('input', e => {
+            const f = e.target.dataset.f, tr = e.target.closest('tr');
+            if (!f || !tr) return;
+            let v = e.target.value;
+            if (f === 'symbol') v = v.toUpperCase();
+            zk.rows[Number(tr.dataset.i)][f] = v;
+            zkSave(); zkUpdate();
+        });
+        document.getElementById('zk-rows').addEventListener('click', e => {
+            const i = e.target.dataset.remove;
+            if (i === undefined) return;
+            zk.rows.splice(Number(i), 1);
+            zkSave(); zkRender();
+        });
+        document.getElementById('zk-add').addEventListener('click', () => {
+            zk.rows.push({symbol: '', shares: '', intent: 'longterm', price: '', dividends: ''});
+            zkSave(); zkRender();
+        });
+        [['zk-nisab', 'nisab'], ['zk-nisab-cur', 'nisabCur'], ['zk-method', 'method']].forEach(([id, key]) => {
+            document.getElementById(id).addEventListener('input', e => { zk[key] = e.target.value; zkSave(); zkUpdate(); });
+        });
+
+        zkRender();
         loadData();
         setInterval(loadData, 60000);
     </script>

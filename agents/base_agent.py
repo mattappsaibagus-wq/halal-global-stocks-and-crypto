@@ -162,6 +162,9 @@ def fetch_yf_financials(symbol):
         "total_revenue": 0.0,
         "dividend_yield": 0.0,
         "dividend_rate": 0.0,
+        "price": 0.0,
+        "currency": "",
+        "name": "",
     }
 
     try:
@@ -200,6 +203,13 @@ def fetch_yf_financials(symbol):
             "total_revenue": to_float(info.get("totalRevenue")),
             "dividend_yield": to_float(info.get("dividendYield")),
             "dividend_rate": to_float(info.get("dividendRate")),
+            "price": to_float(
+                info.get("currentPrice")
+                or info.get("regularMarketPrice")
+                or info.get("previousClose")
+            ),
+            "currency": info.get("currency") or "",
+            "name": info.get("longName") or info.get("shortName") or "",
         }
     except Exception as e:
         result = dict(empty)

@@ -26,10 +26,24 @@ class TestConfig(unittest.TestCase):
         shariah = data["shariah_compliance"]
         self.assertTrue(shariah["enabled"])
         self.assertEqual(shariah["standard"], "AAOIFI_STANDARD_21")
-        self.assertEqual(shariah["max_debt_ratio"], 0.30)
-        self.assertEqual(shariah["max_cash_ratio"], 0.30)
-        self.assertEqual(shariah["max_receivables_ratio"], 0.30)
-        self.assertEqual(shariah["max_haram_revenue"], 0.05)
+        active = data["standard_profiles"][shariah["standard"]]
+        self.assertEqual(active["max_debt_ratio"], 0.30)
+        self.assertEqual(active["max_cash_ratio"], 0.30)
+        self.assertEqual(active["max_receivables_ratio"], 0.30)
+        self.assertEqual(active["max_haram_revenue"], 0.05)
+
+    def test_limits_live_only_in_profiles(self):
+        """Duplicated limits in shariah_compliance would override a CUSTOM profile."""
+        with open(os.path.join(REPO_ROOT, "data", "advisor_config.json")) as f:
+            shariah = json.load(f)["shariah_compliance"]
+        for key in ("max_debt_ratio", "max_cash_ratio", "max_receivables_ratio", "max_haram_revenue"):
+            self.assertNotIn(key, shariah)
+
+    def test_crypto_registry_uses_resolvable_polygon_symbol(self):
+        with open(os.path.join(REPO_ROOT, "data", "halal_crypto_registry.json")) as f:
+            allowed = json.load(f)["allowed_spot_cryptos"]
+        self.assertIn("POL28321-USD", allowed)
+        self.assertNotIn("POL-USD", allowed)
 
     def test_standard_profiles_are_available(self):
         """Both AAOIFI and DJIM thresholds must be selectable."""
