@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+data/*
+!data/advisor_config.json
+!data/halal_crypto_registry.json
+.env
+*.log
+.pytest_cache/
+dashboard/data.json
