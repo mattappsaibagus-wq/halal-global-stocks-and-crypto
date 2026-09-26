@@ -43,6 +43,12 @@ class TestDashboardHTML(unittest.TestCase):
         for needle in ("tab-basket", "halal-basket-v1", "fx_per_usd", "Sell all", "Rebalance band"):
             self.assertIn(needle, self.html)
 
+    def test_disclaimer_at_top(self):
+        self.assertIn('id="disclaimer"', self.html)
+        self.assertLess(self.html.index('id="disclaimer"'), self.html.index('id="tabs"'))
+        self.assertIn("Not financial advice", self.html)
+        self.assertIn("Not a fatwa", self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

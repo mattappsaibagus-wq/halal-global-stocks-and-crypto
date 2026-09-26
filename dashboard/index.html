@@ -67,6 +67,12 @@
         .flag.bad { background: #ff444433; color: #ff8888; } .flag.warn { background: #ffaa0033; color: #ffc766; }
         .jn-close { display: flex; gap: 6px; align-items: center; }
         .jn-close input { width: 90px; }
+        .disclaimer-top { background: #16130a; border: 1px solid #ffaa0055; border-radius: 8px; padding: 10px 14px; margin: -6px 0 16px; font-size: 0.8em; color: #d9c79a; line-height: 1.55; }
+        .disclaimer-top b { color: #ffc766; }
+        .disclaimer-top summary { cursor: pointer; list-style: none; }
+        .disclaimer-top summary::-webkit-details-marker { display: none; }
+        .disclaimer-top summary .more { color: #ffc766; text-decoration: underline; margin-left: 4px; }
+        .disclaimer-top ul { margin: 8px 0 0 18px; }
         .freshness { font-size: 0.78em; color: #888; text-align: center; margin: -8px 0 18px; line-height: 1.6; }
         .freshness .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00d4aa; margin-right: 5px; }
         .freshness .dot.off { background: #666; }
@@ -181,6 +187,16 @@
             <span class="standard-chip" id="standard-chip">Standard: --</span>
         </header>
 
+        <details class="disclaimer-top" id="disclaimer">
+            <summary><b>Disclaimer:</b> research and education only. Not financial advice, not a fatwa. Invest at your own risk.<span class="more">Read more</span></summary>
+            <ul>
+                <li><b>Not financial advice.</b> Nothing here is a recommendation to buy or sell. Signals, trade plans, rotations and basket weights are tools for your own research. Backtests show no proven edge for the timing signals, and past results never guarantee future results.</li>
+                <li><b>Not a fatwa.</b> The Shariah screen applies published AAOIFI / DJIM ratio rules to automated data, which can be incomplete, delayed or wrong. Verify each holding with a qualified Shariah scholar or an established screener (e.g. Zoya, Musaffa) before investing.</li>
+                <li><b>Data may be delayed or inaccurate.</b> Only crypto (and US stocks with your own Finnhub key) is live. Other markets show the official close of the date displayed. Always confirm prices with your broker before trading.</li>
+                <li><b>Risk.</b> Stocks and especially crypto can lose a large part of their value. Only invest money you can afford to lose, and consider speaking with a licensed financial adviser.</li>
+                <li>You are solely responsible for your investment and religious decisions. The authors accept no liability for losses.</li>
+            </ul>
+        </details>
         <div class="freshness" id="freshness">Loading data status...</div>
         <nav class="tabs" id="tabs">
             <button data-tab="scanner" class="active">Scanner</button>
