@@ -181,6 +181,9 @@ class AdvisorAgent:
             "dividend_rate": shariah.get("dividend_rate", 0.0),
             "compliance_note": shariah.get("compliance_note", ""),
             "as_of": shariah.get("as_of"),
+            "above_200d": shariah.get("above_200d"),
+            "stale": shariah.get("stale"),
+            "news": shariah.get("news", []),
             "region": shariah.get("region"),
         }
 

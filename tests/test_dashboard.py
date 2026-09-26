@@ -28,6 +28,17 @@ class TestDashboardHTML(unittest.TestCase):
         for needle in ("risk_plan", "backtest.json", "compliance_changes", "track_record", "Data as of"):
             self.assertIn(needle, self.html)
 
+    def test_journal_rotation_regime_present(self):
+        for needle in ("halal-journal-v1", "tab-journal", "renderRotation", "renderRegimes", "spusReturn", "Export backup"):
+            self.assertIn(needle, self.html)
+
+    def test_live_prices_news_and_sources(self):
+        for needle in ("api.exchange.coinbase.com", "finnhub.io", "STALE", "Official close", "noopener", "Data sources"):
+            self.assertIn(needle, self.html)
+
+    def test_news_links_open_safely(self):
+        self.assertIn('target="_blank" rel="noopener noreferrer"', self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

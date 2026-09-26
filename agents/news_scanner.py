@@ -1,83 +1,98 @@
-from datetime import datetime, timezone
+"""Recent news headlines per symbol, with source, time and link.
+
+Headlines come from Google News' RSS search, which aggregates publishers
+(Reuters, CNBC, local financial press, ...) and gives each item its source
+and publication time. Items are shown as information only: headline
+sentiment was never validated as a trading signal, so it no longer feeds
+the advisor.
+"""
+
+import re
+import urllib.parse
+import xml.etree.ElementTree as ET
+from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
+
 from agents.base_agent import BaseAgent
+
+FEED = "https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
+MAX_AGE_DAYS = 7
+MAX_ITEMS = 5
+
+CRYPTO_NAMES = {
+    "BTC": "Bitcoin", "ETH": "Ethereum", "SOL": "Solana", "AVAX": "Avalanche crypto",
+    "POL28321": "Polygon POL", "POL": "Polygon POL", "LINK": "Chainlink", "ADA": "Cardano",
+    "DOT": "Polkadot", "NEAR": "NEAR Protocol", "ATOM": "Cosmos ATOM",
+}
+
+# Legal-form words that make an exact-phrase search miss most articles.
+_SUFFIXES = r"\b(perusahaan|perseroan|inc|incorporated|corp|corporation|co|company|plc|ltd|limited|llc|tbk|pt|persero|berhad|bhd|" \
+            r"pjsc|p\.j\.s\.c|psc|q\.p\.s\.c|qpsc|a\.s|as|anonim|ortakligi|sirketi|group|holdings?|the|n\.v|s\.a)\b\.?"
+
+
+def search_query(symbol, name=""):
+    base = symbol.split("-")[0].split(".")[0].upper()
+    if symbol.upper().endswith(("-USD", "-USDT")):
+        return f'"{CRYPTO_NAMES.get(base, base)}"'
+    clean = re.sub(r"\(.*?\)", " ", name or "")
+    clean = re.sub(_SUFFIXES, " ", clean, flags=re.I)
+    clean = re.sub(r"[^\w&' .-]", " ", clean)
+    clean = re.sub(r"\s+", " ", clean).strip(" .-")
+    ticker_ok = base.isalpha() and len(base) >= 2   # numeric codes (5347, 2222) match unrelated news
+    if len(clean) >= 3:
+        return f'("{clean}" OR "{base}")' if ticker_ok else f'"{clean}"'
+    return f'"{base}" stock'
+
+
+def parse_feed(xml_text, now=None, max_age_days=MAX_AGE_DAYS, limit=MAX_ITEMS):
+    now = now or datetime.now(timezone.utc)
+    root = ET.fromstring(xml_text)
+    items = []
+    for it in root.iter("item"):
+        title = (it.findtext("title") or "").strip()
+        source = (it.findtext("source") or "").strip()
+        link = (it.findtext("link") or "").strip()
+        try:
+            published = parsedate_to_datetime(it.findtext("pubDate") or "")
+        except (TypeError, ValueError):
+            continue
+        if published.tzinfo is None:
+            published = published.replace(tzinfo=timezone.utc)
+        if not title or not link.startswith("http") or now - published > timedelta(days=max_age_days):
+            continue
+        if source and title.endswith(" - " + source):
+            title = title[: -len(" - " + source)]
+        items.append({"title": title, "source": source or "Unknown", "published": published.isoformat(), "link": link})
+    items.sort(key=lambda i: i["published"], reverse=True)
+    seen, out = set(), []
+    for i in items:  # the same story syndicated across outlets
+        key = i["title"].lower()[:70]
+        if key not in seen:
+            seen.add(key)
+            out.append(i)
+    return out[:limit]
 
 
 class NewsScannerAgent(BaseAgent):
-    """Scans recent news articles for sentiment analysis."""
-
     name = "news_scanner"
-    description = "Scans news for sentiment and key events"
+    description = "Latest headlines with source and time (information only)"
 
-    def __init__(self, config=None):
-        super().__init__(config)
-        self.max_articles = config.get("max_articles", 5) if config else 5
-
-    def analyze(self, symbol, data=None):
-        articles = self._fetch_news(symbol)
-        if not articles:
-            return None
-
-        sentiments = []
-        keywords = []
-        for article in articles[:self.max_articles]:
-            sentiment = self._sentiment_score(article.get("title", "") + " " + article.get("description", ""))
-            sentiments.append(sentiment)
-            for kw in ["earnings", "upgrade", "downgrade", "FDA", "approval", "launch", "partnership", "lawsuit", "recall"]:
-                text = (article.get("title", "") + " " + article.get("description", "")).lower()
-                if kw.lower() in text:
-                    keywords.append(kw)
-
-        avg_sentiment = sum(sentiments) / len(sentiments) if sentiments else 0
-
-        if abs(avg_sentiment) < 0.1:
-            return None
-
-        direction = "positive" if avg_sentiment > 0 else "negative"
-        confidence = min(abs(avg_sentiment) / 0.5, 1.0)
-
+    def analyze(self, symbol, data=None, name=""):
+        query = search_query(symbol, name) + f" when:{MAX_AGE_DAYS}d"
+        try:
+            import requests
+            resp = requests.get(FEED.format(q=urllib.parse.quote(query)), timeout=10,
+                                headers={"User-Agent": "Mozilla/5.0 (HalalGlobalScanner/1.0)"})
+            resp.raise_for_status()
+            items = parse_feed(resp.text)
+            error = None
+        except Exception as exc:
+            items, error = [], f"{type(exc).__name__}"
         return {
             "symbol": symbol,
             "agent": self.name,
-            "signals": [{
-                "type": "news_sentiment",
-                "direction": direction,
-                "avg_sentiment": round(avg_sentiment, 3),
-                "confidence": round(confidence, 2),
-                "keywords": list(set(keywords))[:5],
-            }],
-            "price": None,
-            "articles_count": len(articles),
-            "confidence": round(confidence, 2),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "alert": confidence >= 0.6,
+            "query": query,
+            "news": items,
+            "news_error": error,
+            "fetched_at": datetime.now(timezone.utc).isoformat(),
         }
-
-    def _fetch_news(self, symbol):
-        try:
-            import requests
-            url = f"https://finance.yahoo.com/quote/{symbol}/"
-            headers = {"User-Agent": "Mozilla/5.0 (compatible; HalalGlobalScanner/1.0)"}
-            resp = requests.get(url, headers=headers, timeout=10)
-            if resp.status_code != 200:
-                return []
-            import re
-            titles = re.findall(r'data-test="post-info">(.*?)</a>', resp.text)
-            articles = [{"title": t.strip()[:200], "description": ""} for t in titles[:self.max_articles]]
-            return articles
-        except Exception:
-            # No news is no signal. Fabricated headlines would surface as
-            # high-confidence alerts on the dashboard whenever Yahoo is down.
-            return []
-
-    def _sentiment_score(self, text):
-        positive_words = ["gain", "growth", "up", "rise", "surge", "beat", "strong", "positive", "upgrade", "approval", "breakthrough", "success", "profit", "record"]
-        negative_words = ["loss", "drop", "fall", "down", "decline", "miss", "weak", "negative", "downgrade", "delay", "investigation", "warning", "recall", "lawsuit"]
-        text_lower = text.lower()
-        score = 0
-        for word in positive_words:
-            if word in text_lower:
-                score += 1
-        for word in negative_words:
-            if word in text_lower:
-                score -= 1
-        return min(max(score / 5.0, -1.0), 1.0)

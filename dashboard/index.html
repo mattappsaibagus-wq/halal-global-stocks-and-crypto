@@ -51,6 +51,35 @@
             font-size: 0.8em; font-weight: 700; line-height: 1; padding: 5px 10px 6px; border-radius: 6px;
             margin-left: 10px; vertical-align: middle; display: inline-block; cursor: help;
         }
+        .regimes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 18px; }
+        .regime { background: #111; border: 1px solid #222; border-radius: 8px; padding: 10px 12px; }
+        .regime .r { font-size: 0.78em; color: #aaa; }
+        .regime .l { font-weight: 700; margin: 3px 0; }
+        .regime .d { font-size: 0.72em; color: #888; line-height: 1.5; }
+        .risk-on { color: #00d4aa; } .risk-off { color: #ff7070; } .mixed { color: #ffaa00; } .unknown { color: #888; }
+        .jn-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+        .jn-form label { display: flex; flex-direction: column; gap: 4px; font-size: 0.75em; color: #888; }
+        .jn-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .btn { background: #00d4aa22; color: #00d4aa; border: 1px solid #00d4aa66; border-radius: 6px; padding: 8px 14px; cursor: pointer; font-weight: 600; font-size: 0.85em; }
+        .btn.ghost { background: none; color: #aaa; border-color: #333; }
+        .jn-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+        .flag { font-size: 0.72em; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-left: 4px; }
+        .flag.bad { background: #ff444433; color: #ff8888; } .flag.warn { background: #ffaa0033; color: #ffc766; }
+        .jn-close { display: flex; gap: 6px; align-items: center; }
+        .jn-close input { width: 90px; }
+        .freshness { font-size: 0.78em; color: #888; text-align: center; margin: -8px 0 18px; line-height: 1.6; }
+        .freshness .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00d4aa; margin-right: 5px; }
+        .freshness .dot.off { background: #666; }
+        .price-line { margin-top: 6px; font-size: 0.84em; color: #bbb; display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+        .price-line .px { font-size: 1.15em; font-weight: 700; color: #e0e0e0; font-variant-numeric: tabular-nums; }
+        .live { font-size: 0.7em; font-weight: 800; letter-spacing: 1px; color: #0a0a0f; background: #00d4aa; border-radius: 3px; padding: 1px 5px; }
+        .live.delayed { background: #555; color: #ddd; }
+        .stale { font-size: 0.7em; font-weight: 800; color: #fff; background: #c62828; border-radius: 3px; padding: 1px 5px; }
+        .news { margin-top: 8px; font-size: 0.82em; }
+        .news summary { cursor: pointer; color: #9ab; }
+        .news li { list-style: none; margin: 6px 0 0; line-height: 1.4; }
+        .news a { color: #d8e6ff; text-decoration: none; } .news a:hover { text-decoration: underline; }
+        .news .meta { color: #777; font-size: 0.9em; }
         .chip-sub { display: block; font-size: 0.72em; font-weight: 600; letter-spacing: 0.8px; opacity: 0.85; margin-top: 2px; text-align: center; }
         .chip { font-size: 0.72em; padding: 4px 9px; border-radius: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.4px; }
         .action-buy { background: rgba(0,212,170,0.2); color: #00d4aa; }
@@ -77,7 +106,8 @@
         .error { color: #ff4444; text-align: center; padding: 20px; }
         .generated-time { text-align: center; color: #666; font-size: 0.8em; margin-top: 16px; }
         .disclaimer { color: #666; font-size: 0.75em; line-height: 1.5; margin-top: 16px; text-align: center; }
-        .tabs { display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 1px solid #222; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid #222; overflow-x: auto; scrollbar-width: none; }
+        .tabs button { white-space: nowrap; flex: 0 0 auto; }
         .tabs button {
             background: none; border: none; border-bottom: 2px solid transparent; color: #888;
             padding: 10px 14px; font-size: 0.95em; cursor: pointer; font-weight: 600;
@@ -151,15 +181,18 @@
             <span class="standard-chip" id="standard-chip">Standard: --</span>
         </header>
 
+        <div class="freshness" id="freshness">Loading data status...</div>
         <nav class="tabs" id="tabs">
             <button data-tab="scanner" class="active">Scanner</button>
             <button data-tab="zakat"><span class="long">Zakat &amp; Purification</span><span class="short">Zakat</span></button>
+            <button data-tab="journal"><span class="long">Trade Journal</span><span class="short">Journal</span></button>
             <button data-tab="backtest"><span class="long">Backtest &amp; Track Record</span><span class="short">Backtest</span></button>
         </nav>
 
         <section id="tab-scanner">
         <div id="changes"></div>
         <div id="mode"></div>
+        <div id="regimes" class="regimes"></div>
         <div class="stats">
             <div class="stat-card"><div class="stat-value" id="halal-count">--</div><div class="stat-label">Halal Status: Pass</div></div>
             <div class="stat-card"><div class="stat-value haram" id="haram-count">--</div><div class="stat-label">Haram</div></div>
@@ -179,6 +212,70 @@
 
         <button class="refresh-btn" onclick="loadData()">Refresh Signals</button>
         <div class="generated-time" id="generated-time">--</div>
+        <div class="zk-card zk-notes" style="margin-top:18px">
+            <h2>Data sources &amp; how current they are</h2>
+            <ul>
+                <li><b>Crypto prices: LIVE.</b> Coinbase Exchange, fetched by your browser every 15 s. Each price shows how many seconds ago it last traded.</li>
+                <li><b>US stock prices: live with a free Finnhub key</b> (below), refreshed every 60 s during US market hours. Without a key: official close.</li>
+                <li><b>Indonesia, Malaysia, Saudi, UAE, Qatar, Turkey: official closing price</b> of the date shown (Yahoo Finance). There is no free, reliable real-time feed for these exchanges; the scan runs right after each market closes.</li>
+                <li><b>Shariah ratios:</b> Yahoo Finance company data, as last reported by the company (quarterly).</li>
+                <li><b>News:</b> Google News, which collects headlines from publishers. Every item shows its publisher, age and a link to the original. Headlines are information only, never a signal.</li>
+                <li>A red <span class="stale">STALE</span> tag means the latest price is more than 3 trading days old (suspension, delisting or a feed problem). Don't trade on it.</li>
+            </ul>
+            <div class="jn-form" style="margin-top:10px">
+                <label style="grid-column: 1 / -1">Finnhub API key (free at finnhub.io, stored only in this browser)
+                    <input id="fh-key" type="password" autocomplete="off" placeholder="paste key for live US prices"></label>
+            </div>
+            <div class="jn-actions"><button class="btn" id="fh-save">Save key</button><button class="btn ghost" id="fh-clear">Remove key</button>
+                <span class="zk-notes" id="fh-msg" style="align-self:center"></span></div>
+        </div>
+        </section>
+
+        <section id="tab-journal" hidden>
+            <div class="zk-card">
+                <h2>Log a trade</h2>
+                <div class="jn-form">
+                    <label>Symbol <input id="jn-symbol" list="zk-symbols" placeholder="e.g. MSFT"></label>
+                    <label>Entry date <input id="jn-date" type="date"></label>
+                    <label>Entry price <input id="jn-entry" type="number" min="0" step="any"></label>
+                    <label>Units <input id="jn-units" type="number" min="0" step="any"></label>
+                    <label>Stop <input id="jn-stop" type="number" min="0" step="any" placeholder="from trade plan"></label>
+                    <label>Fees (total) <input id="jn-fees" type="number" min="0" step="any" placeholder="0"></label>
+                    <label style="grid-column: 1 / -1">Why this trade? <input id="jn-note" maxlength="200" placeholder="setup, thesis, what would prove you wrong"></label>
+                </div>
+                <div class="jn-actions">
+                    <button class="btn" id="jn-add">Add trade</button>
+                    <button class="btn ghost" id="jn-fill">Fill from scanner plan</button>
+                    <span id="jn-msg" class="zk-notes" style="align-self:center"></span>
+                </div>
+            </div>
+            <div class="zk-card">
+                <h2>Your results (closed trades)</h2>
+                <div class="jn-stats" id="jn-stats"></div>
+            </div>
+            <div class="zk-card">
+                <h2>Open positions</h2>
+                <div class="zk-scroll"><table class="bt-table" id="jn-open"></table></div>
+            </div>
+            <div class="zk-card">
+                <h2>Exposure (open positions)</h2>
+                <div class="zk-scroll"><table class="bt-table" id="jn-exposure"></table></div>
+            </div>
+            <div class="zk-card">
+                <h2>Closed trades</h2>
+                <div class="zk-scroll"><table class="bt-table" id="jn-closed"></table></div>
+            </div>
+            <div class="zk-card zk-notes">
+                <div class="jn-actions" style="margin-top:0">
+                    <button class="btn ghost" id="jn-export">Export backup (.json)</button>
+                    <label class="btn ghost" style="display:inline-block">Import backup<input id="jn-import" type="file" accept="application/json" hidden></label>
+                </div>
+                <ul style="margin-top:10px">
+                    <li><b>R</b> = result in multiples of the amount you risked (entry − stop). Expectancy above 0 over many trades is the goal.</li>
+                    <li><b>vs SPUS</b>: what the halal S&amp;P 500 ETF did over the same days. If your trades can't beat it, the ETF is the better trade.</li>
+                    <li>Your journal is saved only in this browser. Export a backup regularly.</li>
+                </ul>
+            </div>
         </section>
 
         <section id="tab-backtest" hidden>
@@ -191,6 +288,12 @@
                 <h2>Out-of-sample test: does any rule hold up on unseen data?</h2>
                 <div id="st-summary" class="zk-notes">Loading...</div>
                 <div class="zk-scroll" style="margin-top:12px"><table class="bt-table" id="st-table"></table></div>
+            </div>
+            <div class="zk-card">
+                <h2>Halal momentum rotation (monthly, top 10)</h2>
+                <div id="rot-summary" class="zk-notes">Loading...</div>
+                <div class="zk-scroll" style="margin-top:12px"><table class="bt-table" id="rot-table"></table></div>
+                <div id="rot-picks" style="margin-top:12px"></div>
             </div>
             <div class="zk-card">
                 <h2>Which individual signals carry an edge?</h2>
@@ -287,6 +390,89 @@
             return `<span class="ar-badge ${cls}" lang="ar" dir="rtl" title="${esc(title)}" aria-label="${esc(title)}">${word}</span>`;
         }
 
+        // ---- Live prices ----
+        const livePrices = {};   // symbol -> {price, time, source, change}
+        const priceOf = rec => (rec && livePrices[rec.symbol]?.price) || (rec && rec.price) || null;
+        const ago = iso => {
+            const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+            return s < 90 ? `${Math.round(s)}s ago` : s < 5400 ? `${Math.round(s / 60)} min ago` : s < 172800 ? `${Math.round(s / 3600)} h ago` : `${Math.round(s / 86400)} days ago`;
+        };
+        const fmtPx = v => Number(v).toLocaleString(undefined, {maximumFractionDigits: v < 1 ? 6 : v < 100 ? 4 : 2});
+        function priceLineInner(rec) {
+            const live = livePrices[rec.symbol];
+            const cur = esc(rec.currency || (rec.asset_type === 'crypto' ? 'USD' : ''));
+            if (live) {
+                const fresh = (Date.now() - new Date(live.time).getTime()) < 15 * 60 * 1000;
+                const chg = live.change == null ? '' : ` <span class="${live.change >= 0 ? 'pos' : 'neg'}">${live.change >= 0 ? '+' : ''}${num(live.change)}% ${esc(live.changeLabel || '24h')}</span>`;
+                return `<span class="px">${fmtPx(live.price)} ${cur}</span><span class="live ${fresh ? '' : 'delayed'}">${fresh ? 'LIVE' : 'DELAYED'}</span>
+                    <span class="muted">${esc(live.source)} · last trade ${esc(ago(live.time))}</span>${chg}`;
+            }
+            if (!rec.price) return '<span class="muted">No price available</span>';
+            return `<span class="px">${fmtPx(rec.price)} ${cur}</span>
+                <span class="muted">${rec.as_of ? 'Official close ' + esc(rec.as_of) : 'Latest reported'} · Yahoo Finance</span>
+                ${rec.stale ? '<span class="stale">STALE</span>' : ''}`;
+        }
+        const priceLineHtml = rec => `<div class="price-line" id="px-${esc(rec.symbol)}">${priceLineInner(rec)}</div>`;
+        function newsHtml(rec) {
+            const items = rec.news || [];
+            if (!items.length) return '';
+            return `<details class="news"><summary>News (${items.length}) · latest ${esc(ago(items[0].published))}</summary><ul>${
+                items.map(n => `<li><a href="${esc(n.link)}" target="_blank" rel="noopener noreferrer">${esc(n.title)}</a>
+                    <div class="meta">${esc(n.source)} · ${esc(ago(n.published))}</div></li>`).join('')}</ul></details>`;
+        }
+        function refreshPriceLines() {
+            for (const rec of allRecs) {
+                const el = document.getElementById('px-' + rec.symbol);
+                if (el) el.innerHTML = priceLineInner(rec);
+            }
+        }
+
+        const COINBASE = sym => sym.replace(/^POL\d+-/, 'POL-');   // Yahoo's POL28321-USD is POL-USD on Coinbase
+        let statsAt = 0;
+        async function pollCrypto() {
+            const cryptos = allRecs.filter(r => r.asset_type === 'crypto' && r.halal_status === 'HALAL');
+            const withStats = Date.now() - statsAt > 60000;
+            if (withStats) statsAt = Date.now();
+            await Promise.all(cryptos.map(async rec => {
+                const product = COINBASE(rec.symbol);
+                try {
+                    const t = await fetch(`https://api.exchange.coinbase.com/products/${product}/ticker`).then(r => r.ok ? r.json() : Promise.reject(r.status));
+                    const prev = livePrices[rec.symbol] || {};
+                    let change = prev.change ?? null;
+                    if (withStats) {
+                        const st = await fetch(`https://api.exchange.coinbase.com/products/${product}/stats`).then(r => r.ok ? r.json() : null).catch(() => null);
+                        if (st && +st.open) change = (+t.price / +st.open - 1) * 100;
+                    }
+                    livePrices[rec.symbol] = {price: +t.price, time: t.time, source: 'Coinbase', change};
+                } catch (e) { /* keep last good value; the card falls back to the scan price */ }
+            }));
+            refreshPriceLines(); updateFreshness();
+        }
+
+        let fhKey = '';
+        try { fhKey = localStorage.getItem('halal-finnhub-key') || ''; } catch (e) {}
+        async function pollUS() {
+            if (!fhKey) return;
+            const us = allRecs.filter(r => r.region === 'United States' && r.halal_status === 'HALAL');
+            await Promise.all(us.map(async rec => {
+                try {
+                    const q = await fetch(`https://finnhub.io/api/v1/quote?symbol=${encodeURIComponent(rec.symbol)}&token=${encodeURIComponent(fhKey)}`).then(r => r.ok ? r.json() : Promise.reject(r.status));
+                    if (+q.c > 0 && q.t) livePrices[rec.symbol] = {price: +q.c, time: new Date(q.t * 1000).toISOString(), source: 'Finnhub', change: q.dp, changeLabel: 'today'};
+                } catch (e) {}
+            }));
+            refreshPriceLines(); updateFreshness();
+        }
+
+        let dataGeneratedAt = null;
+        function updateFreshness() {
+            const box = document.getElementById('freshness');
+            if (!dataGeneratedAt) return;
+            const nLive = Object.values(livePrices).filter(p => Date.now() - new Date(p.time).getTime() < 15 * 60 * 1000).length;
+            box.innerHTML = `<span class="dot ${nLive ? '' : 'off'}"></span>${nLive} live price${nLive === 1 ? '' : 's'} (${fhKey ? 'crypto + US' : 'crypto'})
+                · Last scan ${esc(ago(dataGeneratedAt))} (${esc(new Date(dataGeneratedAt).toLocaleString())})
+                · Scans run after each market closes`;
+        }
+
         const num = (v, d = 2) => Number(v).toLocaleString(undefined, {maximumFractionDigits: d});
         function planHtml(rec) {
             const p = rec.risk_plan;
@@ -339,6 +525,7 @@
                     (bt.signals || []).map(x => `<tr><td>${esc(x.signal)}</td><td>${num(x.n, 0)}</td><td>${pct(x.avg_20d)}</td><td>${pct(x.edge_20d)}</td><td>${num(x.up_pct_20d, 1)}%</td></tr>`).join('')
                 }</tbody>`;
                 renderStudy(bt.study);
+                renderRotation(bt.rotation);
                 proven = bt.study ? bt.study.passed : null;
                 document.getElementById('mode').innerHTML = proven === false
                     ? `<div class="changes calm" style="border-color:#ffaa0066;background:#16130a"><h3 style="color:#ffc766">Watchlist mode: no BUY rule is proven yet</h3>
@@ -350,6 +537,181 @@
                 summary.textContent = 'The backtest has not run yet. It runs once a day after the US close, or start it from GitHub Actions.';
             }
         }
+
+        function renderRegimes(list) {
+            const box = document.getElementById('regimes');
+            if (!list || !list.length) { box.innerHTML = ''; return; }
+            box.innerHTML = list.map(r => {
+                const cls = {'Risk-on': 'risk-on', 'Risk-off': 'risk-off', 'Mixed': 'mixed'}[r.regime] || 'unknown';
+                const idx = r.index_above_200d == null ? 'Index: n/a' : `Index ${r.index_vs_200d_pct > 0 ? '+' : ''}${num(r.index_vs_200d_pct)}% vs 200d`;
+                const br = r.breadth_pct == null ? 'Breadth: n/a' : `${num(r.breadth_pct, 0)}% of ${r.breadth_n} above 200d`;
+                return `<div class="regime" title="Risk-on: index above its 200-day average and most stocks in uptrends"><div class="r">${esc(r.region)}</div>
+                    <div class="l ${cls}">${esc(r.regime)}</div><div class="d">${esc(idx)}<br>${esc(br)}</div></div>`;
+            }).join('');
+        }
+
+        function renderRotation(rot) {
+            const box = document.getElementById('rot-summary');
+            if (!rot) { box.textContent = 'The rotation test runs with the next backtest.'; return; }
+            box.innerHTML = `<p class="verdict ${rot.passed ? 'pos' : 'neg'}"><b>${esc(rot.conclusion)}</b></p>
+                <p>Each month: hold the ${rot.top_n} halal stocks with the strongest past returns, equal weights, ${rot.cost_pct_round_trip}% cost per swap.
+                Benchmark = holding all ${rot.universe.length} halal stocks equally. Chosen on older months, judged on the last ${rot.test_months}.</p>`;
+            const c = x => `<td>${pct(x.total_pct)}</td><td>${x.sharpe ?? '-'}</td><td>${pct(x.max_dd_pct)}</td>`;
+            document.getElementById('rot-table').innerHTML = `<thead>
+                <tr><th></th><th colspan="3">Older months</th><th colspan="3">Unseen last 12 months</th></tr>
+                <tr><th>Rule</th><th>Return</th><th>Sharpe</th><th>Max drop</th><th>Return</th><th>Sharpe</th><th>Max drop</th></tr></thead><tbody>${
+                rot.candidates.map(k => `<tr${k.rule === rot.chosen ? ' style="background:#00d4aa14"' : ''}><td>${esc(k.rule)}${k.rule === rot.chosen ? ' <span class="pos">&#9664; chosen</span>' : ''}
+                    <div class="muted" style="font-size:0.8em;white-space:normal">${esc(k.description)}</div></td>${c(k.train)}${c(k.test)}</tr>`).join('')
+            }<tr><td class="muted">Benchmark: all halal stocks</td>${c({total_pct: rot.candidates[0].train.bench_total_pct, sharpe: rot.candidates[0].train.bench_sharpe, max_dd_pct: rot.candidates[0].train.bench_max_dd_pct})}${c({total_pct: rot.candidates[0].test.bench_total_pct, sharpe: rot.candidates[0].test.bench_sharpe, max_dd_pct: rot.candidates[0].test.bench_max_dd_pct})}</tr></tbody>`;
+            const cur = rot.current;
+            document.getElementById('rot-picks').innerHTML = !cur ? '' : !cur.risk_on
+                ? `<p class="zk-notes"><b>${esc(cur.as_of_month)}:</b> the market filter says hold cash this month.</p>`
+                : `<p class="zk-notes"><b>Current top ${cur.picks.length} (month-end ${esc(cur.as_of_month)})${rot.passed ? '' : ', unproven'}:</b> ${
+                    cur.picks.map(p => `${esc(p.symbol)} <span class="${p.score_pct >= 0 ? 'pos' : 'neg'}">${p.score_pct > 0 ? '+' : ''}${num(p.score_pct, 1)}%</span>`).join(' · ')}</p>`;
+        }
+
+        // ---- Trade journal (browser-only storage) ----
+        const JN_KEY = 'halal-journal-v1';
+        let journal = [];
+        let benchmarks = {};
+        try { const j = JSON.parse(localStorage.getItem(JN_KEY) || '[]'); if (Array.isArray(j)) journal = j; } catch (e) {}
+        const jnSave = () => { try { localStorage.setItem(JN_KEY, JSON.stringify(journal)); } catch (e) {} };
+
+        function closeOn(series, date) {
+            if (!series || !date) return null;
+            let v = null;
+            for (let i = 0; i < series.dates.length && series.dates[i] <= date; i++) v = series.closes[i];
+            return v ?? (series.dates[0] > date ? null : series.closes[series.closes.length - 1]);
+        }
+        function spusReturn(from, to) {
+            const s = benchmarks.SPUS; if (!s) return null;
+            const a = closeOn(s, from), b = to ? closeOn(s, to) : s.closes[s.closes.length - 1];
+            return a && b ? (b / a - 1) * 100 : null;
+        }
+        function tradeCalc(t) {
+            const rec = recFor(t.symbol) || {};
+            const entry = +t.entry, units = +t.units, stop = +t.stop, fees = +(t.fees || 0);
+            const risk = stop > 0 && stop < entry ? entry - stop : null;
+            const closed = t.exit_price != null && t.exit_price !== '';
+            const price = closed ? +t.exit_price : priceOf(rec);
+            const pnl = price == null ? null : (price - entry) * units - fees;
+            const r = price == null || !risk ? null : ((price - entry) - fees / (units || 1)) / risk;
+            const retPct = price == null ? null : (price / entry - 1) * 100;
+            return {rec, closed, price, pnl, r, retPct, risk, cur: (rec.currency || '').toUpperCase() || '?',
+                    spus: spusReturn(t.date, closed ? t.exit_date : null), region: rec.region || '?'};
+        }
+
+        function jnRender() {
+            const open = journal.map((t, i) => ({t, i, c: tradeCalc(t)})).filter(x => !x.c.closed);
+            const done = journal.map((t, i) => ({t, i, c: tradeCalc(t)})).filter(x => x.c.closed);
+
+            // results
+            const rs = done.map(x => x.c.r).filter(v => v != null);
+            const wins = done.filter(x => (x.c.pnl || 0) > 0).length;
+            const perCur = {};
+            done.forEach(x => { perCur[x.c.cur] = (perCur[x.c.cur] || 0) + (x.c.pnl || 0); });
+            const vs = done.filter(x => x.c.spus != null && x.c.retPct != null);
+            const avgYou = vs.length ? vs.reduce((a, x) => a + x.c.retPct, 0) / vs.length : null;
+            const avgSpus = vs.length ? vs.reduce((a, x) => a + x.c.spus, 0) / vs.length : null;
+            const tile = (k, v) => `<div class="zk-total"><div class="cur">${k}</div><div class="big" style="font-size:1.2em">${v}</div></div>`;
+            document.getElementById('jn-stats').innerHTML = !done.length ? '<div class="zk-notes">Close your first trade to see your stats.</div>' : [
+                tile('Trades', done.length),
+                tile('Win rate', num(wins / done.length * 100, 0) + '%'),
+                tile('Expectancy', rs.length ? rr(rs.reduce((a, b) => a + b, 0) / rs.length) : '-'),
+                tile('Best / worst', rs.length ? `${rr(Math.max(...rs))} / ${rr(Math.min(...rs))}` : '-'),
+                tile('You vs SPUS (avg per trade)', avgYou == null ? '-' : `${pct(avgYou)} vs ${pct(avgSpus)}`),
+                ...Object.entries(perCur).map(([c, v]) => tile('Profit ' + esc(c), `<span class="${v >= 0 ? 'pos' : 'neg'}">${num(v)}</span>`)),
+            ].join('');
+
+            // open positions
+            document.getElementById('jn-open').innerHTML = !open.length ? '<tbody><tr><td class="muted">No open positions.</td></tr></tbody>' :
+                `<thead><tr><th>Symbol</th><th>Entry</th><th>Now</th><th>P&amp;L</th><th>R now</th><th>To stop</th><th>vs SPUS</th><th>Close at</th></tr></thead><tbody>${
+                open.map(({t, i, c}) => {
+                    const dist = c.price && +t.stop ? (c.price - +t.stop) / c.price * 100 : null;
+                    const flags = [
+                        c.rec.halal_status === 'HARAM' ? '<span class="flag bad">now حرام</span>' : '',
+                        dist != null && dist <= 0 ? '<span class="flag bad">stop hit</span>' : dist != null && dist < 2 ? '<span class="flag warn">near stop</span>' : '',
+                        c.price == null ? '<span class="flag warn">no price</span>' : '',
+                    ].join('');
+                    return `<tr><td>${esc(t.symbol)}${flags}<div class="muted" style="font-size:0.78em">${esc(t.date || '')} · ${num(t.units, 4)} units</div></td>
+                        <td>${num(t.entry, 4)}</td><td>${c.price == null ? '-' : num(c.price, 4) + ' ' + esc(c.cur)}</td>
+                        <td>${c.pnl == null ? '-' : `<span class="${c.pnl >= 0 ? 'pos' : 'neg'}">${num(c.pnl)}</span>`}</td>
+                        <td>${rr(c.r)}</td><td>${dist == null ? '-' : num(dist, 1) + '%'}</td>
+                        <td>${c.retPct == null || c.spus == null ? '-' : `${pct(c.retPct)} / ${pct(c.spus)}`}</td>
+                        <td><span class="jn-close"><input type="number" step="any" min="0" data-exit="${i}" placeholder="${c.price ? num(c.price, 4) : 'price'}">
+                        <button class="btn ghost" data-close="${i}">Close</button><button class="zk-remove" data-del="${i}" aria-label="Delete">&times;</button></span></td></tr>`;
+                }).join('')}</tbody>`;
+
+            // exposure
+            const byRegion = {}, byCur = {};
+            open.forEach(({t, c}) => {
+                const cost = +t.entry * +t.units;
+                byRegion[c.region] = (byRegion[c.region] || 0) + 1;
+                byCur[c.cur] = (byCur[c.cur] || 0) + cost;
+            });
+            document.getElementById('jn-exposure').innerHTML = !open.length ? '<tbody><tr><td class="muted">Nothing open.</td></tr></tbody>' :
+                `<thead><tr><th>Market</th><th>Positions</th><th>Share</th></tr></thead><tbody>${
+                Object.entries(byRegion).sort((a, b) => b[1] - a[1]).map(([k, v]) =>
+                    `<tr><td>${esc(k)}</td><td>${v}</td><td>${num(v / open.length * 100, 0)}%${v / open.length > 0.4 && open.length >= 3 ? ' <span class="flag warn">concentrated</span>' : ''}</td></tr>`).join('')
+                }</tbody><thead><tr><th>Currency</th><th>Cost</th><th></th></tr></thead><tbody>${
+                Object.entries(byCur).map(([k, v]) => `<tr><td>${esc(k)}</td><td>${num(v)}</td><td></td></tr>`).join('')}</tbody>`;
+
+            // closed
+            document.getElementById('jn-closed').innerHTML = !done.length ? '<tbody><tr><td class="muted">No closed trades yet.</td></tr></tbody>' :
+                `<thead><tr><th>Symbol</th><th>Dates</th><th>Entry → exit</th><th>P&amp;L</th><th>R</th><th>You / SPUS</th><th></th></tr></thead><tbody>${
+                done.slice().reverse().map(({t, i, c}) => `<tr><td>${esc(t.symbol)}<div class="muted" style="font-size:0.78em;white-space:normal">${esc(t.note || '')}</div></td>
+                    <td>${esc(t.date || '')} → ${esc(t.exit_date || '')}</td><td>${num(t.entry, 4)} → ${num(t.exit_price, 4)}</td>
+                    <td><span class="${(c.pnl || 0) >= 0 ? 'pos' : 'neg'}">${num(c.pnl)}</span> ${esc(c.cur)}</td><td>${rr(c.r)}</td>
+                    <td>${c.spus == null ? pct(c.retPct) : `${pct(c.retPct)} / ${pct(c.spus)}`}</td>
+                    <td><button class="zk-remove" data-del="${i}" aria-label="Delete">&times;</button></td></tr>`).join('')}</tbody>`;
+        }
+
+        const jnMsg = m => { document.getElementById('jn-msg').textContent = m; };
+        document.getElementById('jn-date').value = new Date().toISOString().slice(0, 10);
+        document.getElementById('jn-fill').addEventListener('click', () => {
+            const rec = recFor(document.getElementById('jn-symbol').value);
+            if (!rec) return jnMsg('Type a symbol from the scanner first.');
+            const p = rec.risk_plan;
+            const live = livePrices[rec.symbol];
+            document.getElementById('jn-entry').value = live ? live.price : p ? p.entry : (rec.price || '');
+            if (p) document.getElementById('jn-stop').value = p.stop;
+            jnMsg((live ? `Entry = live ${live.source} price. ` : 'Entry = last official close. ') +
+                  (p ? `Stop from ${rec.symbol}'s trade plan. Size: up to ${num(p.position_pct)}% of your account.` : 'No BUY plan for this symbol, so set your own stop.'));
+        });
+        document.getElementById('jn-add').addEventListener('click', () => {
+            const v = id => document.getElementById(id).value.trim();
+            const t = {symbol: v('jn-symbol').toUpperCase(), date: v('jn-date'), entry: v('jn-entry'), units: v('jn-units'),
+                       stop: v('jn-stop'), fees: v('jn-fees') || '0', note: v('jn-note'), exit_price: '', exit_date: ''};
+            if (!t.symbol || !(+t.entry > 0) || !(+t.units > 0)) return jnMsg('Symbol, entry price and units are required.');
+            if (!(+t.stop > 0 && +t.stop < +t.entry)) return jnMsg('Set a stop below your entry. Every trade needs a planned exit.');
+            journal.push(t); jnSave(); jnRender(); jnMsg(`Added ${t.symbol}.`);
+            ['jn-symbol', 'jn-entry', 'jn-units', 'jn-stop', 'jn-fees', 'jn-note'].forEach(id => document.getElementById(id).value = '');
+        });
+        document.getElementById('tab-journal').addEventListener('click', e => {
+            const ci = e.target.dataset.close, di = e.target.dataset.del;
+            if (ci !== undefined) {
+                const input = document.querySelector(`[data-exit="${ci}"]`);
+                const price = input.value || input.placeholder.replace(/,/g, '');
+                if (!(+price > 0)) return;
+                Object.assign(journal[+ci], {exit_price: String(+price), exit_date: new Date().toISOString().slice(0, 10)});
+                jnSave(); jnRender();
+            } else if (di !== undefined) {
+                journal.splice(+di, 1); jnSave(); jnRender();
+            }
+        });
+        document.getElementById('jn-export').addEventListener('click', () => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify(journal, null, 2)], {type: 'application/json'}));
+            a.download = `halal-journal-${new Date().toISOString().slice(0, 10)}.json`;
+            a.click(); URL.revokeObjectURL(a.href);
+        });
+        document.getElementById('jn-import').addEventListener('change', async e => {
+            try {
+                const data = JSON.parse(await e.target.files[0].text());
+                if (!Array.isArray(data)) throw new Error('not a journal file');
+                journal = data; jnSave(); jnRender(); jnMsg(`Imported ${data.length} trades.`);
+            } catch (err) { jnMsg('Import failed: ' + err.message); }
+        });
 
         function renderStudy(st) {
             const box = document.getElementById('st-summary');
@@ -424,8 +786,10 @@
                             ${rec.sector ? `<span>${esc(rec.sector)}</span>` : ''}
                             ${rec.as_of ? `<span>Data as of ${esc(rec.as_of)}</span>` : ''}
                         </div>
+                        ${priceLineHtml(rec)}
                         ${planHtml(rec)}
                         ${rec.compliance_note ? `<div class="compliance-note">${esc(rec.compliance_note)}</div>` : ''}
+                        ${newsHtml(rec)}
                         ${reasons.length ? `<ul class="reasons ${rec.halal_status === 'QUESTIONABLE' ? 'questionable' : ''}">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
                     </div>`;
             };
@@ -446,6 +810,7 @@
                 if (!response.ok) throw new Error('Failed to load data');
                 const data = await response.json();
                 allRecs = data.recommendations || [];
+                dataGeneratedAt = data.generated_at;
 
                 document.getElementById('generated-time').textContent = 'Generated: ' + (data.generated_at || 'Unknown');
                 document.getElementById('standard-chip').textContent = 'Standard: ' + (data.shariah_standard || 'N/A').replace(/_/g, ' ');
@@ -456,7 +821,11 @@
                 document.getElementById('buy-count').textContent = allRecs.filter(r => r.action === 'BUY').length;
                 document.getElementById('watch-count').textContent = allRecs.filter(r => r.action === 'WATCH').length;
                 render();
+                updateFreshness();
                 renderChanges(data.compliance_changes);
+                renderRegimes(data.regimes);
+                benchmarks = data.benchmarks || {};
+                jnRender();
                 renderTrack(data.track_record);
                 zkRender();
             } catch (err) {
@@ -480,6 +849,7 @@
             document.getElementById('tab-scanner').hidden = btn.dataset.tab !== 'scanner';
             document.getElementById('tab-zakat').hidden = btn.dataset.tab !== 'zakat';
             document.getElementById('tab-backtest').hidden = btn.dataset.tab !== 'backtest';
+            document.getElementById('tab-journal').hidden = btn.dataset.tab !== 'journal';
         });
 
         // ---- Zakat & purification calculator (browser-only storage) ----
@@ -497,7 +867,7 @@
             const rec = recFor(row.symbol);
             const isCrypto = rec ? rec.asset_type === 'crypto' : /-USDT?$/i.test(row.symbol || '');
             const manual = row.price !== '' && row.price != null;
-            const price = manual ? Number(row.price) : Number(rec?.price || 0);
+            const price = manual ? Number(row.price) : Number(priceOf(rec) || 0);
             const cur = (rec?.currency || (isCrypto ? 'USD' : '') || '?').toUpperCase();
             const mv = Number(row.shares || 0) * price;
             const fullValue = isCrypto || row.intent === 'trading' || zk.method === 'full';
@@ -597,8 +967,27 @@
             document.getElementById(id).addEventListener('input', e => { zk[key] = e.target.value; zkSave(); zkUpdate(); });
         });
 
+        document.getElementById('fh-key').value = fhKey ? '••••••••' : '';
+        document.getElementById('fh-save').addEventListener('click', () => {
+            const v = document.getElementById('fh-key').value.trim();
+            if (!v || v.startsWith('•')) return;
+            fhKey = v; try { localStorage.setItem('halal-finnhub-key', v); } catch (e) {}
+            document.getElementById('fh-msg').textContent = 'Saved. Live US prices start within a minute.';
+            pollUS();
+        });
+        document.getElementById('fh-clear').addEventListener('click', () => {
+            fhKey = ''; try { localStorage.removeItem('halal-finnhub-key'); } catch (e) {}
+            Object.keys(livePrices).forEach(k => { if (livePrices[k].source === 'Finnhub') delete livePrices[k]; });
+            document.getElementById('fh-key').value = '';
+            document.getElementById('fh-msg').textContent = 'Removed.';
+            refreshPriceLines(); updateFreshness();
+        });
+
         zkRender();
-        loadData();
+        loadData().then(() => { pollCrypto(); pollUS(); });
+        setInterval(pollCrypto, 15000);
+        setInterval(pollUS, 60000);
+        setInterval(() => { refreshPriceLines(); updateFreshness(); }, 5000);
         loadBacktest();
         setInterval(loadData, 60000);
     </script>

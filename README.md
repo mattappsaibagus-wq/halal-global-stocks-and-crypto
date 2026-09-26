@@ -97,6 +97,37 @@ If a market is still trading, today's partial bar is ignored (see `agents/market
 ### HARAM alerts
 When a stock that was HALAL fails the screen, the run opens a GitHub issue, which GitHub emails to you, and the dashboard shows a red banner. Changes back to HALAL, or to QUESTIONABLE, appear on the dashboard only.
 
+### Halal momentum rotation (`rotation.py`)
+Each month, hold the 10 halal stocks with the strongest past returns in equal amounts, with a 0.2% cost per swap. It must beat simply holding every halal stock equally.
+
+- **The test:** four candidate rules (6 or 12-month returns, with or without a "cash in downtrends" filter) were fixed in advance. The best on the older months is judged on the last 12, and it must beat the basket on both return and Sharpe.
+- **When it runs:** with the daily backtest; results are on the **Backtest** tab.
+- **Caveat:** 12 months is a short test.
+
+### Market regime panel
+For each region, the Scanner tab shows whether the main index is above its 200-day average, and what share of the region's halal stocks are. *Risk-on* means both are positive; *Risk-off* means both are negative. The Saudi, Dubai and Qatar indices have no usable history on Yahoo, so those regions use the stocks only.
+
+### Trade journal
+Log real trades (entry, units, stop, fees, reason); a stop is required. The **Journal** tab then shows:
+- your win rate, expectancy in R and profit per currency;
+- open positions with "near stop", "stop hit" and "now حرام" warnings;
+- exposure by market and currency;
+- every trade compared with the halal ETF SPUS over the same days.
+
+"Fill from scanner plan" copies a BUY's entry and stop. The journal is stored in your browser; use **Export backup** regularly.
+
+## Data sources and how current they are
+
+| Data | Source | How current |
+|---|---|---|
+| Crypto prices | Coinbase Exchange public ticker, fetched by your browser | **Live** (every 15 s; each price shows its last-trade time) |
+| US stock prices | Finnhub (free key, stored only in your browser) | **Live** during US market hours, every 60 s. Without a key: official close |
+| Other stock prices | Yahoo Finance daily bars | Official close of the date shown. The scan runs right after each market closes |
+| Shariah ratios | Yahoo Finance company data | As last reported by the company (quarterly) |
+| News | Google News RSS (aggregates publishers) | Last 7 days; each headline shows publisher, age and a link. Information only |
+
+A red **STALE** tag means the latest price is more than 3 trading days old. No free, reliable real-time feed exists for the Indonesian, Malaysian, Gulf or Turkish exchanges; real-time data there requires a paid exchange subscription.
+
 ## Match your scholar's view
 Everything is set in two files, with no code changes needed:
 

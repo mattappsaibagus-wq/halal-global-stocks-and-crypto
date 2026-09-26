@@ -17,7 +17,8 @@ from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from agents import compliance_watch
+from agents import compliance_watch, regime
+from agents import indicators as ind
 from agents.base_agent import daily_history, get_data_dir, load_advisor_config, load_watchlist, save_json
 from agents.market_hours import bar_date, region
 from agents.shariah_agent import ShariahScreenerAgent
@@ -31,6 +32,24 @@ from agents.learning_loop import LearningLoop
 TAG = "[Halal Global]"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PRICE_AGENTS = ("early_detector", "momentum_agent", "dd_agent")
+BENCHMARKS = ("SPUS", "HLAL", "UMMA")   # halal ETFs the journal compares your trades against
+
+
+def is_stale(as_of, now, max_trading_days=3):
+    """True when the latest completed bar is more than 3 trading days old
+    (suspended, delisted or a broken feed): the price must not be trusted."""
+    if not as_of:
+        return True
+    import numpy as np
+    return int(np.busday_count(as_of, now.date().isoformat())) > max_trading_days
+
+
+def _series(hist, days=520):
+    if hist is None or hist.empty:
+        return None
+    tail = hist.iloc[-days:]
+    return {"dates": [d.date().isoformat() for d in tail.index],
+            "closes": [round(float(c), 4) for c in tail["Close"]]}
 
 
 def main(watchlist_path=None, dashboard_dir=None, now=None):
@@ -43,16 +62,20 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
 
     config = load_advisor_config()
     shariah_screener = ShariahScreenerAgent()
-    downstream = [EarlyDetectorAgent(), MomentumAgent(), NewsScannerAgent(), DdAgent()]
+    downstream = [EarlyDetectorAgent(), MomentumAgent(), DdAgent()]
+    news_agent = NewsScannerAgent()   # headlines are information only, never a signal
     advisor = AdvisorAgent({"risk": config.get("risk", {})})
     learning_loop = LearningLoop(history_file=os.path.join(data_dir, "learning_history.json"))
 
     all_results = []
     screening = []
+    stock_trends = {}
     for symbol in symbols:
         print(f"{TAG} Screening {symbol}...")
         shariah_result = shariah_screener.analyze(symbol)
         shariah_result["region"] = region(symbol)
+        news = news_agent.analyze(symbol, name=shariah_result.get("name", ""))
+        shariah_result["news"] = news.get("news", [])
         all_results.append(shariah_result)
         screening.append(shariah_result)
 
@@ -63,6 +86,11 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
 
         hist = daily_history(symbol, now=now)
         shariah_result["as_of"] = bar_date(hist)
+        shariah_result["stale"] = is_stale(shariah_result["as_of"], now)
+        above, _ = regime.trend(hist)
+        shariah_result["above_200d"] = above
+        if shariah_result.get("asset_type") != "crypto":
+            stock_trends.setdefault(shariah_result["region"], []).append(above)
 
         for agent in downstream:
             data = {"history": hist} if agent.name in PRICE_AGENTS else None
@@ -82,6 +110,10 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
                 shariah_result["price"] = float(close)
 
     print(f"{TAG} Collected {len(all_results)} agent results")
+
+    index_hist = {r: daily_history(sym, period="1y", now=now) for r, sym in regime.REGION_INDEX.items()}
+    regimes = regime.build(stock_trends, index_hist)
+    benchmarks = {b: _series(daily_history(b, period="2y", now=now)) for b in BENCHMARKS}
 
     recommendations = advisor.consolidate(all_results)
     counts = {s: sum(1 for r in screening if r.get("status") == s) for s in ("HALAL", "HARAM", "QUESTIONABLE")}
@@ -107,7 +139,7 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
     report = {
         "generated_at": generated_at,
         "symbols_scanned": symbols,
-        "total_agents": 1 + len(downstream),
+        "total_agents": 2 + len(downstream),
         "screening_summary": counts,
         "shariah_standard": shariah_screener.standard,
         "agent_results": all_results,
@@ -122,11 +154,19 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
     save_json(
         {
             "generated_at": generated_at,
+            "sources": {
+                "prices": "Yahoo Finance daily bars, completed sessions only (official close)",
+                "fundamentals": "Yahoo Finance company data (latest reported)",
+                "news": "Google News RSS: headline, publisher, time and link",
+                "live_crypto": "Coinbase Exchange public ticker (in your browser, every 15 s)",
+            },
             "shariah_standard": shariah_screener.standard,
             "screening_summary": counts,
             "recommendations": recommendations,
             "total_recommendations": len(recommendations),
             "compliance_changes": sorted(state["changes"], key=lambda c: c["date"], reverse=True),
+            "regimes": regimes,
+            "benchmarks": {k: v for k, v in benchmarks.items() if v},
             "track_record": {
                 "stats": learning.get("stats", {}),
                 "total_predictions": learning.get("total_predictions", 0),

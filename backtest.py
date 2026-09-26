@@ -324,6 +324,12 @@ def main(argv=None):
 
     symbols = load_watchlist(args.watchlist)
     result = run(symbols, args.years, risk_cfg=load_advisor_config().get("risk"))
+    try:
+        import rotation
+        result["rotation"] = rotation.run(symbols)
+        print(f"[rotation] {result['rotation']['conclusion']}")
+    except Exception as exc:  # the signal backtest is still worth saving
+        print(f"[rotation] failed: {exc}")
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w") as f:
         json.dump(result, f, indent=2)

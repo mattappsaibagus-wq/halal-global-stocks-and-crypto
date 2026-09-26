@@ -9,7 +9,7 @@ import pandas as pd
 import run_pipeline
 
 
-def _fake_history(symbol, now=None):
+def _fake_history(symbol, period=None, now=None):
     idx = pd.bdate_range("2026-09-01", periods=10, tz="UTC")
     return pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": 1}, index=idx)
 
@@ -32,9 +32,11 @@ class _FakeSignalAgent:
         self.name = name
         self.calls = []
 
-    def analyze(self, symbol, data=None):
+    def analyze(self, symbol, data=None, name=""):
         self.calls.append(symbol)
         self.data = data
+        if self.name == "news_scanner":
+            return {"symbol": symbol, "agent": self.name, "news": [{"title": "t", "source": "s", "published": "2026-09-14T00:00:00+00:00", "link": "https://x"}]}
         return {
             "symbol": symbol,
             "agent": self.name,
@@ -82,8 +84,21 @@ class TestPipelineIntegration(unittest.TestCase):
 
     def test_haram_symbol_skips_signal_agents(self):
         self._run()
-        for agent in self.agents:
+        for agent in (self.agents[0], self.agents[1], self.agents[3]):
             self.assertEqual(agent.calls, ["AAPL"])
+        self.assertEqual(self.agents[2].calls, ["AAPL", "JPM"])  # news shown for every symbol
+
+    def test_news_attached_but_never_a_signal(self):
+        report = self._run()
+        aapl = next(r for r in report["recommendations"] if r["symbol"] == "AAPL")
+        self.assertEqual(aapl["news"][0]["source"], "s")
+        self.assertNotIn("news_scanner", aapl["agents"])
+
+    def test_stale_flag(self):
+        from datetime import datetime, timezone
+        self.assertTrue(run_pipeline.is_stale("2026-09-14", datetime(2026, 9, 26, tzinfo=timezone.utc)))
+        self.assertFalse(run_pipeline.is_stale("2026-09-24", datetime(2026, 9, 26, tzinfo=timezone.utc)))
+        self.assertTrue(run_pipeline.is_stale(None, datetime(2026, 9, 26, tzinfo=timezone.utc)))
 
     def test_recommendations_carry_shariah_metadata(self):
         report = self._run()
@@ -130,6 +145,9 @@ class TestPipelineIntegration(unittest.TestCase):
         self.assertEqual(data["total_recommendations"], 2)
         self.assertEqual(data["track_record"]["total_predictions"], 1)
         self.assertIn("compliance_changes", data)
+        self.assertIn("regimes", data)
+        self.assertIn("SPUS", data["benchmarks"])
+        self.assertEqual(len(data["benchmarks"]["SPUS"]["dates"]), 10)
 
 
 if __name__ == "__main__":

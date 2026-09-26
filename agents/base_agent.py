@@ -217,7 +217,7 @@ def fetch_yf_financials(symbol):
         return result
 
 
-def daily_history(symbol, period="6mo", now=None):
+def daily_history(symbol, period="1y", now=None):
     """Daily OHLCV with any still-trading session removed.
 
     Shared by all price agents so one scan reads one consistent set of bars,
