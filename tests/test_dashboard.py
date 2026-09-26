@@ -39,6 +39,10 @@ class TestDashboardHTML(unittest.TestCase):
     def test_news_links_open_safely(self):
         self.assertIn('target="_blank" rel="noopener noreferrer"', self.html)
 
+    def test_halal_basket_tab(self):
+        for needle in ("tab-basket", "halal-basket-v1", "fx_per_usd", "Sell all", "Rebalance band"):
+            self.assertIn(needle, self.html)
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 

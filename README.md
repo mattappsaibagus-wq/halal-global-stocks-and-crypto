@@ -104,6 +104,19 @@ Each month, hold the 10 halal stocks with the strongest past returns in equal am
 - **When it runs:** with the daily backtest; results are on the **Backtest** tab.
 - **Caveat:** 12 months is a short test.
 
+**Result (September 2026, in USD): did not pass.** The best rule (12-month momentum) returned +22.5% vs +15.8% for the equal-weight basket, but with a lower Sharpe (1.14 vs 1.31), a deeper drop, and t = 0.59. It had a lower Sharpe than the basket in the older data too.
+
+### Halal Basket (dashboard tab)
+Hold every current halal stock (not crypto) in equal dollar amounts and review once a month. This is the approach the tests above support.
+
+- **Your plan:** enter an amount; it shows dollars and target shares per stock, converted from local prices at the latest exchange rates.
+- **Rebalancing:** enter your current holdings; it lists what to buy or sell. A band (25%, 10% or exact) avoids trading on small drifts.
+- **Lots:** Indonesian and Malaysian orders are rounded to lots of 100 shares.
+- **حرام stocks:** holdings that turned حرام show as **sell all**.
+- **"Why a basket":** compares the basket's last 12 months with momentum and SPUS.
+
+A halal ETF (SPUS, HLAL, UMMA) is the no-effort alternative.
+
 ### Market regime panel
 For each region, the Scanner tab shows whether the main index is above its 200-day average, and what share of the region's halal stocks are. *Risk-on* means both are positive; *Risk-off* means both are negative. The Saudi, Dubai and Qatar indices have no usable history on Yahoo, so those regions use the stocks only.
 

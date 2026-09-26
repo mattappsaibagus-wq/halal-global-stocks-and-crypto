@@ -148,6 +148,8 @@ class TestPipelineIntegration(unittest.TestCase):
         self.assertIn("regimes", data)
         self.assertIn("SPUS", data["benchmarks"])
         self.assertEqual(len(data["benchmarks"]["SPUS"]["dates"]), 10)
+        self.assertEqual(data["fx_per_usd"]["USD"], 1.0)
+        self.assertIn("TRY", data["fx_per_usd"])
 
 
 if __name__ == "__main__":

@@ -32,7 +32,8 @@ from agents.learning_loop import LearningLoop
 TAG = "[Halal Global]"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PRICE_AGENTS = ("early_detector", "momentum_agent", "dd_agent")
-BENCHMARKS = ("SPUS", "HLAL", "UMMA")   # halal ETFs the journal compares your trades against
+BENCHMARKS = ("SPUS", "HLAL", "UMMA")
+FX_CURRENCIES = ("IDR", "MYR", "SAR", "AED", "QAR", "TRY")   # quoted as units per 1 USD   # halal ETFs the journal compares your trades against
 
 
 def is_stale(as_of, now, max_trading_days=3):
@@ -114,6 +115,11 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
     index_hist = {r: daily_history(sym, period="1y", now=now) for r, sym in regime.REGION_INDEX.items()}
     regimes = regime.build(stock_trends, index_hist)
     benchmarks = {b: _series(daily_history(b, period="2y", now=now)) for b in BENCHMARKS}
+    fx = {"USD": 1.0}
+    for ccy in FX_CURRENCIES:
+        rate = ind.last_close(daily_history(f"{ccy}=X", period="1mo", now=now))
+        if rate:
+            fx[ccy] = round(rate, 6)
 
     recommendations = advisor.consolidate(all_results)
     counts = {s: sum(1 for r in screening if r.get("status") == s) for s in ("HALAL", "HARAM", "QUESTIONABLE")}
@@ -167,6 +173,7 @@ def main(watchlist_path=None, dashboard_dir=None, now=None):
             "compliance_changes": sorted(state["changes"], key=lambda c: c["date"], reverse=True),
             "regimes": regimes,
             "benchmarks": {k: v for k, v in benchmarks.items() if v},
+            "fx_per_usd": fx,
             "track_record": {
                 "stats": learning.get("stats", {}),
                 "total_predictions": learning.get("total_predictions", 0),

@@ -185,6 +185,7 @@
         <nav class="tabs" id="tabs">
             <button data-tab="scanner" class="active">Scanner</button>
             <button data-tab="zakat"><span class="long">Zakat &amp; Purification</span><span class="short">Zakat</span></button>
+            <button data-tab="basket"><span class="long">Halal Basket</span><span class="short">Basket</span></button>
             <button data-tab="journal"><span class="long">Trade Journal</span><span class="short">Journal</span></button>
             <button data-tab="backtest"><span class="long">Backtest &amp; Track Record</span><span class="short">Backtest</span></button>
         </nav>
@@ -229,6 +230,44 @@
             <div class="jn-actions"><button class="btn" id="fh-save">Save key</button><button class="btn ghost" id="fh-clear">Remove key</button>
                 <span class="zk-notes" id="fh-msg" style="align-self:center"></span></div>
         </div>
+        </section>
+
+        <section id="tab-basket" hidden>
+            <div class="zk-card">
+                <h2>Why a basket</h2>
+                <div id="bk-why" class="zk-notes">Loading...</div>
+            </div>
+            <div class="zk-card">
+                <h2>Your plan</h2>
+                <div class="jn-form">
+                    <label>Amount to invest (USD) <input id="bk-account" type="number" min="0" step="any" placeholder="e.g. 10000"></label>
+                    <label>Rebalance band <select id="bk-band">
+                        <option value="0.25">Trade only if a stock is 25%+ off its target (fewer trades)</option>
+                        <option value="0.10">10%+ off target</option>
+                        <option value="0">Always rebalance exactly</option></select></label>
+                </div>
+                <div class="jn-stats" id="bk-summary" style="margin-top:12px"></div>
+            </div>
+            <div class="zk-card">
+                <h2>Market mix</h2>
+                <div class="zk-scroll"><table class="bt-table" id="bk-regions"></table></div>
+            </div>
+            <div class="zk-card">
+                <h2>Stocks, targets and this month's rebalance</h2>
+                <p class="zk-notes" style="margin-bottom:8px">Enter the shares you hold now; the last column tells you what to buy or sell. Do this once a month.</p>
+                <div class="zk-scroll"><table class="bt-table" id="bk-table"></table></div>
+                <div class="jn-actions"><button class="btn ghost" id="bk-copy">Copy rebalance list</button><span class="zk-notes" id="bk-msg" style="align-self:center"></span></div>
+            </div>
+            <div class="zk-card zk-notes">
+                <ul>
+                    <li>Equal weights: every halal stock gets the same dollar amount. Prices in other currencies are converted with the latest exchange rate from the scan.</li>
+                    <li>Indonesian and Malaysian shares trade in lots of 100, so buy/sell amounts there are rounded down to whole lots.</li>
+                    <li>Spot crypto is left out: its swings would dominate a basket. Hold it separately, if at all.</li>
+                    <li>When a stock turns حرام it is marked <b>sell all</b>; ask a scholar how to purify gains after the change. New halal stocks appear automatically.</li>
+                    <li>Plain alternative: a halal ETF (SPUS, HLAL, UMMA) does this for you, for a small yearly fee.</li>
+                    <li>Your amounts and holdings are saved only in this browser. This is not financial advice.</li>
+                </ul>
+            </div>
         </section>
 
         <section id="tab-journal" hidden>
@@ -526,6 +565,8 @@
                 }</tbody>`;
                 renderStudy(bt.study);
                 renderRotation(bt.rotation);
+                rotationData = bt.rotation || null;
+                bkRender();
                 proven = bt.study ? bt.study.passed : null;
                 document.getElementById('mode').innerHTML = proven === false
                     ? `<div class="changes calm" style="border-color:#ffaa0066;background:#16130a"><h3 style="color:#ffc766">Watchlist mode: no BUY rule is proven yet</h3>
@@ -570,6 +611,125 @@
                 : `<p class="zk-notes"><b>Current top ${cur.picks.length} (month-end ${esc(cur.as_of_month)})${rot.passed ? '' : ', unproven'}:</b> ${
                     cur.picks.map(p => `${esc(p.symbol)} <span class="${p.score_pct >= 0 ? 'pos' : 'neg'}">${p.score_pct > 0 ? '+' : ''}${num(p.score_pct, 1)}%</span>`).join(' · ')}</p>`;
         }
+
+        // ---- Halal basket (browser-only storage) ----
+        const BK_KEY = 'halal-basket-v1';
+        let basket = {account: '', band: '0.25', holdings: {}};
+        let fxPerUsd = {USD: 1};
+        let rotationData = null;
+        try { const b = JSON.parse(localStorage.getItem(BK_KEY) || 'null'); if (b && typeof b === 'object') basket = Object.assign(basket, b); } catch (e) {}
+        const bkSave = () => { try { localStorage.setItem(BK_KEY, JSON.stringify(basket)); } catch (e) {} };
+        const usdPrice = rec => {
+            const p = priceOf(rec), cur = (rec.currency || 'USD').toUpperCase();
+            const rate = cur === 'USD' ? 1 : fxPerUsd[cur];
+            return p && rate ? p / rate : null;
+        };
+        // Indonesia (IDX) and Malaysia (Bursa) trade in board lots of 100 shares.
+        const lotSize = sym => /\.(JK|KL)$/i.test(sym) ? 100 : 1;
+        const basketMembers = () => allRecs.filter(r => r.asset_type !== 'crypto' && r.halal_status === 'HALAL')
+            .sort((a, b) => (a.region || '').localeCompare(b.region || '') || a.symbol.localeCompare(b.symbol));
+
+        function spusLast12() {
+            const s = benchmarks.SPUS; if (!s || s.closes.length < 250) return null;
+            return (s.closes[s.closes.length - 1] / s.closes[s.closes.length - 252] - 1) * 100;
+        }
+
+        function bkRender() {
+            const members = basketMembers();
+            const n = members.length;
+            const account = +basket.account || 0;
+            const band = +basket.band;
+            const target = n && account ? account / n : 0;
+
+            // why
+            const why = document.getElementById('bk-why');
+            const rot = rotationData;
+            const t = rot && rot.candidates && rot.candidates[0] ? rot.candidates[0].test : null;
+            const mom = rot && rot.chosen ? rot.candidates.find(c => c.rule === rot.chosen).test : null;
+            const spus = spusLast12();
+            why.innerHTML = t ? `<p>Over the last 12 months (in USD), holding every halal stock equally returned <b>${pct(t.bench_total_pct)}</b>
+                with a Sharpe of <b>${t.bench_sharpe}</b> and a deepest drop of ${pct(t.bench_max_dd_pct)}.
+                ${mom ? `The best momentum rule returned ${pct(mom.total_pct)} but with more risk (Sharpe ${mom.sharpe}, deepest drop ${pct(mom.max_dd_pct)}).` : ''}
+                ${spus != null ? `The halal ETF SPUS returned ${pct(spus)}.` : ''}</p>
+                <p>Timing signals did not beat an average day, so the basket keeps you invested in every compliant company and reviews once a month. Past results do not guarantee future results.</p>`
+                : 'The comparison appears after the next backtest run.';
+
+            // summary
+            const purif = n ? members.reduce((a, r) => a + (+r.purification_pct || 0), 0) / n : 0;
+            const tile = (k, v) => `<div class="zk-total"><div class="cur">${k}</div><div class="big" style="font-size:1.2em">${v}</div></div>`;
+            const heldValue = Object.entries(basket.holdings).reduce((a, [sym, u]) => {
+                const rec = recFor(sym); const px = rec ? usdPrice(rec) : null;
+                return a + (px && +u ? px * +u : 0);
+            }, 0);
+            document.getElementById('bk-summary').innerHTML = [
+                tile('Halal stocks', n),
+                tile('Per stock', target ? '$' + num(target, 0) : '-'),
+                tile('Weight each', n ? num(100 / n, 2) + '%' : '-'),
+                tile('Your holdings now', heldValue ? '$' + num(heldValue, 0) : '-'),
+                tile('Avg purification', num(purif, 2) + '% of dividends'),
+            ].join('');
+
+            // regions
+            const regions = {};
+            members.forEach(r => { regions[r.region || '?'] = (regions[r.region || '?'] || 0) + 1; });
+            document.getElementById('bk-regions').innerHTML = `<thead><tr><th>Market</th><th>Stocks</th><th>Weight</th><th>Amount</th></tr></thead><tbody>${
+                Object.entries(regions).sort((a, b) => b[1] - a[1]).map(([k, v]) =>
+                    `<tr><td>${esc(k)}</td><td>${v}</td><td>${num(v / n * 100, 1)}%</td><td>${target ? '$' + num(v * target, 0) : '-'}</td></tr>`).join('')
+            }</tbody>`;
+
+            // rows
+            const actions = [];
+            const row = (rec, halal) => {
+                const pxUsd = usdPrice(rec);
+                const held = +(basket.holdings[rec.symbol] || 0);
+                const value = pxUsd && held ? pxUsd * held : 0;
+                const tgtShares = halal && pxUsd && target ? target / pxUsd : 0;
+                let act = '-';
+                if (!halal && held) { act = `<b class="neg">Sell all ${num(held, 4)}</b>`; actions.push(`SELL ALL ${rec.symbol} (${held}) - no longer halal`); }
+                else if (halal && pxUsd && target) {
+                    const diff = target - value;
+                    const off = Math.abs(diff) / target;
+                    const lot = lotSize(rec.symbol);
+                    const shares = Math.floor(Math.abs(diff) / pxUsd / lot) * lot;
+                    if (off <= band || shares === 0) act = '<span class="muted">OK</span>';
+                    else if (diff > 0) { act = `<span class="pos">Buy ${shares}</span>`; actions.push(`BUY ${shares} ${rec.symbol}`); }
+                    else { act = `<span class="neg">Sell ${shares}</span>`; actions.push(`SELL ${shares} ${rec.symbol}`); }
+                    if (pxUsd * lotSize(rec.symbol) > target) act += ` <span class="flag warn">1 ${lotSize(rec.symbol) > 1 ? 'lot' : 'share'} > target</span>`;
+                    if (lotSize(rec.symbol) > 1) act += ' <span class="muted" style="font-size:0.78em">(lots of 100)</span>';
+                } else if (halal && !pxUsd) act = '<span class="flag warn">no price/FX</span>';
+                return `<tr><td>${esc(rec.symbol)}${badgeFor(rec)}<div class="muted" style="font-size:0.78em">${esc(rec.name || '')}</div></td>
+                    <td>${esc(rec.region || '')}</td>
+                    <td>${priceOf(rec) ? fmtPx(priceOf(rec)) + ' ' + esc(rec.currency || '') : '-'}${pxUsd && (rec.currency || 'USD') !== 'USD' ? `<div class="muted" style="font-size:0.78em">$${fmtPx(pxUsd)}</div>` : ''}</td>
+                    <td>${tgtShares ? num(tgtShares, tgtShares < 10 ? 2 : 0) : '-'}</td>
+                    <td><input type="number" min="0" step="any" data-hold="${esc(rec.symbol)}" value="${held || ''}" style="width:90px"></td>
+                    <td>${value ? '$' + num(value, 0) : '-'}</td><td>${act}</td></tr>`;
+            };
+            const exits = Object.keys(basket.holdings).filter(sym => +basket.holdings[sym] && !members.some(m => m.symbol === sym))
+                .map(sym => recFor(sym) || {symbol: sym, halal_status: 'UNSCREENED'});
+            document.getElementById('bk-table').innerHTML = !n ? '<tbody><tr><td class="muted">Waiting for scan data.</td></tr></tbody>' :
+                `<thead><tr><th>Stock</th><th>Market</th><th>Price</th><th>Target shares</th><th>You hold</th><th>Value</th><th>This month</th></tr></thead><tbody>${
+                    exits.map(r => row(r, false)).join('') + members.map(r => row(r, true)).join('')}</tbody>`;
+            bkActions = actions;
+        }
+        let bkActions = [];
+
+        document.getElementById('tab-basket').addEventListener('change', e => {
+            const sym = e.target.dataset.hold;
+            if (sym !== undefined) {
+                const v = e.target.value.trim();
+                if (+v > 0) basket.holdings[sym] = v; else delete basket.holdings[sym];
+                bkSave(); bkRender();
+            }
+        });
+        document.getElementById('bk-account').addEventListener('input', e => { basket.account = e.target.value; bkSave(); bkRender(); });
+        document.getElementById('bk-band').addEventListener('change', e => { basket.band = e.target.value; bkSave(); bkRender(); });
+        document.getElementById('bk-copy').addEventListener('click', async () => {
+            const text = bkActions.length ? bkActions.join('\n') : 'Nothing to trade this month.';
+            try { await navigator.clipboard.writeText(text); document.getElementById('bk-msg').textContent = `Copied ${bkActions.length} line(s).`; }
+            catch (e) { document.getElementById('bk-msg').textContent = text; }
+        });
+        document.getElementById('bk-account').value = basket.account;
+        document.getElementById('bk-band').value = basket.band;
 
         // ---- Trade journal (browser-only storage) ----
         const JN_KEY = 'halal-journal-v1';
@@ -826,6 +986,8 @@
                 renderChanges(data.compliance_changes);
                 renderRegimes(data.regimes);
                 benchmarks = data.benchmarks || {};
+                fxPerUsd = data.fx_per_usd || {USD: 1};
+                bkRender();
                 jnRender();
                 renderTrack(data.track_record);
                 zkRender();
@@ -851,6 +1013,7 @@
             document.getElementById('tab-zakat').hidden = btn.dataset.tab !== 'zakat';
             document.getElementById('tab-backtest').hidden = btn.dataset.tab !== 'backtest';
             document.getElementById('tab-journal').hidden = btn.dataset.tab !== 'journal';
+            document.getElementById('tab-basket').hidden = btn.dataset.tab !== 'basket';
         });
 
         // ---- Zakat & purification calculator (browser-only storage) ----
