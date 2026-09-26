@@ -51,6 +51,7 @@
             font-size: 0.8em; font-weight: 700; line-height: 1; padding: 5px 10px 6px; border-radius: 6px;
             margin-left: 10px; vertical-align: middle; display: inline-block; cursor: help;
         }
+        .chip-sub { display: block; font-size: 0.72em; font-weight: 600; letter-spacing: 0.8px; opacity: 0.85; margin-top: 2px; text-align: center; }
         .chip { font-size: 0.72em; padding: 4px 9px; border-radius: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.4px; }
         .action-buy { background: rgba(0,212,170,0.2); color: #00d4aa; }
         .action-sell { background: rgba(255,136,68,0.2); color: #ff8844; }
@@ -409,8 +410,9 @@
                             <span class="signal-symbol">${esc(rec.symbol)}${badgeFor(rec)}${rec.name && rec.name !== rec.symbol ? `<span class="asset-name">${esc(rec.name)}</span>` : ''}</span>
                             <span class="chips">
                                 ${isCrypto ? '<span class="chip badge-crypto">Spot crypto</span>' : ''}
-                                <span class="chip action-${esc(action)}">${esc(proven === false && ['BUY', 'WATCH'].includes(rec.action) ? rec.action + ' setup'
-                                    : rec.action === 'AVOID' ? (rec.halal_status === 'HARAM' ? 'Rejected' : 'Data incomplete')
+                                <span class="chip action-${esc(action)}">${rec.action === 'AVOID' && rec.halal_status === 'HARAM' ? 'Rejected<small class="chip-sub">Haram</small>'
+                                    : esc(proven === false && ['BUY', 'WATCH'].includes(rec.action) ? rec.action + ' setup'
+                                    : rec.action === 'AVOID' ? 'Data incomplete'
                                     : (rec.recommendation || rec.action))}</span>
                             </span>
                         </div>
