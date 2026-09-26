@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Halal Global Stocks and Crypto</title>
+    <meta name="theme-color" content="#07090d">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Naskh+Arabic:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2307090d'/%3E%3Cg fill='none' stroke='%2322d3a6' stroke-width='2'%3E%3Crect x='9' y='9' width='14' height='14'/%3E%3Crect x='9' y='9' width='14' height='14' transform='rotate(45 16 16)'/%3E%3C/g%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23d9b25f'/%3E%3C/svg%3E">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -201,13 +206,237 @@
             .zk-table td.act { grid-column: 1 / -1; align-items: flex-end; }
             .zk-table td.act::before { content: none; }
         }
+
+        /* ================= Premium theme (overrides the base styles above) ================= */
+        :root {
+            --bg: #07090d; --bg-2: #0b0e14;
+            --surface: #0f131b; --surface-2: #141925; --inset: #0a0d13;
+            --line: rgba(255,255,255,0.07); --line-2: rgba(255,255,255,0.12);
+            --text: #e8ebf1; --text-2: #a3abba; --text-3: #6d7585;
+            --halal: #22d3a6; --halal-soft: rgba(34,211,166,0.12);
+            --haram: #f25f5c; --haram-soft: rgba(242,95,92,0.12);
+            --warn: #f5b544; --warn-soft: rgba(245,181,68,0.12);
+            --info: #6ea8ff; --info-soft: rgba(110,168,255,0.12);
+            --gold: #d9b25f;
+            --radius: 14px; --radius-sm: 10px;
+            --shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 10px 30px -12px rgba(0,0,0,0.6);
+        }
+        html { background: var(--bg); }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-feature-settings: 'cv11', 'ss01', 'tnum';
+            background:
+                radial-gradient(900px 480px at 12% -8%, rgba(34,211,166,0.10), transparent 60%),
+                radial-gradient(700px 420px at 95% -10%, rgba(217,178,95,0.08), transparent 60%),
+                var(--bg);
+            background-attachment: fixed;
+            color: var(--text); padding: 0 16px 48px; -webkit-font-smoothing: antialiased; line-height: 1.5;
+        }
+        .container { max-width: 1080px; }
+        ::selection { background: rgba(34,211,166,0.3); }
+
+        /* Hero */
+        header.hero {
+            position: relative; text-align: left; border: 1px solid var(--line); border-radius: 20px;
+            margin: 20px 0 16px; padding: 28px 28px 24px; overflow: hidden;
+            background: linear-gradient(135deg, rgba(20,25,37,0.9), rgba(11,14,20,0.9));
+            box-shadow: var(--shadow);
+            display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+        }
+        header.hero::before {  /* faint 8-point-star lattice */
+            content: ""; position: absolute; inset: 0; opacity: 0.06; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Crect x='16' y='16' width='24' height='24'/%3E%3Crect x='16' y='16' width='24' height='24' transform='rotate(45 28 28)'/%3E%3C/g%3E%3C/svg%3E");
+            -webkit-mask-image: linear-gradient(90deg, transparent 20%, #000 100%); mask-image: linear-gradient(90deg, transparent 20%, #000 100%);
+        }
+        header.hero::after {
+            content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(217,178,95,0.6), rgba(34,211,166,0.6), transparent);
+        }
+        .brand { display: flex; align-items: center; gap: 16px; position: relative; }
+        .brand-mark {
+            width: 52px; height: 52px; flex: 0 0 52px; border-radius: 14px; display: grid; place-items: center;
+            background: linear-gradient(145deg, #121a24, #0a0e14); border: 1px solid var(--line-2);
+            box-shadow: 0 0 0 4px rgba(34,211,166,0.05), 0 8px 24px -8px rgba(34,211,166,0.35);
+        }
+        h1 { font-size: 1.7em; font-weight: 800; letter-spacing: -0.03em; color: var(--text); line-height: 1.15; }
+        h1 span { background: linear-gradient(90deg, var(--halal), #7de8cb 60%, var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .subtitle { color: var(--text-2); font-size: 0.9em; margin-top: 4px; }
+        .standard-chip {
+            position: relative; margin-top: 0; padding: 7px 14px; font-size: 0.74em; font-weight: 600; letter-spacing: 0.06em;
+            text-transform: uppercase; color: var(--gold); border: 1px solid rgba(217,178,95,0.35); background: rgba(217,178,95,0.07);
+        }
+
+        /* Disclaimer + freshness */
+        .disclaimer-top { background: rgba(245,181,68,0.05); border: 1px solid rgba(245,181,68,0.22); border-radius: var(--radius-sm); margin: 0 0 12px; padding: 11px 16px; color: #d8c9a2; }
+        .disclaimer-top b, .disclaimer-top summary .more { color: var(--warn); }
+        .freshness { margin: 0 0 14px; color: var(--text-3); }
+        .freshness .dot { background: var(--halal); box-shadow: 0 0 0 0 rgba(34,211,166,0.6); animation: pulse 2s infinite; }
+        .freshness .dot.off { background: #555; animation: none; box-shadow: none; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(34,211,166,0.55); } 70% { box-shadow: 0 0 0 7px rgba(34,211,166,0); } 100% { box-shadow: 0 0 0 0 rgba(34,211,166,0); } }
+
+        /* Sticky segmented tab bar */
+        .tabs {
+            position: sticky; top: 10px; z-index: 20; gap: 4px; padding: 6px; margin-bottom: 20px;
+            border: 1px solid var(--line-2); border-radius: 14px;
+            background: rgba(12,15,22,0.78); -webkit-backdrop-filter: blur(14px) saturate(140%); backdrop-filter: blur(14px) saturate(140%);
+            box-shadow: 0 12px 30px -14px rgba(0,0,0,0.8);
+        }
+        .tabs button {
+            border: none; border-radius: 10px; padding: 12px 20px; font-size: 1.08em; font-weight: 600;
+            color: var(--text-2); letter-spacing: -0.01em; transition: background .15s, color .15s; flex: 1 0 auto;
+        }
+        .tabs button:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+        .tabs button.active {
+            color: #04130e; background: linear-gradient(180deg, #3ee0b6, var(--halal));
+            box-shadow: 0 6px 18px -6px rgba(34,211,166,0.6), inset 0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        /* Regime tiles */
+        .regimes { gap: 12px; margin-bottom: 20px; }
+        .regime { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 14px 16px; box-shadow: var(--shadow); }
+        .regime .r { color: var(--text-2); font-weight: 500; font-size: 0.8em; }
+        .regime .l { font-size: 1.12em; letter-spacing: -0.01em; }
+        .regime .d { color: var(--text-3); }
+        .risk-on { color: var(--halal); } .risk-off { color: var(--haram); } .mixed { color: var(--warn); }
+
+        /* KPI tiles */
+        .stats { gap: 12px; margin-bottom: 22px; }
+        .stat-card {
+            position: relative; text-align: left; padding: 16px 18px 14px; border-radius: var(--radius-sm); overflow: hidden;
+            background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--line); box-shadow: var(--shadow);
+            display: flex; flex-direction: column-reverse; gap: 4px;
+        }
+        .stat-card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--halal); opacity: 0.8; }
+        .stat-card:has(.haram)::before { background: var(--haram); }
+        .stat-card:has(.questionable)::before { background: var(--warn); }
+        .stat-value { font-size: 2em; font-weight: 800; letter-spacing: -0.03em; color: var(--text); line-height: 1.1; }
+        .stat-value.haram { color: var(--haram); } .stat-value.questionable { color: var(--warn); }
+        .stat-card:first-child .stat-value { color: var(--halal); }
+        .stat-label { color: var(--text-3); font-size: 0.7em; font-weight: 600; letter-spacing: 0.09em; }
+
+        /* Filter pills */
+        .filters { gap: 8px; margin-bottom: 18px; align-items: center; }
+        .filters button {
+            background: var(--surface); color: var(--text-2); border: 1px solid var(--line-2); border-radius: 999px;
+            padding: 10px 20px; font-size: 1em; font-weight: 600; min-height: 44px; transition: all .15s;
+        }
+        .filters button:hover { color: var(--text); border-color: rgba(255,255,255,0.22); }
+        .filters button.active { color: var(--halal); border-color: rgba(34,211,166,0.55); background: var(--halal-soft); box-shadow: 0 0 0 3px rgba(34,211,166,0.08); }
+        .filters button.ghost { background: transparent; border-color: var(--line); font-size: 0.88em; font-weight: 500; color: var(--text-3); }
+
+        /* Group titles */
+        .group-title { font-size: 0.78em; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-2); border-bottom: none; margin: 26px 0 12px; padding: 0; font-weight: 700; }
+        .group-title::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-2), transparent); align-self: center; }
+        .group-title .count { background: var(--surface-2); border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; color: var(--text-2); letter-spacing: 0; font-size: 0.95em; }
+
+        /* Asset cards */
+        .signal-list { gap: 10px; }
+        .signal-card, .signal-card.buy, .signal-card.sell, .signal-card.watch, .signal-card.hold, .signal-card.avoid {
+            position: relative; overflow: hidden; opacity: 1;
+            background: linear-gradient(180deg, var(--surface-2), var(--surface));
+            border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 20px 16px 24px; box-shadow: var(--shadow);
+            transition: transform .15s ease, border-color .15s, box-shadow .15s;
+        }
+        .signal-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--info); }
+        .signal-card.buy::before { background: var(--halal); }
+        .signal-card.watch::before { background: var(--warn); }
+        .signal-card.sell::before { background: #ff8844; }
+        .signal-card.avoid::before { background: var(--haram); }
+        .signal-card.avoid { background: linear-gradient(180deg, #151219, var(--surface)); }
+        .signal-card:hover { transform: translateY(-1px); border-color: var(--line-2); box-shadow: var(--shadow), 0 0 0 1px rgba(255,255,255,0.03); }
+        .signal-card.open { border-color: rgba(34,211,166,0.25); }
+        .signal-card.avoid.open { border-color: rgba(242,95,92,0.25); }
+        .signal-header { margin-bottom: 4px; }
+        .signal-symbol { font-size: 1.2em; font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; flex-wrap: wrap; row-gap: 4px; }
+        .asset-name { color: var(--text-2); font-weight: 500; font-size: 0.72em; margin-left: 10px; letter-spacing: 0; }
+        .ar-badge { font-family: 'Noto Naskh Arabic', 'Amiri', serif; font-size: 0.78em; padding: 4px 11px 6px; border-radius: 8px; margin-left: 10px; }
+        .badge-halal { background: var(--halal-soft); color: var(--halal); border: 1px solid rgba(34,211,166,0.35); }
+        .badge-haram { background: var(--haram-soft); color: var(--haram); border: 1px solid rgba(242,95,92,0.35); }
+        .badge-questionable { background: var(--warn-soft); color: var(--warn); border: 1px solid rgba(245,181,68,0.35); }
+        .chip { font-size: 0.7em; padding: 5px 10px; border-radius: 999px; letter-spacing: 0.06em; font-weight: 700; }
+        .action-buy { background: var(--halal-soft); color: var(--halal); box-shadow: inset 0 0 0 1px rgba(34,211,166,0.3); }
+        .action-watch { background: var(--warn-soft); color: var(--warn); box-shadow: inset 0 0 0 1px rgba(245,181,68,0.3); }
+        .action-hold { background: var(--info-soft); color: var(--info); box-shadow: inset 0 0 0 1px rgba(110,168,255,0.28); }
+        .action-avoid { background: var(--haram-soft); color: var(--haram); box-shadow: inset 0 0 0 1px rgba(242,95,92,0.3); border-radius: 10px; }
+        .badge-crypto { background: rgba(247,147,26,0.1); color: #f7a64a; box-shadow: inset 0 0 0 1px rgba(247,147,26,0.3); border: none; }
+        .chev { width: 26px; height: 26px; border-radius: 50%; display: inline-grid; place-items: center; background: rgba(255,255,255,0.04); border: 1px solid var(--line); font-size: 0.62em; color: var(--text-3); }
+        .signal-card.open .chev { background: var(--halal-soft); border-color: rgba(34,211,166,0.35); }
+        .price-line { margin-top: 4px; color: var(--text-3); }
+        .price-line .px { color: var(--text); font-size: 1.22em; font-weight: 700; letter-spacing: -0.01em; }
+        .live { background: var(--halal); color: #04130e; border-radius: 999px; padding: 1px 7px; }
+        .card-body { border-top: 1px solid var(--line); margin-top: 14px; padding-top: 14px; animation: reveal .18s ease; }
+        @keyframes reveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+        .confidence-bar { height: 4px; background: rgba(255,255,255,0.06); border-radius: 999px; }
+        .confidence-fill { background: linear-gradient(90deg, var(--halal), #7de8cb); border-radius: 999px; }
+        .signal-meta { color: var(--text-2); gap: 8px 16px; }
+        .chart-box { background: var(--inset); border: 1px solid var(--line); border-radius: 12px; padding: 12px 12px 10px; }
+        .chart-ranges { display: inline-flex; gap: 2px; padding: 3px; background: var(--surface); border: 1px solid var(--line); border-radius: 9px; }
+        .chart-ranges button { border: none; background: transparent; color: var(--text-3); border-radius: 7px; padding: 4px 11px; font-weight: 600; }
+        .chart-ranges button.active { background: var(--surface-2); color: var(--halal); box-shadow: inset 0 0 0 1px rgba(34,211,166,0.3); }
+        .chart-legend { color: var(--text-3); }
+        .plan { gap: 10px; }
+        .plan div { background: var(--inset); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; }
+        .plan div div { border: none; padding: 0; background: none; }
+        .plan .k { color: var(--text-3); letter-spacing: 0.08em; font-weight: 600; }
+        .plan .v { font-size: 1em; }
+        .std-all { background: var(--halal-soft); color: var(--halal); } .std-some { background: var(--warn-soft); color: var(--warn); } .std-none { background: var(--haram-soft); color: var(--haram); }
+        .reasons { color: #f7908d; } .reasons li { margin-top: 3px; }
+        .news summary { color: var(--info); }
+        .news a { color: var(--text); } .news .meta { color: var(--text-3); }
+        .compliance-note { color: #7de8cb; }
+
+        /* Panels on other tabs */
+        .zk-card, .changes.calm { background: linear-gradient(180deg, var(--surface-2), var(--surface)); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+        .zk-card h2 { font-size: 1.05em; letter-spacing: -0.01em; }
+        .zk-card input, .zk-card select, input, select {
+            background: var(--inset); border: 1px solid var(--line-2); border-radius: 9px; color: var(--text); font-family: inherit;
+        }
+        .zk-card input:focus, .zk-card select:focus, input:focus, select:focus { outline: none; border-color: rgba(34,211,166,0.6); box-shadow: 0 0 0 3px rgba(34,211,166,0.12); }
+        .zk-total { background: var(--inset); border: 1px solid var(--line); border-radius: 12px; }
+        .zk-total .big { color: var(--halal); letter-spacing: -0.02em; }
+        .btn, .zk-add { border-radius: 10px; background: var(--halal-soft); border-color: rgba(34,211,166,0.4); color: var(--halal); }
+        .btn.ghost { border-color: var(--line-2); color: var(--text-2); }
+        .bt-table th, .zk-table th { color: var(--text-3); border-bottom-color: var(--line-2); }
+        .bt-table td, .zk-table td { border-bottom-color: var(--line); }
+        .bt-table tbody tr:hover td { background: rgba(255,255,255,0.02); }
+        .changes { border-radius: var(--radius); }
+        .refresh-btn {
+            border-radius: 12px; padding: 14px; margin-top: 24px; color: #04130e; letter-spacing: 0.01em;
+            background: linear-gradient(180deg, #3ee0b6, var(--halal)); box-shadow: 0 10px 24px -10px rgba(34,211,166,0.7), inset 0 1px 0 rgba(255,255,255,0.35);
+            transition: transform .15s, filter .15s;
+        }
+        .refresh-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+        .generated-time, .disclaimer { color: var(--text-3); }
+        button:focus-visible, .card-head:focus-visible { outline: 2px solid rgba(34,211,166,0.7); outline-offset: 2px; box-shadow: none; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+        @media (max-width: 640px) {
+            body { padding: 0 12px 40px; }
+            header.hero { padding: 20px 18px; border-radius: 16px; margin-top: 12px; }
+            h1 { font-size: 1.35em; }
+            .brand-mark { width: 44px; height: 44px; flex-basis: 44px; }
+            .tabs { top: 6px; padding: 4px; }
+            .tabs button { padding: 10px 14px; font-size: 1em; }
+            .signal-card, .signal-card.buy, .signal-card.watch, .signal-card.hold, .signal-card.avoid { padding: 14px 14px 14px 18px; }
+            .stat-value { font-size: 1.6em; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Halal Global Stocks and Crypto</h1>
-            <p class="subtitle">Shariah-screened early-move scanner &middot; global equities &amp; spot crypto</p>
+        <header class="hero">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">
+                    <svg width="30" height="30" viewBox="0 0 32 32" fill="none">
+                        <rect x="8" y="8" width="16" height="16" stroke="#22d3a6" stroke-width="1.8"/>
+                        <rect x="8" y="8" width="16" height="16" stroke="#22d3a6" stroke-width="1.8" transform="rotate(45 16 16)"/>
+                        <circle cx="16" cy="16" r="3" fill="#d9b25f"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>Halal Global <span>Stocks &amp; Crypto</span></h1>
+                    <p class="subtitle">Shariah-screened scanner &middot; global equities &amp; spot crypto</p>
+                </div>
+            </div>
             <span class="standard-chip" id="standard-chip">Standard: --</span>
         </header>
 
@@ -1114,7 +1343,7 @@
             const vals = closes.concat(ma50.filter(v => v != null), plan ? [plan.stop, plan.target] : []);
             let lo = Math.min(...vals), hi = Math.max(...vals);
             const pad = (hi - lo) * 0.06 || hi * 0.01 || 1; lo -= pad; hi += pad;
-            const W = 640, H = 220, L = 4, R = 58, T = 8, B = 20;
+            const W = 880, H = 280, L = 4, R = 64, T = 8, B = 22;
             const x = i => L + (W - L - R) * (closes.length === 1 ? 0 : i / (closes.length - 1));
             const y = v => T + (H - T - B) * (1 - (v - lo) / (hi - lo));
             const up = closes[closes.length - 1] >= closes[0];
