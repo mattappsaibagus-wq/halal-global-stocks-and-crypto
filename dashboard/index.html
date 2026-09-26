@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halal Global Stocks and Crypto</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 960px; margin: 0 auto; }
+        header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid #222; margin-bottom: 24px; }
+        h1 { font-size: 2em; color: #00d4aa; letter-spacing: -0.5px; }
+        .subtitle { color: #888; font-size: 0.9em; margin-top: 8px; }
+        .standard-chip {
+            display: inline-block; margin-top: 12px; padding: 4px 12px; border-radius: 999px;
+            border: 1px solid #00d4aa55; color: #00d4aa; font-size: 0.75em; letter-spacing: 0.5px;
+        }
+        .stats { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .stat-card {
+            background: #111; border: 1px solid #222; border-radius: 8px;
+            padding: 14px 16px; flex: 1; min-width: 120px; text-align: center;
+        }
+        .stat-value { font-size: 1.7em; font-weight: 700; color: #00d4aa; }
+        .stat-value.haram { color: #ff4444; }
+        .stat-value.questionable { color: #ffaa00; }
+        .stat-label { color: #888; font-size: 0.72em; text-transform: uppercase; letter-spacing: 1px; }
+        .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .filters button {
+            background: #111; color: #aaa; border: 1px solid #333; border-radius: 6px;
+            padding: 6px 12px; cursor: pointer; font-size: 0.85em;
+        }
+        .filters button.active { border-color: #00d4aa; color: #00d4aa; }
+        .signal-list { display: flex; flex-direction: column; gap: 12px; }
+        .signal-card { background: #111; border: 1px solid #333; border-radius: 10px; padding: 16px 18px; }
+        .signal-card.buy { border-left: 4px solid #00d4aa; }
+        .signal-card.sell { border-left: 4px solid #ff8844; }
+        .signal-card.watch { border-left: 4px solid #ffaa00; }
+        .signal-card.hold { border-left: 4px solid #3a7bd5; }
+        .signal-card.avoid { border-left: 4px solid #ff4444; opacity: 0.85; }
+        .signal-header { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+        .signal-symbol { font-size: 1.25em; font-weight: 700; }
+        .chips { display: flex; gap: 6px; flex-wrap: wrap; }
+        .chip { font-size: 0.72em; padding: 4px 9px; border-radius: 4px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.4px; }
+        .action-buy { background: rgba(0,212,170,0.2); color: #00d4aa; }
+        .action-sell { background: rgba(255,136,68,0.2); color: #ff8844; }
+        .action-watch { background: rgba(255,170,0,0.2); color: #ffaa00; }
+        .action-hold { background: rgba(58,123,213,0.2); color: #6fa3ef; }
+        .action-avoid { background: rgba(255,68,68,0.2); color: #ff4444; }
+        .badge-halal { background: rgba(0,212,170,0.15); color: #00d4aa; border: 1px solid #00d4aa66; }
+        .badge-haram { background: rgba(255,68,68,0.15); color: #ff4444; border: 1px solid #ff444466; }
+        .badge-questionable { background: rgba(255,170,0,0.15); color: #ffaa00; border: 1px solid #ffaa0066; }
+        .badge-unscreened { background: #222; color: #888; border: 1px solid #444; }
+        .badge-crypto { background: rgba(247,147,26,0.15); color: #f7931a; border: 1px solid #f7931a66; }
+        .confidence-bar { width: 100%; height: 6px; background: #222; border-radius: 3px; margin: 8px 0; overflow: hidden; }
+        .confidence-fill { height: 100%; background: #00d4aa; border-radius: 3px; }
+        .signal-meta { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.8em; color: #888; margin-top: 6px; }
+        .reasons { margin-top: 8px; font-size: 0.82em; color: #ff8888; list-style: none; }
+        .reasons.questionable { color: #ffc766; }
+        .reasons li::before { content: "\2715  "; }
+        .refresh-btn {
+            display: block; width: 100%; background: #00d4aa; color: #0a0a0f; border: none;
+            padding: 12px; border-radius: 8px; font-size: 1em; font-weight: 700; cursor: pointer; margin-top: 20px;
+        }
+        .loading { text-align: center; padding: 40px; color: #888; }
+        .error { color: #ff4444; text-align: center; padding: 20px; }
+        .generated-time { text-align: center; color: #666; font-size: 0.8em; margin-top: 16px; }
+        .disclaimer { color: #666; font-size: 0.75em; line-height: 1.5; margin-top: 16px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Halal Global Stocks and Crypto</h1>
+            <p class="subtitle">Shariah-screened early-move scanner &middot; global equities &amp; spot crypto</p>
+            <span class="standard-chip" id="standard-chip">Standard: --</span>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card"><div class="stat-value" id="halal-count">--</div><div class="stat-label">Halal Status: Pass</div></div>
+            <div class="stat-card"><div class="stat-value haram" id="haram-count">--</div><div class="stat-label">Haram</div></div>
+            <div class="stat-card"><div class="stat-value questionable" id="questionable-count">--</div><div class="stat-label">Questionable</div></div>
+            <div class="stat-card"><div class="stat-value" id="buy-count">--</div><div class="stat-label">Buy</div></div>
+            <div class="stat-card"><div class="stat-value" id="watch-count">--</div><div class="stat-label">Watch</div></div>
+        </div>
+
+        <div class="filters" id="filters">
+            <button data-filter="all" class="active">All</button>
+            <button data-filter="halal">Halal only</button>
+            <button data-filter="signals">Signals (Buy/Watch/Sell)</button>
+            <button data-filter="rejected">Rejected</button>
+        </div>
+
+        <div id="signal-container" class="signal-list"><div class="loading">Loading signals...</div></div>
+
+        <button class="refresh-btn" onclick="loadData()">Refresh Signals</button>
+        <div class="generated-time" id="generated-time">--</div>
+        <p class="disclaimer">
+            Screening follows AAOIFI Standard 21 / DJIM ratio rules using Yahoo Finance data, with current market cap as the denominator.
+            Purification figures marked "estimate" are not measured. This is research tooling, not a fatwa or financial advice.
+            Consult a qualified Shariah scholar and financial adviser.
+        </p>
+    </div>
+
+    <script>
+        let allRecs = [];
+        let activeFilter = 'all';
+
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+        function badgeFor(rec) {
+            const status = (rec.halal_status || 'UNSCREENED').toUpperCase();
+            const cls = {HALAL: 'badge-halal', HARAM: 'badge-haram', QUESTIONABLE: 'badge-questionable'}[status] || 'badge-unscreened';
+            return `<span class="chip ${cls}" title="Halal Status">${esc(status)}</span>`;
+        }
+
+        function passes(rec) {
+            if (activeFilter === 'halal') return rec.halal_status === 'HALAL';
+            if (activeFilter === 'signals') return ['BUY', 'WATCH', 'SELL'].includes(rec.action);
+            if (activeFilter === 'rejected') return rec.action === 'AVOID';
+            return true;
+        }
+
+        function render() {
+            const container = document.getElementById('signal-container');
+            const recs = allRecs.filter(passes);
+            if (recs.length === 0) {
+                container.innerHTML = '<div class="loading">Nothing to show for this filter.</div>';
+                return;
+            }
+            container.innerHTML = recs.map(rec => {
+                const action = (rec.action || 'HOLD').toLowerCase();
+                const confPct = Math.round((rec.confidence || 0) * 100);
+                const isCrypto = rec.asset_type === 'crypto';
+                const reasons = rec.rejection_reasons || [];
+                const purification = rec.halal_status === 'HALAL' && !isCrypto
+                    ? `<span>Purification: ${Number(rec.purification_pct || 0).toFixed(2)}%${rec.purification_basis === 'estimate' ? ' (estimate)' : ''}</span>`
+                    : '';
+                const ratios = rec.ratios && Object.keys(rec.ratios).length
+                    ? `<span>Debt ${rec.ratios.debt_ratio_pct}% &middot; Cash ${rec.ratios.cash_ratio_pct}% &middot; AR ${rec.ratios.receivables_ratio_pct}%</span>`
+                    : '';
+                return `
+                    <div class="signal-card ${esc(action)}">
+                        <div class="signal-header">
+                            <span class="signal-symbol">${esc(rec.symbol)}</span>
+                            <span class="chips">
+                                ${isCrypto ? '<span class="chip badge-crypto">Spot crypto</span>' : ''}
+                                ${badgeFor(rec)}
+                                <span class="chip action-${esc(action)}">${esc(rec.recommendation || rec.action)}</span>
+                            </span>
+                        </div>
+                        ${action === 'avoid' ? '' : `<div class="confidence-bar"><div class="confidence-fill" style="width:${confPct}%"></div></div>`}
+                        <div class="signal-meta">
+                            ${action === 'avoid' ? '' : `<span>Confidence: ${confPct}%</span><span>Signals: ${rec.signal_count || 0}</span>`}
+                            ${purification}
+                            ${ratios}
+                            ${rec.sector ? `<span>${esc(rec.sector)}</span>` : ''}
+                        </div>
+                        ${reasons.length ? `<ul class="reasons ${rec.halal_status === 'QUESTIONABLE' ? 'questionable' : ''}">${reasons.map(r => `<li>${esc(r)}</li>`).join('')}</ul>` : ''}
+                    </div>`;
+            }).join('');
+        }
+
+        async function loadData() {
+            const container = document.getElementById('signal-container');
+            try {
+                const response = await fetch('data.json', {cache: 'no-store'});
+                if (!response.ok) throw new Error('Failed to load data');
+                const data = await response.json();
+                allRecs = data.recommendations || [];
+
+                document.getElementById('generated-time').textContent = 'Generated: ' + (data.generated_at || 'Unknown');
+                document.getElementById('standard-chip').textContent = 'Standard: ' + (data.shariah_standard || 'N/A').replace(/_/g, ' ');
+                const count = s => allRecs.filter(r => r.halal_status === s).length;
+                document.getElementById('halal-count').textContent = count('HALAL');
+                document.getElementById('haram-count').textContent = count('HARAM');
+                document.getElementById('questionable-count').textContent = count('QUESTIONABLE');
+                document.getElementById('buy-count').textContent = allRecs.filter(r => r.action === 'BUY').length;
+                document.getElementById('watch-count').textContent = allRecs.filter(r => r.action === 'WATCH').length;
+                render();
+            } catch (err) {
+                container.innerHTML = '<div class="error">Error loading data: ' + esc(err.message) + '</div>';
+            }
+        }
+
+        document.getElementById('filters').addEventListener('click', e => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            activeFilter = btn.dataset.filter;
+            document.querySelectorAll('#filters button').forEach(b => b.classList.toggle('active', b === btn));
+            render();
+        });
+
+        loadData();
+        setInterval(loadData, 60000);
+    </script>
+</body>
+</html>
