@@ -98,8 +98,11 @@ Change these under `risk` in `data/advisor_config.json`.
 | 12:30 Sun–Fri | 21:30 | Saudi Arabia, UAE, Qatar |
 | 15:45 Mon–Fri | 00:45 | Turkey |
 | 21:30 Mon–Fri | 06:30 | United States (+ backtest) |
+| Every 3 hours | every 3 hours | Refresh of news, crypto signals and prices between the closes |
 
-If a market is still trading, today's partial bar is ignored (see `agents/market_hours.py`).
+If a market is still trading, today's partial bar is ignored (see `agents/market_hours.py`). Signals are recorded once per completed bar, so the extra runs never double-count the track record.
+
+The dashboard reloads the newest scan every minute. **Reload latest scan** does the same on demand, and **Run a new scan now** opens the workflow on GitHub so you can start one (Run workflow button).
 
 ### HARAM alerts
 When a stock that was HALAL fails the screen, the run opens a GitHub issue, which GitHub emails to you, and the dashboard shows a red banner. Changes back to HALAL, or to QUESTIONABLE, appear on the dashboard only.

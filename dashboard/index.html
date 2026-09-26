@@ -406,6 +406,10 @@
             transition: transform .15s, filter .15s;
         }
         .refresh-btn:hover { transform: translateY(-1px); filter: brightness(1.05); }
+        .refresh-btn:disabled { opacity: 0.7; cursor: progress; transform: none; }
+        .refresh-note { text-align: center; color: var(--text-3); font-size: 0.8em; margin-top: 10px; line-height: 1.6; }
+        .refresh-note a { color: var(--halal); text-decoration: none; font-weight: 600; margin-left: 4px; white-space: nowrap; }
+        .refresh-note a:hover { text-decoration: underline; }
         .generated-time, .disclaimer { color: var(--text-3); }
         button:focus-visible, .card-head:focus-visible { outline: 2px solid rgba(34,211,166,0.7); outline-offset: 2px; box-shadow: none; }
         @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
@@ -483,7 +487,9 @@
 
         <div id="signal-container" class="signal-list"><div class="loading">Loading signals...</div></div>
 
-        <button class="refresh-btn" onclick="loadData()">Refresh Signals</button>
+        <button class="refresh-btn" id="refresh-btn" type="button">Reload latest scan</button>
+        <div class="refresh-note" id="refresh-note">The page also reloads the latest scan by itself every minute. New scans run on GitHub every 3 hours and after each market closes.
+            <a id="run-scan-link" href="#" target="_blank" rel="noopener noreferrer">Run a new scan now on GitHub &rarr;</a></div>
         <div class="generated-time" id="generated-time">--</div>
         <div class="zk-card zk-notes" style="margin-top:18px">
             <h2>Data sources &amp; how current they are</h2>
@@ -1561,6 +1567,28 @@
         setInterval(() => { refreshPriceLines(); updateFreshness(); }, 5000);
         loadBacktest();
         setInterval(loadData, 60000);
+
+        // ---- Manual reload: fetch the newest published scan and say what happened ----
+        (() => {
+            const btn = document.getElementById('refresh-btn'), note = document.getElementById('refresh-note');
+            const owner = location.hostname.split('.')[0], repo = location.pathname.split('/').filter(Boolean)[0];
+            const link = document.getElementById('run-scan-link');
+            if (location.hostname.endsWith('github.io') && repo) link.href = `https://github.com/${owner}/${repo}/actions/workflows/scan.yml`;
+            else link.hidden = true;
+            const base = note.firstChild.textContent;
+            btn.addEventListener('click', async () => {
+                const before = dataGeneratedAt;
+                btn.disabled = true; btn.textContent = 'Checking…';
+                chartsPromise = null;                  // pick up new charts too
+                await loadData();
+                openCards.forEach(sym => drawChart(sym));
+                btn.disabled = false; btn.textContent = 'Reload latest scan';
+                const age = dataGeneratedAt ? ago(dataGeneratedAt) : 'unknown';
+                note.firstChild.textContent = (dataGeneratedAt && dataGeneratedAt !== before
+                    ? `Updated: loaded a newer scan (finished ${age}). `
+                    : `Already up to date: the latest scan finished ${age}. `) + base;
+            });
+        })();
     </script>
 </body>
 </html>

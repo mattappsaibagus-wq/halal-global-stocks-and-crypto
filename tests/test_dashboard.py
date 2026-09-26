@@ -57,6 +57,14 @@ class TestDashboardHTML(unittest.TestCase):
         for needle in ("card-head", "card-body", "openCards", "aria-expanded", "charts.json", "drawChart", "50-day average", "Expand all"):
             self.assertIn(needle, self.html)
 
+    def test_manual_reload_and_run_link(self):
+        for needle in ('id="refresh-btn"', "Reload latest scan", "run-scan-link", "actions/workflows/scan.yml", "chartsPromise = null"):
+            self.assertIn(needle, self.html)
+
+    def test_workflow_runs_every_three_hours(self):
+        with open(os.path.join(os.path.dirname(__file__), "..", ".github", "workflows", "scan.yml")) as f:
+            self.assertIn("'0 */3 * * *'", f.read())
+
     def test_dashboard_escapes_data(self):
         self.assertIn("const esc", self.html)
 
