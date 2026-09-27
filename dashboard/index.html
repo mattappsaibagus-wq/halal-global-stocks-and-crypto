@@ -451,7 +451,8 @@
         .sp-meta .k, .fh-row label span { color: var(--text-3); font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
         .sp-meta .v { font-size: 0.9em; color: var(--text); font-weight: 500; }
         .sp-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 10px; font-size: 0.82em; }
-        .sp-foot:has(.sp-msg:empty) { display: none; }
+        .sp-admin { color: var(--text-3); text-decoration: none; margin-left: auto; }
+        .sp-admin:hover { color: var(--text-2); text-decoration: underline; }
         .sp-msg { color: var(--halal); }
         .wl-mode { border: 1px solid #ffaa0055; background: #16130a; border-radius: 999px; padding: 7px 14px; margin-bottom: 14px; font-size: 0.8em; color: #e8d3a6; }
         .wl-mode[open] { border-radius: 12px; }
@@ -606,6 +607,7 @@
             </div>
             <div class="sp-foot">
                 <span class="sp-msg" id="refresh-note" role="status" aria-live="polite"></span>
+                <a class="sp-admin" id="run-scan-link" href="#" target="_blank" rel="noopener noreferrer" title="For the site maintainer: start an update now">Admin console &#8599;</a>
             </div>
             <div class="generated-time" id="generated-time" hidden>--</div>
         </section>
@@ -1752,6 +1754,11 @@
         }
         (() => {
             const btn = document.getElementById('refresh-btn'), label = document.getElementById('refresh-label'), note = document.getElementById('refresh-note');
+            const owner = location.hostname.split('.')[0], repo = location.pathname.split('/').filter(Boolean)[0];
+            const link = document.getElementById('run-scan-link');
+            if (CFG.repo) link.href = `https://github.com/${CFG.repo}/actions/workflows/scan.yml`;
+            else if (location.hostname.endsWith('github.io') && repo) link.href = `https://github.com/${owner}/${repo}/actions/workflows/scan.yml`;
+            else link.hidden = true;
             btn.addEventListener('click', async () => {
                 const before = dataGeneratedAt;
                 btn.disabled = true; btn.classList.add('busy'); label.textContent = 'Refreshing…';
