@@ -499,6 +499,28 @@
             .signal-card, .signal-card.buy, .signal-card.watch, .signal-card.hold, .signal-card.avoid { padding: 14px 14px 14px 18px; }
             .stat-value { font-size: 1.6em; }
         }
+        /* Filter pills: large, colour-coded, solid fill when active */
+        .filters button[data-filter] {
+            --fc: #e6edf3; --fc-ink: #0b0f14;
+            font-size: 1.08em; font-weight: 700; min-height: 50px; padding: 12px 22px;
+            color: var(--fc); background: #1b2230; border: 2px solid color-mix(in srgb, var(--fc) 55%, transparent);
+            box-shadow: none;
+        }
+        .filters button[data-filter="halal"]    { --fc: #34e3b4; }
+        .filters button[data-filter="signals"]  { --fc: #ffc24d; }
+        .filters button[data-filter="rejected"] { --fc: #ff7470; }
+        .filters button[data-filter]:hover { border-color: var(--fc); background: #232c3c; color: var(--fc); }
+        .filters button[data-filter].active {
+            background: var(--fc); color: var(--fc-ink); border-color: var(--fc);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--fc) 30%, transparent), 0 4px 14px color-mix(in srgb, var(--fc) 35%, transparent);
+        }
+        .filters button[data-filter].active::before { content: "\2713  "; font-weight: 800; }
+        @media (max-width: 640px) {
+            .filters { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: stretch; }
+            .filters button[data-filter] { width: 100%; font-size: 1.05em; min-height: 56px; padding: 10px 10px; border-radius: 16px; line-height: 1.2; }
+            .filters .spacer { display: none; }
+            .filters button.ghost { width: 100%; }
+        }
     </style>
 </head>
 <body>
