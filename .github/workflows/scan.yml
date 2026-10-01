@@ -1,17 +1,18 @@
 name: Halal Scan
 
 # Four runs, each just after a group of markets closes, so every region is
-# scanned on a completed trading day, plus a run every 3 hours for news and
-# crypto. Signals are only recorded once per completed bar, so extra runs
-# never double-count the track record. GitHub may start scheduled runs a few
-# minutes late.
+# scanned on a completed trading day, plus an hourly run for news, crypto and
+# prices. Signals are only recorded once per completed bar, so extra runs
+# never double-count the track record. GitHub often delays or silently skips
+# scheduled runs at the top of the hour, so the hourly run uses minute 17 and
+# runs every hour: one skipped run now leaves a 2-hour gap, not 6+ hours.
 on:
   schedule:
     - cron: '30 9 * * 1-5'    # 18:30 Tokyo: after Indonesia & Malaysia close
     - cron: '30 12 * * 0-5'   # 21:30 Tokyo: after Saudi, UAE & Qatar close (Saudi/Qatar trade Sun-Thu)
     - cron: '45 15 * * 1-5'   # 00:45 Tokyo: after Turkey closes
     - cron: '30 21 * * 1-5'   # 06:30 Tokyo: after the US closes, plus the daily backtest
-    - cron: '0 */3 * * *'     # every 3 hours: fresh news, crypto signals and prices between the market-close runs
+    - cron: '17 * * * *'      # hourly at :17: fresh news, crypto signals and prices between the market-close runs
   workflow_dispatch:
     inputs:
       backtest:
