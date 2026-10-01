@@ -139,6 +139,10 @@
         }
         .loading { text-align: center; padding: 40px; color: #888; }
         .error { color: #ff4444; text-align: center; padding: 20px; }
+        .scan-time { margin: 6px 0 0; font-size: 0.9em; color: var(--text-2, #bbb); font-variant-numeric: tabular-nums; }
+        .scan-time b { color: var(--text-1, #fff); }
+        .scan-time .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; background: #22d3a6; }
+        .scan-time .dot.warn { background: #f5b942; } .scan-time .dot.off { background: #e5484d; }
         .generated-time { text-align: center; color: #666; font-size: 0.8em; margin-top: 16px; }
         .disclaimer { color: #666; font-size: 0.75em; line-height: 1.5; margin-top: 16px; text-align: center; }
         .tabs { display: flex; gap: 4px; margin-bottom: 18px; border-bottom: 1px solid #222; overflow-x: auto; scrollbar-width: none; }
@@ -537,6 +541,7 @@
                 <div>
                     <h1>Halal Global <span>Stocks &amp; Crypto</span></h1>
                     <p class="subtitle">Shariah-screened scanner &middot; global equities &amp; spot crypto</p>
+                    <p class="scan-time" id="scan-time"><span class="dot off"></span>Last scan: loading…</p>
                 </div>
             </div>
             <span class="standard-chip" id="standard-chip">Standard: --</span>
@@ -601,7 +606,7 @@
             </div>
             <div class="sp-meta">
                 <div><span class="k">Next scheduled update</span><span class="v" id="sp-next">—</span></div>
-                <div><span class="k">Update schedule</span><span class="v">Every 3 hours and after each market close</span></div>
+                <div><span class="k">Update schedule</span><span class="v">Hourly and after each market close (JST)</span></div>
                 <div><span class="k">This page</span><span class="v">Refreshes automatically every minute</span></div>
             </div>
             <div class="sp-foot">
@@ -842,6 +847,15 @@
             const s = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
             return s < 90 ? `${Math.round(s)}s ago` : s < 5400 ? `${Math.round(s / 60)} min ago` : s < 172800 ? `${Math.round(s / 3600)} h ago` : `${Math.round(s / 86400)} days ago`;
         };
+        // All scan times are shown in Japan Standard Time, whatever the viewer's device timezone.
+        const fmtJST = (d, withDay = true) => new Date(d).toLocaleString('en-GB', {timeZone: 'Asia/Tokyo',
+            ...(withDay ? {weekday: 'short', day: 'numeric', month: 'short'} : {}), hour: '2-digit', minute: '2-digit', hour12: false}) + ' JST';
+        function updateScanTime() {
+            const el = document.getElementById('scan-time');
+            if (!el || !dataGeneratedAt) return;
+            const hrs = (Date.now() - new Date(dataGeneratedAt)) / 3.6e6;
+            el.innerHTML = `<span class="dot ${hrs < 2 ? '' : hrs < 6 ? 'warn' : 'off'}"></span>Last scan: <b>${esc(fmtJST(dataGeneratedAt))}</b> · ${esc(ago(dataGeneratedAt))}`;
+        }
         const fmtPx = v => Number(v).toLocaleString(undefined, {maximumFractionDigits: v < 1 ? 6 : v < 100 ? 4 : 2});
         function priceLineInner(rec) {
             const live = livePrices[rec.symbol];
@@ -953,8 +967,8 @@
             if (!dataGeneratedAt) return;
             const nLive = Object.values(livePrices).filter(p => Date.now() - new Date(p.time).getTime() < 15 * 60 * 1000).length;
             box.innerHTML = `<span class="dot ${nLive ? '' : 'off'}"></span>${nLive} live price${nLive === 1 ? '' : 's'} (${fhKey ? 'crypto + US' : 'crypto'})
-                · Last scan ${esc(ago(dataGeneratedAt))} (${esc(new Date(dataGeneratedAt).toLocaleString())})
-                · Scans run after each market closes`;
+                · Last scan ${esc(ago(dataGeneratedAt))} (${esc(fmtJST(dataGeneratedAt))})
+                · Scans run hourly and after each market close`;
         }
 
         const num = (v, d = 2) => Number(v).toLocaleString(undefined, {maximumFractionDigits: d});
@@ -1432,7 +1446,8 @@
                 allRecs = data.recommendations || [];
                 dataGeneratedAt = data.generated_at;
 
-                document.getElementById('generated-time').textContent = 'Generated: ' + (data.generated_at || 'Unknown');
+                document.getElementById('generated-time').textContent = 'Generated: ' + (data.generated_at ? fmtJST(data.generated_at) : 'Unknown');
+                updateScanTime();
                 if (typeof updateStatusPanel === 'function') updateStatusPanel();
                 document.getElementById('standard-chip').textContent = 'Standard: ' + (data.shariah_standard || 'N/A').replace(/_/g, ' ');
                 const count = s => allRecs.filter(r => r.halal_status === s).length;
@@ -1729,7 +1744,7 @@
         const SCHEDULE_UTC = [   // mirrors .github/workflows/scan.yml (days: 0=Sun)
             {h: 9, m: 30, days: [1,2,3,4,5]}, {h: 12, m: 30, days: [0,1,2,3,4,5]},
             {h: 15, m: 45, days: [1,2,3,4,5]}, {h: 21, m: 30, days: [1,2,3,4,5]},
-            ...[0,3,6,9,12,15,18,21].map(h => ({h, m: 0, days: [0,1,2,3,4,5,6]})),
+            ...Array.from({length: 24}, (_, h) => ({h, m: 17, days: [0,1,2,3,4,5,6]})),   // hourly at :17
         ];
         function nextScheduled(from = new Date()) {
             let best = null;
@@ -1739,7 +1754,7 @@
             }
             return best;
         }
-        const fmtLocal = d => d.toLocaleString(undefined, {weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'});
+        const fmtLocal = d => fmtJST(d);
         function updateStatusPanel() {
             const sub = document.getElementById('sp-updated'), dot = document.getElementById('sp-dot');
             if (dataGeneratedAt) {
@@ -1765,7 +1780,7 @@
                 clearTimeout(note._t); note._t = setTimeout(() => { note.textContent = ''; }, 6000);
             });
             updateStatusPanel();
-            setInterval(updateStatusPanel, 30000);
+            setInterval(() => { updateStatusPanel(); updateScanTime(); }, 30000);
         })();
     </script>
 </body>
