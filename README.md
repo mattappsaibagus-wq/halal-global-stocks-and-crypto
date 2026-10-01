@@ -98,7 +98,7 @@ Change these under `risk` in `data/advisor_config.json`.
 | 12:30 Sun–Fri | 21:30 | Saudi Arabia, UAE, Qatar |
 | 15:45 Mon–Fri | 00:45 | Turkey |
 | 21:30 Mon–Fri | 06:30 | United States (+ backtest) |
-| Every 3 hours | every 3 hours | Refresh of news, crypto signals and prices between the closes |
+| Hourly (:17) | every hour at :17 | Refresh of news, crypto signals and prices between the closes |
 
 If a market is still trading, today's partial bar is ignored (see `agents/market_hours.py`). Signals are recorded once per completed bar, so the extra runs never double-count the track record.
 
