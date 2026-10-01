@@ -66,9 +66,15 @@ class TestDashboardHTML(unittest.TestCase):
         for needle in ("run-scan-link", "Admin console"):
             self.assertNotIn(needle, self.html)
 
-    def test_workflow_runs_every_three_hours(self):
+    def test_workflow_runs_hourly_off_the_hour(self):
+        # GitHub often skips cron runs at minute 0, so the refresh runs hourly at :17.
         with open(os.path.join(os.path.dirname(__file__), "..", ".github", "workflows", "scan.yml")) as f:
-            self.assertIn("'0 */3 * * *'", f.read())
+            self.assertIn("'17 * * * *'", f.read())
+        self.assertIn("m: 17", self.html)   # dashboard's next-update schedule mirrors it
+
+    def test_scan_times_shown_in_jst(self):
+        for needle in ('id="scan-time"', "timeZone: 'Asia/Tokyo'", "' JST'", "updateScanTime()"):
+            self.assertIn(needle, self.html)
 
     def test_where_to_buy(self):
         import json
