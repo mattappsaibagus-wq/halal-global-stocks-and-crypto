@@ -1,0 +1,860 @@
+{
+  "generated_at": "2026-10-03T00:39:12.665922+00:00",
+  "study": {
+    "cutoff": "2025-10-01",
+    "test_days": 365,
+    "candidates": [
+      {
+        "rule": "current",
+        "description": "Today's rule (advisor BUY)",
+        "train": {
+          "n": 3049,
+          "avg_20d": 1.59,
+          "edge_20d": 0.039,
+          "expectancy_r": 0.024,
+          "any_day_r": 0.003,
+          "excess_r": 0.021,
+          "t_stat": 1.02,
+          "win_rate": 44.8
+        },
+        "test": {
+          "n": 1539,
+          "avg_20d": NaN,
+          "edge_20d": NaN,
+          "expectancy_r": -0.089,
+          "any_day_r": NaN,
+          "excess_r": NaN,
+          "t_stat": NaN,
+          "win_rate": 39.5
+        }
+      },
+      {
+        "rule": "trend_volume",
+        "description": "Volume spike while price is above SMA20 > SMA50",
+        "train": {
+          "n": 983,
+          "avg_20d": 3.083,
+          "edge_20d": 1.532,
+          "expectancy_r": 0.121,
+          "any_day_r": 0.003,
+          "excess_r": 0.118,
+          "t_stat": 3.21,
+          "win_rate": 49.8
+        },
+        "test": {
+          "n": 383,
+          "avg_20d": 1.068,
+          "edge_20d": NaN,
+          "expectancy_r": -0.038,
+          "any_day_r": NaN,
+          "excess_r": NaN,
+          "t_stat": NaN,
+          "win_rate": 42.0
+        }
+      },
+      {
+        "rule": "volume_up_day",
+        "description": "Volume spike on a 3-day up move, price above SMA50",
+        "train": {
+          "n": 796,
+          "avg_20d": 4.047,
+          "edge_20d": 2.496,
+          "expectancy_r": 0.135,
+          "any_day_r": 0.003,
+          "excess_r": 0.132,
+          "t_stat": 3.21,
+          "win_rate": 49.4
+        },
+        "test": {
+          "n": 359,
+          "avg_20d": NaN,
+          "edge_20d": NaN,
+          "expectancy_r": NaN,
+          "any_day_r": NaN,
+          "excess_r": NaN,
+          "t_stat": null,
+          "win_rate": 40.9
+        }
+      },
+      {
+        "rule": "momentum_continuation",
+        "description": "Price above SMA20 > SMA50 and overbought or strong 1-month gain",
+        "train": {
+          "n": 964,
+          "avg_20d": 2.293,
+          "edge_20d": 0.742,
+          "expectancy_r": 0.02,
+          "any_day_r": 0.003,
+          "excess_r": 0.018,
+          "t_stat": 0.48,
+          "win_rate": 45.2
+        },
+        "test": {
+          "n": 467,
+          "avg_20d": NaN,
+          "edge_20d": NaN,
+          "expectancy_r": -0.039,
+          "any_day_r": NaN,
+          "excess_r": NaN,
+          "t_stat": NaN,
+          "win_rate": 42.6
+        }
+      },
+      {
+        "rule": "volume_breakout",
+        "description": "Volume spike, above SMA20 > SMA50, and strong 1-month gain",
+        "train": {
+          "n": 808,
+          "avg_20d": 3.502,
+          "edge_20d": 1.951,
+          "expectancy_r": 0.121,
+          "any_day_r": 0.003,
+          "excess_r": 0.118,
+          "t_stat": 2.94,
+          "win_rate": 49.9
+        },
+        "test": {
+          "n": 304,
+          "avg_20d": 1.779,
+          "edge_20d": NaN,
+          "expectancy_r": -0.034,
+          "any_day_r": NaN,
+          "excess_r": NaN,
+          "t_stat": NaN,
+          "win_rate": 41.8
+        }
+      }
+    ],
+    "chosen": "volume_up_day",
+    "passed": false,
+    "conclusion": "'volume_up_day' was the best on the older data but did NOT hold up on the unseen last year (359 trades, +nanR per trade vs +nanR for buying any day, t = None). No rule is proven; treat signals as a watchlist only."
+  },
+  "years": 3,
+  "symbols": [
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "GOOGL",
+    "AMZN",
+    "META",
+    "TSLA",
+    "AVGO",
+    "ADBE",
+    "AMD",
+    "QCOM",
+    "JNJ",
+    "PG",
+    "LLY",
+    "ABT",
+    "NKE",
+    "LIN",
+    "TLKM.JK",
+    "ICBP.JK",
+    "UNVR.JK",
+    "INDF.JK",
+    "ASII.JK",
+    "KLBF.JK",
+    "UNTR.JK",
+    "ANTM.JK",
+    "BRIS.JK",
+    "5347.KL",
+    "5183.KL",
+    "6947.KL",
+    "5225.KL",
+    "4863.KL",
+    "5258.KL",
+    "3816.KL",
+    "5681.KL",
+    "2222.SR",
+    "1120.SR",
+    "1150.SR",
+    "2010.SR",
+    "7010.SR",
+    "1211.SR",
+    "EMAAR.AE",
+    "DIB.AE",
+    "DEWA.AE",
+    "SALIK.AE",
+    "AIRARABIA.AE",
+    "QIBK.QA",
+    "IQCD.QA",
+    "BIMAS.IS",
+    "THYAO.IS",
+    "TUPRS.IS",
+    "BTC-USD",
+    "ETH-USD",
+    "SOL-USD",
+    "AVAX-USD",
+    "POL28321-USD",
+    "LINK-USD",
+    "ADA-USD",
+    "DOT-USD",
+    "NEAR-USD",
+    "ATOM-USD"
+  ],
+  "method": {
+    "entry": "next day's open",
+    "horizons_days": [
+      5,
+      10,
+      20
+    ],
+    "cost_pct_round_trip": 0.2,
+    "not_replayed": [
+      "news_scanner (no news archive)",
+      "dd_agent (no historical fundamentals)"
+    ],
+    "note": "Signals on consecutive days overlap, so N counts signal-days, not independent trades. Uses today's watchlist and prices adjusted for splits and dividends; companies that were delisted are missing (survivorship bias)."
+  },
+  "groups": {
+    "All markets": {
+      "baseline": {
+        "n": 42720,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN
+      },
+      "BUY": {
+        "n": 12170,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN,
+        "edge_20d": NaN,
+        "win_rate_20d": 49.9,
+        "trades": 12170,
+        "expectancy_r": NaN,
+        "stop_hit_pct": 47.5,
+        "target_hit_pct": 31.1,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 7348,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN,
+        "edge_20d": NaN,
+        "enough_data": true
+      },
+      "verdict": "BUY signals are roughly no better than an average day (+nan% over 20 days, +nanR per trade)."
+    },
+    "Crypto": {
+      "baseline": {
+        "n": 10123,
+        "avg_5d": 0.248,
+        "avg_10d": 0.42,
+        "avg_20d": 0.665
+      },
+      "BUY": {
+        "n": 3216,
+        "avg_5d": 0.521,
+        "avg_10d": 0.322,
+        "avg_20d": 1.538,
+        "edge_20d": 0.873,
+        "win_rate_20d": 42.6,
+        "trades": 3216,
+        "expectancy_r": -0.078,
+        "stop_hit_pct": 51.8,
+        "target_hit_pct": 30.3,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 1908,
+        "avg_5d": -0.425,
+        "avg_10d": -0.245,
+        "avg_20d": -0.059,
+        "edge_20d": -0.724,
+        "enough_data": true
+      },
+      "verdict": "BUY trades lost money with the stop and target (-0.08R per trade; +0.87% vs an average day over 20 days). Don't trade them as-is."
+    },
+    "Indonesia": {
+      "baseline": {
+        "n": 5749,
+        "avg_5d": -0.139,
+        "avg_10d": -0.078,
+        "avg_20d": 0.108
+      },
+      "BUY": {
+        "n": 1663,
+        "avg_5d": -0.273,
+        "avg_10d": 0.017,
+        "avg_20d": 0.457,
+        "edge_20d": 0.349,
+        "win_rate_20d": 48.3,
+        "trades": 1663,
+        "expectancy_r": -0.069,
+        "stop_hit_pct": 48.3,
+        "target_hit_pct": 26.5,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 927,
+        "avg_5d": 0.276,
+        "avg_10d": 0.436,
+        "avg_20d": 0.512,
+        "edge_20d": 0.404,
+        "enough_data": true
+      },
+      "verdict": "BUY trades lost money with the stop and target (-0.07R per trade; +0.35% vs an average day over 20 days). Don't trade them as-is."
+    },
+    "Malaysia": {
+      "baseline": {
+        "n": 5294,
+        "avg_5d": 0.055,
+        "avg_10d": 0.17,
+        "avg_20d": 0.444
+      },
+      "BUY": {
+        "n": 1153,
+        "avg_5d": -0.09,
+        "avg_10d": 0.108,
+        "avg_20d": 0.664,
+        "edge_20d": 0.22,
+        "win_rate_20d": 49.7,
+        "trades": 1153,
+        "expectancy_r": -0.071,
+        "stop_hit_pct": 44.2,
+        "target_hit_pct": 24.6,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 780,
+        "avg_5d": 0.102,
+        "avg_10d": 0.257,
+        "avg_20d": 0.601,
+        "edge_20d": 0.157,
+        "enough_data": true
+      },
+      "verdict": "BUY trades lost money with the stop and target (-0.07R per trade; +0.22% vs an average day over 20 days). Don't trade them as-is."
+    },
+    "Qatar": {
+      "baseline": {
+        "n": 1338,
+        "avg_5d": -0.007,
+        "avg_10d": 0.048,
+        "avg_20d": 0.223
+      },
+      "BUY": {
+        "n": 282,
+        "avg_5d": -0.087,
+        "avg_10d": -0.251,
+        "avg_20d": -0.559,
+        "edge_20d": -0.782,
+        "win_rate_20d": 45.0,
+        "trades": 282,
+        "expectancy_r": -0.175,
+        "stop_hit_pct": 55.3,
+        "target_hit_pct": 26.6,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 204,
+        "avg_5d": -0.337,
+        "avg_10d": -0.429,
+        "avg_20d": -0.79,
+        "edge_20d": -1.013,
+        "enough_data": true
+      },
+      "verdict": "BUY trades lost money with the stop and target (-0.17R per trade; -0.78% vs an average day over 20 days). Don't trade them as-is."
+    },
+    "Saudi Arabia": {
+      "baseline": {
+        "n": 4054,
+        "avg_5d": 0.034,
+        "avg_10d": 0.1,
+        "avg_20d": 0.264
+      },
+      "BUY": {
+        "n": 868,
+        "avg_5d": 0.121,
+        "avg_10d": 0.394,
+        "avg_20d": 0.188,
+        "edge_20d": -0.076,
+        "win_rate_20d": 49.5,
+        "trades": 868,
+        "expectancy_r": -0.096,
+        "stop_hit_pct": 48.3,
+        "target_hit_pct": 27.0,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 527,
+        "avg_5d": 0.203,
+        "avg_10d": -0.043,
+        "avg_20d": 0.189,
+        "edge_20d": -0.075,
+        "enough_data": true
+      },
+      "verdict": "BUY trades lost money with the stop and target (-0.10R per trade; -0.08% vs an average day over 20 days). Don't trade them as-is."
+    },
+    "Turkey": {
+      "baseline": {
+        "n": 2031,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN
+      },
+      "BUY": {
+        "n": 673,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN,
+        "edge_20d": NaN,
+        "win_rate_20d": 57.8,
+        "trades": 673,
+        "expectancy_r": 0.147,
+        "stop_hit_pct": 42.6,
+        "target_hit_pct": 37.1,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 365,
+        "avg_5d": 0.339,
+        "avg_10d": 1.131,
+        "avg_20d": NaN,
+        "edge_20d": NaN,
+        "enough_data": true
+      },
+      "verdict": "BUY signals are roughly no better than an average day (+nan% over 20 days, +0.15R per trade)."
+    },
+    "UAE": {
+      "baseline": {
+        "n": 2690,
+        "avg_5d": 0.433,
+        "avg_10d": 0.984,
+        "avg_20d": 2.069
+      },
+      "BUY": {
+        "n": 877,
+        "avg_5d": 0.611,
+        "avg_10d": 0.894,
+        "avg_20d": 1.797,
+        "edge_20d": -0.272,
+        "win_rate_20d": 61.8,
+        "trades": 877,
+        "expectancy_r": 0.244,
+        "stop_hit_pct": 39.0,
+        "target_hit_pct": 40.9,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 527,
+        "avg_5d": 0.23,
+        "avg_10d": 0.767,
+        "avg_20d": 1.533,
+        "edge_20d": -0.536,
+        "enough_data": true
+      },
+      "verdict": "BUY signals are roughly no better than an average day (-0.27% over 20 days, +0.24R per trade)."
+    },
+    "United States": {
+      "baseline": {
+        "n": 11441,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN
+      },
+      "BUY": {
+        "n": 3438,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN,
+        "edge_20d": NaN,
+        "win_rate_20d": 53.4,
+        "trades": 3438,
+        "expectancy_r": NaN,
+        "stop_hit_pct": 46.5,
+        "target_hit_pct": 33.9,
+        "enough_data": true
+      },
+      "SELL": {
+        "n": 0,
+        "avg_5d": null,
+        "avg_10d": null,
+        "avg_20d": null,
+        "correct_20d": null,
+        "enough_data": false
+      },
+      "WATCH": {
+        "n": 2110,
+        "avg_5d": NaN,
+        "avg_10d": NaN,
+        "avg_20d": NaN,
+        "edge_20d": NaN,
+        "enough_data": true
+      },
+      "verdict": "BUY signals are roughly no better than an average day (+nan% over 20 days, +nanR per trade)."
+    }
+  },
+  "signals": [
+    {
+      "signal": "above_sma",
+      "n": 13823,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 52.1
+    },
+    {
+      "signal": "below_sma",
+      "n": 12368,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 51.6
+    },
+    {
+      "signal": "early_down",
+      "n": 10397,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 50.8
+    },
+    {
+      "signal": "early_movement",
+      "n": 21194,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 50.0
+    },
+    {
+      "signal": "early_up",
+      "n": 10797,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 49.1
+    },
+    {
+      "signal": "macd_bearish",
+      "n": 1714,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 52.4
+    },
+    {
+      "signal": "macd_bullish",
+      "n": 1704,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 50.2
+    },
+    {
+      "signal": "rsi_overbought",
+      "n": 6006,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 52.0
+    },
+    {
+      "signal": "rsi_oversold",
+      "n": 4704,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 52.1
+    },
+    {
+      "signal": "strong_momentum",
+      "n": 15440,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 50.5
+    },
+    {
+      "signal": "uptrend",
+      "n": 22197,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 51.1
+    },
+    {
+      "signal": "volume_spike",
+      "n": 5679,
+      "avg_20d": NaN,
+      "edge_20d": NaN,
+      "up_pct_20d": 52.0
+    }
+  ],
+  "rotation": {
+    "generated_at": "2026-10-03T00:39:16.531835+00:00",
+    "universe": [
+      "1120.SR",
+      "1150.SR",
+      "1211.SR",
+      "2010.SR",
+      "2222.SR",
+      "4863.KL",
+      "5183.KL",
+      "5225.KL",
+      "5258.KL",
+      "5681.KL",
+      "7010.SR",
+      "AAPL",
+      "ABT",
+      "ADBE",
+      "AIRARABIA.AE",
+      "AMD",
+      "AMZN",
+      "ANTM.JK",
+      "AVGO",
+      "BIMAS.IS",
+      "BRIS.JK",
+      "DIB.AE",
+      "EMAAR.AE",
+      "GOOGL",
+      "IQCD.QA",
+      "JNJ",
+      "KLBF.JK",
+      "LIN",
+      "LLY",
+      "META",
+      "MSFT",
+      "NKE",
+      "NVDA",
+      "PG",
+      "QCOM",
+      "QIBK.QA",
+      "SALIK.AE",
+      "TLKM.JK",
+      "TSLA",
+      "UNTR.JK",
+      "UNVR.JK"
+    ],
+    "currency": "USD (local prices converted at each month-end exchange rate)",
+    "top_n": 10,
+    "cost_pct_round_trip": 0.2,
+    "test_months": 12,
+    "candidates": [
+      {
+        "rule": "mom6",
+        "description": "Top 10 by 6-month return (skip last month)",
+        "train": {
+          "months": 40,
+          "total_pct": 64.04,
+          "bench_total_pct": 62.13,
+          "sharpe": 0.97,
+          "bench_sharpe": 1.16,
+          "max_dd_pct": -9.87,
+          "bench_max_dd_pct": -10.22,
+          "excess_month_pct": 0.07,
+          "t_stat": 0.14,
+          "beat_bench_pct": 52.5,
+          "invested_pct": 100.0
+        },
+        "test": {
+          "months": 12,
+          "total_pct": 11.17,
+          "bench_total_pct": 8.37,
+          "sharpe": 0.56,
+          "bench_sharpe": 0.76,
+          "max_dd_pct": -10.03,
+          "bench_max_dd_pct": -5.33,
+          "excess_month_pct": 0.366,
+          "t_stat": 0.24,
+          "beat_bench_pct": 41.7,
+          "invested_pct": 100.0
+        }
+      },
+      {
+        "rule": "mom12",
+        "description": "Top 10 by 12-month return (skip last month)",
+        "train": {
+          "months": 34,
+          "total_pct": 93.99,
+          "bench_total_pct": 72.19,
+          "sharpe": 1.46,
+          "bench_sharpe": 1.82,
+          "max_dd_pct": -15.06,
+          "bench_max_dd_pct": -6.54,
+          "excess_month_pct": 0.425,
+          "t_stat": 0.72,
+          "beat_bench_pct": 52.9,
+          "invested_pct": 100.0
+        },
+        "test": {
+          "months": 12,
+          "total_pct": 11.78,
+          "bench_total_pct": 8.37,
+          "sharpe": 0.63,
+          "bench_sharpe": 0.76,
+          "max_dd_pct": -10.57,
+          "bench_max_dd_pct": -5.33,
+          "excess_month_pct": 0.376,
+          "t_stat": 0.33,
+          "beat_bench_pct": 50.0,
+          "invested_pct": 100.0
+        }
+      },
+      {
+        "rule": "mom6_regime",
+        "description": "mom6, but hold cash when fewer than half the stocks are above their 10-month average",
+        "train": {
+          "months": 40,
+          "total_pct": 34.66,
+          "bench_total_pct": 62.13,
+          "sharpe": 0.69,
+          "bench_sharpe": 1.16,
+          "max_dd_pct": -9.96,
+          "bench_max_dd_pct": -10.22,
+          "excess_month_pct": -0.458,
+          "t_stat": -0.76,
+          "beat_bench_pct": 45.0,
+          "invested_pct": 72.5
+        },
+        "test": {
+          "months": 12,
+          "total_pct": 11.57,
+          "bench_total_pct": 8.37,
+          "sharpe": 0.57,
+          "bench_sharpe": 0.76,
+          "max_dd_pct": -10.03,
+          "bench_max_dd_pct": -5.33,
+          "excess_month_pct": 0.395,
+          "t_stat": 0.26,
+          "beat_bench_pct": 41.7,
+          "invested_pct": 83.3
+        }
+      },
+      {
+        "rule": "mom12_regime",
+        "description": "mom12, but hold cash when fewer than half the stocks are above their 10-month average",
+        "train": {
+          "months": 34,
+          "total_pct": 54.32,
+          "bench_total_pct": 72.19,
+          "sharpe": 1.1,
+          "bench_sharpe": 1.82,
+          "max_dd_pct": -15.15,
+          "bench_max_dd_pct": -6.54,
+          "excess_month_pct": -0.285,
+          "t_stat": -0.41,
+          "beat_bench_pct": 47.1,
+          "invested_pct": 76.5
+        },
+        "test": {
+          "months": 12,
+          "total_pct": 10.94,
+          "bench_total_pct": 8.37,
+          "sharpe": 0.6,
+          "bench_sharpe": 0.76,
+          "max_dd_pct": -10.57,
+          "bench_max_dd_pct": -5.33,
+          "excess_month_pct": 0.306,
+          "t_stat": 0.27,
+          "beat_bench_pct": 50.0,
+          "invested_pct": 83.3
+        }
+      }
+    ],
+    "chosen": "mom12",
+    "passed": false,
+    "conclusion": "'mom12' was the best on the older months but did NOT pass on the unseen last 12 months: it returned more (11.78% vs 8.37%) but with more risk: Sharpe 0.63 vs 0.76, deepest drop -10.57% vs -5.33%. An equal-weight halal basket (or a halal ETF) was the safer choice.",
+    "current": {
+      "as_of_month": "2026-09",
+      "risk_on": true,
+      "picks": [
+        {
+          "symbol": "AMD",
+          "score_pct": 190.9
+        },
+        {
+          "symbol": "LLY",
+          "score_pct": 52.6
+        },
+        {
+          "symbol": "JNJ",
+          "score_pct": 46.6
+        },
+        {
+          "symbol": "AIRARABIA.AE",
+          "score_pct": 42.0
+        },
+        {
+          "symbol": "GOOGL",
+          "score_pct": 39.9
+        },
+        {
+          "symbol": "BIMAS.IS",
+          "score_pct": 31.0
+        },
+        {
+          "symbol": "AAPL",
+          "score_pct": 24.9
+        },
+        {
+          "symbol": "1150.SR",
+          "score_pct": 21.7
+        },
+        {
+          "symbol": "NVDA",
+          "score_pct": 18.5
+        },
+        {
+          "symbol": "AMZN",
+          "score_pct": 18.3
+        }
+      ]
+    }
+  }
+}
