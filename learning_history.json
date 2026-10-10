@@ -1,0 +1,3814 @@
+{
+  "predictions": [
+    {
+      "symbol": "BRIS.JK",
+      "action": "SELL",
+      "confidence": 1.0,
+      "as_of": "2026-09-25",
+      "entry": 1510.0,
+      "returns": {
+        "5": -5.629,
+        "10": -10.596
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "SELL",
+      "confidence": 1.0,
+      "as_of": "2026-09-25",
+      "entry": 10.652303695678711,
+      "returns": {
+        "5": 4.879,
+        "10": 3.198
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-25",
+      "entry": 0.1163,
+      "returns": {
+        "5": -0.464,
+        "10": -4.738
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-25",
+      "entry": 13.918909,
+      "returns": {
+        "5": 3.09,
+        "10": 1.653
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-25",
+      "entry": 4.948784,
+      "returns": {
+        "5": 2.561,
+        "10": 2.029
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "AMD",
+      "action": "SELL",
+      "confidence": 0.96,
+      "as_of": "2026-09-25",
+      "entry": 630.63,
+      "returns": {
+        "5": 0.801,
+        "10": -2.831
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "NKE",
+      "action": "SELL",
+      "confidence": 0.96,
+      "as_of": "2026-09-25",
+      "entry": 35.75,
+      "returns": {
+        "5": -7.413,
+        "10": -2.098
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "QIBK.QA",
+      "action": "SELL",
+      "confidence": 0.96,
+      "as_of": "2026-09-24",
+      "entry": 20.75,
+      "returns": {
+        "5": -1.494,
+        "10": -3.711
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "SALIK.AE",
+      "action": "BUY",
+      "confidence": 0.95,
+      "as_of": "2026-09-25",
+      "entry": 5.6,
+      "returns": {
+        "5": -2.857
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 0.93,
+      "as_of": "2026-09-25",
+      "entry": 1.211589,
+      "returns": {
+        "5": 1.858,
+        "10": 0.48
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-25",
+      "entry": 225.070007,
+      "returns": {
+        "5": 4.585,
+        "10": 2.33
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "BIMAS.IS",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-25",
+      "entry": 424.75,
+      "returns": {
+        "5": -2.531,
+        "10": -5.238
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.89,
+      "as_of": "2026-09-25",
+      "entry": 516.169983,
+      "returns": {
+        "5": -0.312,
+        "10": 3.319
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 0.88,
+      "as_of": "2026-09-25",
+      "entry": 122.009743,
+      "returns": {
+        "5": -2.786,
+        "10": -0.787
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "BUY",
+      "confidence": 0.87,
+      "as_of": "2026-09-25",
+      "entry": 11.68,
+      "returns": {
+        "5": -3.425
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "IQCD.QA",
+      "action": "SELL",
+      "confidence": 0.84,
+      "as_of": "2026-09-24",
+      "entry": 9.765,
+      "returns": {
+        "5": -3.021,
+        "10": -5.253
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "1211.SR",
+      "action": "SELL",
+      "confidence": 0.82,
+      "as_of": "2026-09-24",
+      "entry": 61.1,
+      "returns": {
+        "5": -0.491,
+        "10": 2.128
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-25",
+      "entry": 341.07,
+      "returns": {
+        "5": -2.668,
+        "10": -1.859
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "BUY",
+      "confidence": 0.8,
+      "as_of": "2026-09-25",
+      "entry": 751.659973,
+      "returns": {
+        "5": -2.858,
+        "10": -4.074
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "ADBE",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-25",
+      "entry": 235.47,
+      "returns": {
+        "5": 0.856,
+        "10": 3.419
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-25",
+      "entry": 201.97,
+      "returns": {
+        "5": -7.24,
+        "10": -13.844
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "5225.KL",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-25",
+      "entry": 8.03,
+      "returns": {
+        "5": -2.864,
+        "10": -0.996
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-25",
+      "entry": 0.2584719955921173,
+      "returns": {
+        "5": -4.868,
+        "10": 4.816
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-25",
+      "entry": 3230.0,
+      "returns": {
+        "5": -2.167,
+        "10": -1.548
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-25",
+      "entry": 2.07,
+      "returns": {
+        "5": -0.483,
+        "10": -2.899
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "ABT",
+      "action": "SELL",
+      "confidence": 0.76,
+      "as_of": "2026-09-25",
+      "entry": 101.29,
+      "returns": {
+        "5": -4.354,
+        "10": -1.797
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "5183.KL",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-25",
+      "entry": 4.49,
+      "returns": {
+        "5": -3.786,
+        "10": -5.345
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "AVGO",
+      "action": "SELL",
+      "confidence": 0.74,
+      "as_of": "2026-09-25",
+      "entry": 352.81,
+      "returns": {
+        "5": 0.353,
+        "10": 3.272
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.72,
+      "as_of": "2026-09-25",
+      "entry": 7.29,
+      "returns": {
+        "5": -0.823
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "TUPRS.IS",
+      "action": "BUY",
+      "confidence": 0.72,
+      "as_of": "2026-09-25",
+      "entry": 406.0,
+      "returns": {
+        "5": -7.143,
+        "10": -4.988
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "THYAO.IS",
+      "action": "SELL",
+      "confidence": 0.65,
+      "as_of": "2026-09-25",
+      "entry": 290.75,
+      "returns": {
+        "5": 0.43,
+        "10": -1.118
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "WATCH",
+      "confidence": 0.64,
+      "as_of": "2026-09-25",
+      "entry": 1.7897650003433228,
+      "returns": {
+        "5": -4.032,
+        "10": -1.004
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "TSLA",
+      "action": "WATCH",
+      "confidence": 0.62,
+      "as_of": "2026-09-25",
+      "entry": 372.11,
+      "returns": {
+        "5": 0.349,
+        "10": 3.408
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.62,
+      "as_of": "2026-09-25",
+      "entry": 84034.921875,
+      "returns": {
+        "5": -0.899,
+        "10": 2.568
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "AMZN",
+      "action": "SELL",
+      "confidence": 0.61,
+      "as_of": "2026-09-25",
+      "entry": 249.67,
+      "returns": {
+        "5": 0.228,
+        "10": 4.117
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "WATCH",
+      "confidence": 0.6,
+      "as_of": "2026-09-25",
+      "entry": 2690.4755859375,
+      "returns": {
+        "5": -0.419,
+        "10": 1.117
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-26T08:55:40.393933+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 121.425644,
+      "returns": {
+        "5": -3.134,
+        "10": -1.174
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 10.859573,
+      "returns": {
+        "5": 1.293,
+        "10": 3.595
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 0.120581,
+      "returns": {
+        "5": -8.369,
+        "10": -9.571
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 14.154918,
+      "returns": {
+        "5": 1.675,
+        "10": -2.062
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 0.254308,
+      "returns": {
+        "5": -2.319,
+        "10": 6.524
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 1.242884,
+      "returns": {
+        "5": -3.458,
+        "10": -1.56
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 5.024236,
+      "returns": {
+        "5": 1.484,
+        "10": 2.822
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-26",
+      "entry": 1.867475,
+      "returns": {
+        "5": -6.574,
+        "10": -3.768
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-26",
+      "entry": 84406.453125,
+      "returns": {
+        "5": -0.629,
+        "10": 1.136
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-26",
+      "entry": 2695.213135,
+      "returns": {
+        "5": 0.361,
+        "10": 0.127
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T11:29:02.688533+00:00"
+    },
+    {
+      "symbol": "2222.SR",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-09-27",
+      "entry": 25.82,
+      "returns": {
+        "5": -1.472
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-27T16:28:29.532892+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-27",
+      "entry": 122.058701,
+      "returns": {
+        "5": 0.198,
+        "10": -4.718
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-27",
+      "entry": 10.911216,
+      "returns": {
+        "5": 2.005,
+        "10": 2.372
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-27",
+      "entry": 0.12202,
+      "returns": {
+        "5": -8.9,
+        "10": -16.596
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-27",
+      "entry": 14.037887,
+      "returns": {
+        "5": 2.786,
+        "10": -4.879
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-27",
+      "entry": 1.271122,
+      "returns": {
+        "5": -3.455,
+        "10": -13.132
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-27",
+      "entry": 5.374939,
+      "returns": {
+        "5": -7.644,
+        "10": -6.542
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 0.96,
+      "as_of": "2026-09-27",
+      "entry": 1.887389,
+      "returns": {
+        "5": -7.258,
+        "10": -10.368
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "SALIK.AE",
+      "action": "BUY",
+      "confidence": 0.95,
+      "as_of": "2026-09-28",
+      "entry": 5.6,
+      "returns": {
+        "5": -3.75
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-27",
+      "entry": 2686.926758,
+      "returns": {
+        "5": 2.838,
+        "10": -4.629
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.85,
+      "as_of": "2026-09-28",
+      "entry": 3100.0,
+      "returns": {
+        "5": 3.226
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "UNVR.JK",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-09-28",
+      "entry": 1635.0,
+      "returns": {
+        "5": -3.67
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-09-27",
+      "entry": 0.255515,
+      "returns": {
+        "5": 0.284,
+        "10": -0.832
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "5225.KL",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-28",
+      "entry": 8.01,
+      "returns": {
+        "5": -1.873
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-27",
+      "entry": 84458.0859375,
+      "returns": {
+        "5": 2.258,
+        "10": -1.211
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-28",
+      "entry": 2.07,
+      "returns": {
+        "5": -0.0
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "5183.KL",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-28",
+      "entry": 4.43,
+      "returns": {
+        "5": -5.643
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "WATCH",
+      "confidence": 0.74,
+      "as_of": "2026-09-28",
+      "entry": 720.0,
+      "returns": {
+        "5": 4.167
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-28",
+      "entry": 7.32,
+      "returns": {
+        "5": -1.639
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T13:01:57.566846+00:00"
+    },
+    {
+      "symbol": "BIMAS.IS",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-28",
+      "entry": 426.5,
+      "returns": {
+        "5": -2.169
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T17:47:10.545101+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-28",
+      "entry": 1510.0,
+      "returns": {
+        "5": -6.954
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T17:47:10.545101+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-28",
+      "entry": 2.07,
+      "returns": {
+        "5": -0.0
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T17:47:10.545101+00:00"
+    },
+    {
+      "symbol": "PG",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-28",
+      "entry": 149.029999,
+      "returns": {
+        "5": -2.198
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T21:05:15.744350+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.87,
+      "as_of": "2026-09-28",
+      "entry": 187.48,
+      "returns": {
+        "5": -3.243
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T21:05:15.744350+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-28",
+      "entry": 338.4,
+      "returns": {
+        "5": -1.622
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T21:05:15.744350+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "WATCH",
+      "confidence": 0.76,
+      "as_of": "2026-09-28",
+      "entry": 715.62,
+      "returns": {
+        "5": 3.844
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T21:05:15.744350+00:00"
+    },
+    {
+      "symbol": "LLY",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-28",
+      "entry": 1184.78,
+      "returns": {
+        "5": -2.957
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-28T21:05:15.744350+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-28",
+      "entry": 15.442647,
+      "returns": {
+        "5": -10.08,
+        "10": -16.122
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "UNTR.JK",
+      "action": "BUY",
+      "confidence": 0.96,
+      "as_of": "2026-09-29",
+      "entry": 25175.0,
+      "returns": {
+        "5": 3.575
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-28",
+      "entry": 83502.609375,
+      "returns": {
+        "5": 1.592,
+        "10": -1.289
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "BUY",
+      "confidence": 0.85,
+      "as_of": "2026-09-28",
+      "entry": 0.117145,
+      "returns": {
+        "5": -7.713,
+        "10": -14.149
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "WATCH",
+      "confidence": 0.81,
+      "as_of": "2026-09-28",
+      "entry": 0.24712400138378143,
+      "returns": {
+        "5": -0.94,
+        "10": 0.176
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-28",
+      "entry": 10.593069076538086,
+      "returns": {
+        "5": 4.776,
+        "10": 0.037
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-29",
+      "entry": 725.0,
+      "returns": {
+        "5": 4.828
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-29",
+      "entry": 2.06,
+      "returns": {
+        "5": -0.0
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-29",
+      "entry": 7.26,
+      "returns": {
+        "5": -1.377
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "SALIK.AE",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-29",
+      "entry": 5.51,
+      "returns": {
+        "5": -1.452
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-28",
+      "entry": 2688.668701171875,
+      "returns": {
+        "5": -0.258,
+        "10": -5.658
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.69,
+      "as_of": "2026-09-29",
+      "entry": 3160.0,
+      "returns": {
+        "5": 1.899
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "WATCH",
+      "confidence": 0.69,
+      "as_of": "2026-09-28",
+      "entry": 1.180516004562378,
+      "returns": {
+        "5": 0.837,
+        "10": -6.448
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "WATCH",
+      "confidence": 0.66,
+      "as_of": "2026-09-28",
+      "entry": 1.7346140146255493,
+      "returns": {
+        "5": -2.976,
+        "10": 4.836
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "WATCH",
+      "confidence": 0.64,
+      "as_of": "2026-09-28",
+      "entry": 118.83673095703125,
+      "returns": {
+        "5": 0.44,
+        "10": -5.374
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T12:12:57.330987+00:00"
+    },
+    {
+      "symbol": "BIMAS.IS",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-29",
+      "entry": 421.75,
+      "returns": {
+        "5": -3.082
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T16:04:30.802328+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-29",
+      "entry": 2.06,
+      "returns": {
+        "5": -0.0
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T16:04:30.802328+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-29",
+      "entry": 1515.0,
+      "returns": {
+        "5": -6.601
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T18:12:31.424333+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-29",
+      "entry": 725.0,
+      "returns": {
+        "5": 4.828
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T18:12:31.424333+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-29",
+      "entry": 7.26,
+      "returns": {
+        "5": -1.377
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-29T20:14:01.584012+00:00"
+    },
+    {
+      "symbol": "UNTR.JK",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-30",
+      "entry": 27075.0,
+      "returns": {
+        "5": -6.833
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-09-29",
+      "entry": 11.435551,
+      "returns": {
+        "5": -3.695,
+        "10": -9.265
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-29",
+      "entry": 227.210007,
+      "returns": {
+        "5": 6.628
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "PG",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-29",
+      "entry": 148.320007,
+      "returns": {
+        "5": 0.216
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "4863.KL",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-30",
+      "entry": 8.01,
+      "returns": {
+        "5": -0.874
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 0.89,
+      "as_of": "2026-09-29",
+      "entry": 14.597478,
+      "returns": {
+        "5": -3.223,
+        "10": -11.594
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-09-29",
+      "entry": 738.79,
+      "returns": {
+        "5": 0.102
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-09-29",
+      "entry": 184.1,
+      "returns": {
+        "5": -2.08
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "BUY",
+      "confidence": 0.87,
+      "as_of": "2026-09-30",
+      "entry": 3200.0,
+      "returns": {
+        "5": 0.625
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-09-30",
+      "entry": 2.07,
+      "returns": {
+        "5": -0.966
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-29",
+      "entry": 2676.72216796875,
+      "returns": {
+        "5": 1.021,
+        "10": -6.62
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-29",
+      "entry": 119.05546569824219,
+      "returns": {
+        "5": 1.919,
+        "10": -7.161
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-30",
+      "entry": 730.0,
+      "returns": {
+        "5": 2.74
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-29",
+      "entry": 329.4,
+      "returns": {
+        "5": 1.169
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.69,
+      "as_of": "2026-09-29",
+      "entry": 0.11748799681663513,
+      "returns": {
+        "5": -7.063,
+        "10": -14.723
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.62,
+      "as_of": "2026-09-29",
+      "entry": 508.959991,
+      "returns": {
+        "5": 4.791
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T09:21:44.415146+00:00"
+    },
+    {
+      "symbol": "SALIK.AE",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-30",
+      "entry": 5.4,
+      "returns": {
+        "5": -2.778
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T16:02:52.851098+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-09-30",
+      "entry": 7.24,
+      "returns": {
+        "5": -2.486
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T16:02:52.851098+00:00"
+    },
+    {
+      "symbol": "BIMAS.IS",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-09-30",
+      "entry": 418.5,
+      "returns": {
+        "5": -4.361
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T16:02:52.851098+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-30",
+      "entry": 2.07,
+      "returns": {
+        "5": -0.966
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T16:02:52.851098+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.77,
+      "as_of": "2026-09-30",
+      "entry": 1420.0,
+      "returns": {
+        "5": -2.113
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T17:40:14.909403+00:00"
+    },
+    {
+      "symbol": "UNTR.JK",
+      "action": "WATCH",
+      "confidence": 0.76,
+      "as_of": "2026-09-30",
+      "entry": 27075.0,
+      "returns": {
+        "5": -6.833
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T17:40:14.909403+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-30",
+      "entry": 730.0,
+      "returns": {
+        "5": 2.74
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T17:40:14.909403+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-30",
+      "entry": 3200.0,
+      "returns": {
+        "5": 0.625
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T17:40:14.909403+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-09-30",
+      "entry": 228.380005,
+      "returns": {
+        "5": 3.84
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T20:18:22.626419+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "WATCH",
+      "confidence": 0.72,
+      "as_of": "2026-09-30",
+      "entry": 725.18,
+      "returns": {
+        "5": -0.098
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T20:18:22.626419+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-09-30",
+      "entry": 7.24,
+      "returns": {
+        "5": -2.486
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T20:18:22.626419+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "WATCH",
+      "confidence": 0.61,
+      "as_of": "2026-09-30",
+      "entry": 333.02,
+      "returns": {
+        "5": 0.945
+      },
+      "outcome": null,
+      "recorded_at": "2026-09-30T20:18:22.626419+00:00"
+    },
+    {
+      "symbol": "UNTR.JK",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-01",
+      "entry": 26350.0,
+      "returns": {
+        "5": -5.313
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "SALIK.AE",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-01",
+      "entry": 5.5,
+      "returns": {
+        "5": -2.727
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-09-30",
+      "entry": 0.1138010025024414,
+      "returns": {
+        "5": -2.646,
+        "10": -11.521
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-30",
+      "entry": 83553.8515625,
+      "returns": {
+        "5": 3.159,
+        "10": -0.946
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-30",
+      "entry": 2683.679443359375,
+      "returns": {
+        "5": 1.374,
+        "10": -7.058
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-30",
+      "entry": 10.933302879333496,
+      "returns": {
+        "5": 0.546,
+        "10": -3.542
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-09-30",
+      "entry": 5.336692810058594,
+      "returns": {
+        "5": -5.387,
+        "10": -0.991
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-01",
+      "entry": 720.0,
+      "returns": {
+        "5": 6.25
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "WATCH",
+      "confidence": 0.77,
+      "as_of": "2026-09-30",
+      "entry": 1.221614956855774,
+      "returns": {
+        "5": -0.345,
+        "10": 2.291
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 0.76,
+      "as_of": "2026-09-30",
+      "entry": 14.358115,
+      "returns": {
+        "5": -1.456,
+        "10": -9.898
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-01",
+      "entry": 3120.0,
+      "returns": {
+        "5": 1.923
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-01",
+      "entry": 2.05,
+      "returns": {
+        "5": -0.976
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-01",
+      "entry": 7.25,
+      "returns": {
+        "5": -1.793
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "UNVR.JK",
+      "action": "WATCH",
+      "confidence": 0.68,
+      "as_of": "2026-10-01",
+      "entry": 1625.0,
+      "returns": {
+        "5": -1.538
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T12:23:16.143136+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-01",
+      "entry": 230.860001,
+      "returns": {
+        "5": 1.118
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T20:30:42.780290+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-01",
+      "entry": 725.929993,
+      "returns": {
+        "5": -1.474
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T20:30:42.780290+00:00"
+    },
+    {
+      "symbol": "ADBE",
+      "action": "BUY",
+      "confidence": 0.89,
+      "as_of": "2026-10-01",
+      "entry": 241.279999,
+      "returns": {
+        "5": -3.113
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T20:30:42.780290+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-10-01",
+      "entry": 512.799988,
+      "returns": {
+        "5": 2.458
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T20:30:42.780290+00:00"
+    },
+    {
+      "symbol": "AIRARABIA.AE",
+      "action": "WATCH",
+      "confidence": 0.74,
+      "as_of": "2026-10-01",
+      "entry": 4.74,
+      "returns": {
+        "5": -4.641
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T20:30:42.780290+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.66,
+      "as_of": "2026-10-01",
+      "entry": 182.09,
+      "returns": {
+        "5": -5.058
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T20:30:42.780290+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-01",
+      "entry": 11.32,
+      "returns": {
+        "5": -0.177
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-01T23:10:35.325406+00:00"
+    },
+    {
+      "symbol": "NKE",
+      "action": "WATCH",
+      "confidence": 0.94,
+      "as_of": "2026-10-01",
+      "entry": 35.15,
+      "returns": {
+        "5": -2.176
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T00:58:51.331890+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 0.94,
+      "as_of": "2026-10-01",
+      "entry": 10.999374,
+      "returns": {
+        "5": 2.279
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T08:29:51.775680+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-01",
+      "entry": 4.806079,
+      "returns": {
+        "5": 7.489
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T08:29:51.775680+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-01",
+      "entry": 84853.1015625,
+      "returns": {
+        "5": 0.604
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T08:29:51.775680+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-01",
+      "entry": 2705.537109375,
+      "returns": {
+        "5": -0.255
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T08:29:51.775680+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-01",
+      "entry": 0.24626700580120087,
+      "returns": {
+        "5": 10.003
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T08:29:51.775680+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-01",
+      "entry": 1.1770089864730835,
+      "returns": {
+        "5": 3.95
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T08:29:51.775680+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-10-02",
+      "entry": 2.06,
+      "returns": {
+        "5": -2.427
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T15:46:36.459506+00:00"
+    },
+    {
+      "symbol": "UNTR.JK",
+      "action": "BUY",
+      "confidence": 0.82,
+      "as_of": "2026-10-02",
+      "entry": 26000.0,
+      "returns": {
+        "5": -4.808
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T15:46:36.459506+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-02",
+      "entry": 725.0,
+      "returns": {
+        "5": 8.276
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T15:46:36.459506+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-02",
+      "entry": 7.23,
+      "returns": {
+        "5": -1.521
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T15:46:36.459506+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-02",
+      "entry": 3140.0,
+      "returns": {
+        "5": 1.274
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T15:46:36.459506+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "WATCH",
+      "confidence": 0.63,
+      "as_of": "2026-10-02",
+      "entry": 11.4,
+      "returns": {
+        "5": -0.877
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T15:46:36.459506+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-02",
+      "entry": 1415.0,
+      "returns": {
+        "5": -4.594
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T17:58:40.855115+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-02",
+      "entry": 725.0,
+      "returns": {
+        "5": 8.276
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T17:58:40.855115+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-02",
+      "entry": 2.06,
+      "returns": {
+        "5": -2.427
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T17:58:40.855115+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-02",
+      "entry": 517.530029,
+      "returns": {
+        "5": 3.047
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T20:42:30.532175+00:00"
+    },
+    {
+      "symbol": "TSLA",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-02",
+      "entry": 370.589996,
+      "returns": {
+        "5": 3.832
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T20:42:30.532175+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 0.83,
+      "as_of": "2026-10-02",
+      "entry": 233.949997,
+      "returns": {
+        "5": -1.554
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T20:42:30.532175+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-02",
+      "entry": 728.08,
+      "returns": {
+        "5": -0.968
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T20:42:30.532175+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-02",
+      "entry": 184.87,
+      "returns": {
+        "5": -5.874
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T20:42:30.532175+00:00"
+    },
+    {
+      "symbol": "AMD",
+      "action": "WATCH",
+      "confidence": 0.72,
+      "as_of": "2026-10-02",
+      "entry": 633.91,
+      "returns": {
+        "5": -3.334
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-02T20:42:30.532175+00:00"
+    },
+    {
+      "symbol": "NKE",
+      "action": "WATCH",
+      "confidence": 1.0,
+      "as_of": "2026-10-02",
+      "entry": 33.87,
+      "returns": {
+        "5": 3.336
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T00:28:12.063865+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-02",
+      "entry": 2668.151123,
+      "returns": {
+        "5": -3.957
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-02",
+      "entry": 118.615143,
+      "returns": {
+        "5": -1.952
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-02",
+      "entry": 0.10720299929380417,
+      "returns": {
+        "5": -5.068
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-02",
+      "entry": 13.798003196716309,
+      "returns": {
+        "5": -3.225
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "BUY",
+      "confidence": 0.75,
+      "as_of": "2026-10-02",
+      "entry": 84497.210938,
+      "returns": {
+        "5": -1.256
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-02",
+      "entry": 0.24437500536441803,
+      "returns": {
+        "5": 3.689
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "WATCH",
+      "confidence": 0.69,
+      "as_of": "2026-10-02",
+      "entry": 1.1549040079116821,
+      "returns": {
+        "5": -4.39
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-03T12:30:31.613413+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 0.93,
+      "as_of": "2026-10-03",
+      "entry": 11.123674,
+      "returns": {
+        "5": -4.735
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-03",
+      "entry": 84763.578125,
+      "returns": {
+        "5": -2.758
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-03",
+      "entry": 2687.255371,
+      "returns": {
+        "5": -5.608
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-03",
+      "entry": 119.645058,
+      "returns": {
+        "5": -6.014
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-03",
+      "entry": 14.115564,
+      "returns": {
+        "5": -8.236
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-03",
+      "entry": 0.244208,
+      "returns": {
+        "5": 1.373
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-03",
+      "entry": 4.806012153625488,
+      "returns": {
+        "5": 4.492
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 0.81,
+      "as_of": "2026-10-03",
+      "entry": 1.718984,
+      "returns": {
+        "5": 5.789
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.69,
+      "as_of": "2026-10-03",
+      "entry": 0.11025100201368332,
+      "returns": {
+        "5": -8.781
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "WATCH",
+      "confidence": 0.68,
+      "as_of": "2026-10-03",
+      "entry": 1.1847779750823975,
+      "returns": {
+        "5": -6.784
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-04T09:44:42.038307+00:00"
+    },
+    {
+      "symbol": "1211.SR",
+      "action": "BUY",
+      "confidence": 0.82,
+      "as_of": "2026-10-04",
+      "entry": 62.950001,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-04T15:20:49.675514+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-04",
+      "entry": 0.25925,
+      "returns": {
+        "5": -7.433
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-04",
+      "entry": 2726.509033,
+      "returns": {
+        "5": -8.325
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-04",
+      "entry": 11.108187,
+      "returns": {
+        "5": -6.591
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-04",
+      "entry": 86480.3046875,
+      "returns": {
+        "5": -4.574
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 0.77,
+      "as_of": "2026-10-04",
+      "entry": 121.528595,
+      "returns": {
+        "5": -9.05
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-04",
+      "entry": 14.274962425231934,
+      "returns": {
+        "5": -9.597
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 0.74,
+      "as_of": "2026-10-04",
+      "entry": 1.205378,
+      "returns": {
+        "5": -2.329
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 0.74,
+      "as_of": "2026-10-04",
+      "entry": 1.75111,
+      "returns": {
+        "5": 8.034
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 0.71,
+      "as_of": "2026-10-04",
+      "entry": 4.912884,
+      "returns": {
+        "5": -0.745
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "BUY",
+      "confidence": 0.7,
+      "as_of": "2026-10-04",
+      "entry": 0.11005,
+      "returns": {
+        "5": -8.96
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-05T08:59:00.252610+00:00"
+    },
+    {
+      "symbol": "1211.SR",
+      "action": "WATCH",
+      "confidence": 0.94,
+      "as_of": "2026-10-05",
+      "entry": 63.5,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-05",
+      "entry": 7.24,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-05",
+      "entry": 1415.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-05",
+      "entry": 750.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-05",
+      "entry": 3200.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-05",
+      "entry": 2.06,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "WATCH",
+      "confidence": 0.64,
+      "as_of": "2026-10-05",
+      "entry": 11.38,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "2010.SR",
+      "action": "BUY",
+      "confidence": 0.61,
+      "as_of": "2026-10-05",
+      "entry": 47.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "IQCD.QA",
+      "action": "BUY",
+      "confidence": 0.61,
+      "as_of": "2026-10-05",
+      "entry": 9.671,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:24:08.954212+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-05",
+      "entry": 2.06,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:45:09.039741+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.75,
+      "as_of": "2026-10-05",
+      "entry": 750.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T18:45:09.039741+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-05",
+      "entry": 238.899994,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "TSLA",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-05",
+      "entry": 378.73,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-05",
+      "entry": 180.79,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "AIRARABIA.AE",
+      "action": "WATCH",
+      "confidence": 0.74,
+      "as_of": "2026-10-05",
+      "entry": 4.6,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "BUY",
+      "confidence": 0.73,
+      "as_of": "2026-10-05",
+      "entry": 741.900024,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "GOOGL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-05",
+      "entry": 346.47,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "AMZN",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-05",
+      "entry": 251.4,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-05",
+      "entry": 7.24,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.65,
+      "as_of": "2026-10-05",
+      "entry": 525.179993,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "AMD",
+      "action": "WATCH",
+      "confidence": 0.65,
+      "as_of": "2026-10-05",
+      "entry": 631.75,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-05T20:39:29.699075+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-05",
+      "entry": 0.270537,
+      "returns": {
+        "5": -5.906
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-05",
+      "entry": 1.230911,
+      "returns": {
+        "5": 1.518
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-05",
+      "entry": 5.248954,
+      "returns": {
+        "5": 0.664
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 0.94,
+      "as_of": "2026-10-05",
+      "entry": 1.810633,
+      "returns": {
+        "5": 6.593
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-05",
+      "entry": 85786.59375,
+      "returns": {
+        "5": -3.524
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-05",
+      "entry": 2711.031494,
+      "returns": {
+        "5": -7.996
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-05",
+      "entry": 120.750687,
+      "returns": {
+        "5": -9.276
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-05",
+      "entry": 13.861174,
+      "returns": {
+        "5": -6.667
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 0.82,
+      "as_of": "2026-10-05",
+      "entry": 11.141276,
+      "returns": {
+        "5": -5.343
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-05",
+      "entry": 0.1090880036354065,
+      "returns": {
+        "5": -7.698
+      },
+      "outcome": null,
+      "recorded_at": "2026-10-06T07:32:05.219378+00:00"
+    },
+    {
+      "symbol": "1211.SR",
+      "action": "BUY",
+      "confidence": 0.98,
+      "as_of": "2026-10-06",
+      "entry": 63.849998,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.95,
+      "as_of": "2026-10-06",
+      "entry": 755.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "BUY",
+      "confidence": 0.91,
+      "as_of": "2026-10-06",
+      "entry": 3250.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "BUY",
+      "confidence": 0.87,
+      "as_of": "2026-10-06",
+      "entry": 11.46,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "5183.KL",
+      "action": "WATCH",
+      "confidence": 0.81,
+      "as_of": "2026-10-06",
+      "entry": 4.3,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-06",
+      "entry": 2.06,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-06",
+      "entry": 7.2,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "2222.SR",
+      "action": "BUY",
+      "confidence": 0.76,
+      "as_of": "2026-10-06",
+      "entry": 25.799999,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-06",
+      "entry": 1410.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "IQCD.QA",
+      "action": "BUY",
+      "confidence": 0.62,
+      "as_of": "2026-10-06",
+      "entry": 9.674,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T15:07:55.732187+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-06",
+      "entry": 2.06,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T16:09:51.240384+00:00"
+    },
+    {
+      "symbol": "TSLA",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-06",
+      "entry": 380.679993,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "AVGO",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-06",
+      "entry": 375.809998,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "BUY",
+      "confidence": 0.93,
+      "as_of": "2026-10-06",
+      "entry": 239.240005,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 333.630005,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 738.880005,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "AMD",
+      "action": "WATCH",
+      "confidence": 0.87,
+      "as_of": "2026-10-06",
+      "entry": 649.42,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.86,
+      "as_of": "2026-10-06",
+      "entry": 529.299988,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "LIN",
+      "action": "WATCH",
+      "confidence": 0.83,
+      "as_of": "2026-10-06",
+      "entry": 489.95,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "QCOM",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-06",
+      "entry": 181.03,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "PG",
+      "action": "BUY",
+      "confidence": 0.73,
+      "as_of": "2026-10-06",
+      "entry": 148.410004,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-06",
+      "entry": 11.46,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-06",
+      "entry": 7.2,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-06T20:16:24.240486+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-06",
+      "entry": 0.267487,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-06",
+      "entry": 5.068957,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 0.98,
+      "as_of": "2026-10-06",
+      "entry": 11.624902,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.92,
+      "as_of": "2026-10-07",
+      "entry": 755.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 85557.5625,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 2697.516357,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 120.787636,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 13.959114,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-06",
+      "entry": 1.20141,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "BUY",
+      "confidence": 0.87,
+      "as_of": "2026-10-07",
+      "entry": 11.46,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-10-06",
+      "entry": 1.782541,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "BUY",
+      "confidence": 0.81,
+      "as_of": "2026-10-07",
+      "entry": 3230.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-07",
+      "entry": 7.16,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-07",
+      "entry": 2.02,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "TLKM.JK",
+      "action": "WATCH",
+      "confidence": 0.67,
+      "as_of": "2026-10-07",
+      "entry": 2310.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.62,
+      "as_of": "2026-10-06",
+      "entry": 0.10752200335264206,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T13:16:59.903159+00:00"
+    },
+    {
+      "symbol": "AVGO",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-07",
+      "entry": 376.51,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "LLY",
+      "action": "BUY",
+      "confidence": 0.93,
+      "as_of": "2026-10-07",
+      "entry": 1188.719971,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-07",
+      "entry": 336.670013,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-07",
+      "entry": 721.309998,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-07",
+      "entry": 237.47,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "LIN",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-07",
+      "entry": 483.98,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "BUY",
+      "confidence": 0.76,
+      "as_of": "2026-10-07",
+      "entry": 529.76001,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "GOOGL",
+      "action": "BUY",
+      "confidence": 0.7,
+      "as_of": "2026-10-07",
+      "entry": 350.5,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-07",
+      "entry": 11.46,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "PG",
+      "action": "BUY",
+      "confidence": 0.66,
+      "as_of": "2026-10-07",
+      "entry": 147.820007,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-07T20:47:06.772761+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-07",
+      "entry": 5.344986,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-07",
+      "entry": 11.131031,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-07",
+      "entry": 0.255415,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.88,
+      "as_of": "2026-10-08",
+      "entry": 775.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "ETH-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-07",
+      "entry": 2573.52734375,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "POL28321-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-07",
+      "entry": 0.10255499929189682,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-07",
+      "entry": 13.32896900177002,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-07",
+      "entry": 1.1179280281066895,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "BUY",
+      "confidence": 0.87,
+      "as_of": "2026-10-08",
+      "entry": 11.26,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "WATCH",
+      "confidence": 0.81,
+      "as_of": "2026-10-07",
+      "entry": 116.22258758544922,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 0.81,
+      "as_of": "2026-10-07",
+      "entry": 1.724271,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.74,
+      "as_of": "2026-10-07",
+      "entry": 83275.9296875,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-08",
+      "entry": 3150.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T13:23:43.602721+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-08",
+      "entry": 2.01,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T16:48:56.483372+00:00"
+    },
+    {
+      "symbol": "ADBE",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-10-08",
+      "entry": 241.050003,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "PG",
+      "action": "BUY",
+      "confidence": 0.83,
+      "as_of": "2026-10-08",
+      "entry": 150.589996,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "BUY",
+      "confidence": 0.83,
+      "as_of": "2026-10-08",
+      "entry": 7.06,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-08",
+      "entry": 522.61,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "GOOGL",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-08",
+      "entry": 348.29,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "LIN",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-08",
+      "entry": 481.7,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "LLY",
+      "action": "BUY",
+      "confidence": 0.73,
+      "as_of": "2026-10-08",
+      "entry": 1169.599976,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "BUY",
+      "confidence": 0.72,
+      "as_of": "2026-10-08",
+      "entry": 340.420013,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "WATCH",
+      "confidence": 0.72,
+      "as_of": "2026-10-08",
+      "entry": 230.48,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "NKE",
+      "action": "BUY",
+      "confidence": 0.7,
+      "as_of": "2026-10-08",
+      "entry": 34.740002,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-08",
+      "entry": 11.26,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "WATCH",
+      "confidence": 0.66,
+      "as_of": "2026-10-08",
+      "entry": 720.89,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "AMD",
+      "action": "WATCH",
+      "confidence": 0.62,
+      "as_of": "2026-10-08",
+      "entry": 620.68,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-08T20:49:15.105760+00:00"
+    },
+    {
+      "symbol": "SOL-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-08",
+      "entry": 109.44225311279297,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-08",
+      "entry": 10.07657241821289,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-08",
+      "entry": 12.69583511352539,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-08",
+      "entry": 4.459370136260986,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "BTC-USD",
+      "action": "WATCH",
+      "confidence": 0.85,
+      "as_of": "2026-10-08",
+      "entry": 81676.3359375,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "DIB.AE",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-08",
+      "entry": 7.12,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "WATCH",
+      "confidence": 0.68,
+      "as_of": "2026-10-08",
+      "entry": 1.76139497756958,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T07:21:54.244982+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "BUY",
+      "confidence": 0.94,
+      "as_of": "2026-10-09",
+      "entry": 785.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T15:16:35.642760+00:00"
+    },
+    {
+      "symbol": "EMAAR.AE",
+      "action": "BUY",
+      "confidence": 0.87,
+      "as_of": "2026-10-09",
+      "entry": 11.38,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T15:16:35.642760+00:00"
+    },
+    {
+      "symbol": "UNVR.JK",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-10-09",
+      "entry": 1595.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T15:16:35.642760+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "BUY",
+      "confidence": 0.78,
+      "as_of": "2026-10-09",
+      "entry": 2.02,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T15:16:35.642760+00:00"
+    },
+    {
+      "symbol": "5258.KL",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-09",
+      "entry": 2.02,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T16:28:12.006194+00:00"
+    },
+    {
+      "symbol": "BRIS.JK",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-09",
+      "entry": 1355.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T18:27:51.257120+00:00"
+    },
+    {
+      "symbol": "KLBF.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-09",
+      "entry": 785.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T18:27:51.257120+00:00"
+    },
+    {
+      "symbol": "ANTM.JK",
+      "action": "WATCH",
+      "confidence": 0.7,
+      "as_of": "2026-10-09",
+      "entry": 3180.0,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T18:27:51.257120+00:00"
+    },
+    {
+      "symbol": "AAPL",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-09",
+      "entry": 336.640015,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "PG",
+      "action": "BUY",
+      "confidence": 0.9,
+      "as_of": "2026-10-09",
+      "entry": 151.229996,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "ABT",
+      "action": "BUY",
+      "confidence": 0.84,
+      "as_of": "2026-10-09",
+      "entry": 99.599998,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "MSFT",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-09",
+      "entry": 535.07,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "LIN",
+      "action": "WATCH",
+      "confidence": 0.8,
+      "as_of": "2026-10-09",
+      "entry": 483.73,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "NVDA",
+      "action": "WATCH",
+      "confidence": 0.79,
+      "as_of": "2026-10-09",
+      "entry": 229.28,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "GOOGL",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-09",
+      "entry": 351.66,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "LLY",
+      "action": "WATCH",
+      "confidence": 0.75,
+      "as_of": "2026-10-09",
+      "entry": 1179.27,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "AMZN",
+      "action": "BUY",
+      "confidence": 0.74,
+      "as_of": "2026-10-09",
+      "entry": 262.429993,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "JNJ",
+      "action": "BUY",
+      "confidence": 0.67,
+      "as_of": "2026-10-09",
+      "entry": 261.440002,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "META",
+      "action": "WATCH",
+      "confidence": 0.65,
+      "as_of": "2026-10-09",
+      "entry": 718.67,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "TSLA",
+      "action": "WATCH",
+      "confidence": 0.62,
+      "as_of": "2026-10-09",
+      "entry": 382.7,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-09T20:19:57.374399+00:00"
+    },
+    {
+      "symbol": "ATOM-USD",
+      "action": "BUY",
+      "confidence": 1.0,
+      "as_of": "2026-10-09",
+      "entry": 2.064994,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-10T12:26:50.802872+00:00"
+    },
+    {
+      "symbol": "AVAX-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-09",
+      "entry": 10.341124534606934,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-10T12:26:50.802872+00:00"
+    },
+    {
+      "symbol": "LINK-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-09",
+      "entry": 12.806872367858887,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-10T12:26:50.802872+00:00"
+    },
+    {
+      "symbol": "ADA-USD",
+      "action": "WATCH",
+      "confidence": 0.88,
+      "as_of": "2026-10-09",
+      "entry": 0.242917001247406,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-10T12:26:50.802872+00:00"
+    },
+    {
+      "symbol": "DOT-USD",
+      "action": "BUY",
+      "confidence": 0.81,
+      "as_of": "2026-10-09",
+      "entry": 1.237394,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-10T12:26:50.802872+00:00"
+    },
+    {
+      "symbol": "NEAR-USD",
+      "action": "WATCH",
+      "confidence": 0.73,
+      "as_of": "2026-10-09",
+      "entry": 4.889594078063965,
+      "returns": {},
+      "outcome": null,
+      "recorded_at": "2026-10-10T12:26:50.802872+00:00"
+    }
+  ],
+  "last_run": "2026-10-10T21:39:57.802989+00:00",
+  "total_predictions": 333
+}
